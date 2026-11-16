@@ -7,7 +7,7 @@ from typing import Any
 
 from config import DB_PATH
 
-HISTORY_LIMIT = 20  # Claude-ға жіберілетін соңғы хабарлар саны
+HISTORY_LIMIT = 20  # тарихтан оқылатын соңғы хабарлар саны
 
 _db = sqlite3.connect(DB_PATH, check_same_thread=False)
 _db.row_factory = sqlite3.Row

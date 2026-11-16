@@ -41,14 +41,6 @@ def paths(d: dict) -> list[Path]:
     return [DIR / i for i in d["images"]]
 
 
-def prompt_block() -> str:
-    """Claude-ға каталог сипаттамасы."""
-    items = load()
-    if not items:
-        return "(no designs yet)"
-    return "\n".join(f'- id="{d["id"]}": {d["title"]}. {d.get("about", "")}' for d in items)
-
-
 def slug(text: str) -> str:
     s = re.sub(r"[^\w]+", "-", text.lower(), flags=re.U).strip("-")
     return s[:40] or "design"
