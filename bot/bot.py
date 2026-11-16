@@ -12,7 +12,7 @@ import asyncio
 import logging
 from collections import defaultdict
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Message, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, Message, Update
 from telegram.constants import ChatAction
 from telegram.ext import (
     Application,
@@ -23,6 +23,7 @@ from telegram.ext import (
     filters,
 )
 
+import designs
 import store
 from brain import decide
 from config import MAIL_ACCOUNTS, MAIL_POLL_SECONDS, OWNER_CHAT_ID, TELEGRAM_BOT_TOKEN
@@ -67,18 +68,52 @@ async def tell_owner(app: Application, key: str, text: str, mode: str) -> None:
 
 
 # ───────────── Клиентке жіберу ─────────────
-async def send_to_customer(app: Application, key: str, text: str) -> None:
+async def send_designs_tg(app: Application, chat_id: int, items: list[dict]) -> None:
+    for d in items:
+        caption = d["title"] + (f"\n{d['link']}" if d.get("link") else "")
+        files = designs.paths(d)[:10]  # Telegram альбомында ең көбі 10 сурет
+        if len(files) == 1:
+            with files[0].open("rb") as f:
+                await app.bot.send_photo(chat_id, f, caption=caption)
+            continue
+        handles = [p.open("rb") for p in files]
+        try:
+            media = [InputMediaPhoto(h, caption=caption if i == 0 else None) for i, h in enumerate(handles)]
+            await app.bot.send_media_group(chat_id, media)
+        finally:
+            for h in handles:
+                h.close()
+
+
+async def send_to_customer(app: Application, key: str, text: str, design_ids: list[str] | None = None) -> None:
+    items = [d for d in (designs.get(i) for i in design_ids or []) if d]
     if key.startswith("tg:"):
         chat_id = int(key[3:])
         for part in chunks(text):
             await app.bot.send_message(chat_id, part)
+        if items:
+            await app.bot.send_chat_action(chat_id, ChatAction.UPLOAD_PHOTO)
+            await send_designs_tg(app, chat_id, items)
     elif key.startswith("mail:"):
         meta = store.get_conv(key)["meta"]
         acc = ACCOUNTS[meta["account"]]
+        body = text
+        links = [f"{d['title']}: {d['link']}" for d in items if d.get("link")]
+        if links:
+            body += "\n\n" + "\n".join(links)
+        files = [p for d in items for p in designs.paths(d)]
         await asyncio.to_thread(
-            send_reply, acc, meta["to"], meta.get("subject", ""), text, meta.get("message_id", ""), meta.get("references", "")
+            send_reply,
+            acc,
+            meta["to"],
+            meta.get("subject", ""),
+            body,
+            meta.get("message_id", ""),
+            meta.get("references", ""),
+            files,
         )
-    store.add_message(key, "assistant", text)
+    note = ("\n[Жіберілген дизайндар: " + ", ".join(d["title"] for d in items) + "]") if items else ""
+    store.add_message(key, "assistant", text + note)
 
 
 # ───────────── Ортақ логика: клиент хабары ─────────────
@@ -98,7 +133,7 @@ async def handle_customer(app: Application, key: str, title: str, channel: str, 
             return
         reply = d.reply or ACK
         try:
-            await send_to_customer(app, key, reply)
+            await send_to_customer(app, key, reply, d.designs)
         except Exception:
             log.exception("%s: клиентке жіберу мүмкін болмады", key)
             reply = "(клиентке жіберілмеді — қате)"
@@ -109,7 +144,9 @@ async def handle_customer(app: Application, key: str, title: str, channel: str, 
                 app,
                 key,
                 f"🔥 Іс: {d.category_kk}\n👤 {title}\n📝 {d.summary}\n\n"
-                f"Клиент жазды:\n{text}\n\n🤖 Бот жауабы:\n{reply}\n\n"
+                f"Клиент жазды:\n{text}\n\n🤖 Бот жауабы:\n{reply}\n"
+                + (f"🎨 Дизайн жіберілді: {', '.join(d.designs)}\n" if d.designs else "")
+                + "\n"
                 "↩️ Осы хабарға reply жасап жазсаңыз, клиентке кетеді. "
                 "Бот бұл клиентке енді жауап бермейді, «Ботқа қайтару» басқанша.",
                 "human",
@@ -160,7 +197,9 @@ async def on_help(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
         "• «Іс» болса (тапсырыс, баға, төлем, шағым) — сізге 🔥 хабар келеді.\n"
         "• Хабарға reply жасап жазсаңыз — клиентке кетеді (Telegram немесе email).\n"
         "• «🤖 Ботқа қайтару» — бот сол клиентпен қайта сөйлеседі.\n\n"
-        "/list — өзіңіз жауап беретін клиенттер\n/id — chat ID"
+        "🎨 Дизайн қосу: фото (немесе альбом) жіберіп, астына жазыңыз:\n"
+        "#дизайн Кофехана сайты | жылы түстер, мәзір, галерея\n\n"
+        "/list — өзіңіз жауап беретін клиенттер\n/designs — дизайн каталогы\n/id — chat ID"
     )
 
 
@@ -191,10 +230,87 @@ async def on_button(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     await q.edit_message_reply_markup(reply_markup=kb(mode))
 
 
+# ───────────── Иесі: дизайн қосу ─────────────
+DESIGN_TAGS = ("#дизайн", "#design", "#портфолио")
+album_buf: dict[str, dict] = {}
+
+
+def _design_caption(text: str | None) -> tuple[str, str] | None:
+    """«#дизайн Кофехана сайты | жылы түстер, мәзір» → (атауы, сипаттамасы)."""
+    if not text:
+        return None
+    t = text.strip()
+    tag = next((x for x in DESIGN_TAGS if t.lower().startswith(x)), None)
+    if not tag:
+        return None
+    rest = t[len(tag) :].strip()
+    title, _, about = rest.partition("|")
+    return title.strip() or "Дизайн", about.strip()
+
+
+async def _finish_design(ctx: ContextTypes.DEFAULT_TYPE, msg: Message, file_ids: list[str], caption: str | None) -> None:
+    parsed = _design_caption(caption)
+    if not parsed:
+        await msg.reply_text(
+            "Бұл фотоны дизайн каталогына қосу үшін астына жазыңыз:\n"
+            "#дизайн Атауы | қысқаша сипаттама\n\n"
+            "Клиентке жіберу үшін 🔥 хабарландыруға reply жасаңыз."
+        )
+        return
+    title, about = parsed
+    blobs = []
+    for fid in file_ids:
+        f = await ctx.bot.get_file(fid)
+        blobs.append(bytes(await f.download_as_bytearray()))
+    did = await asyncio.to_thread(designs.add, title, about, blobs)
+    await msg.reply_text(
+        f"✅ Дизайн қосылды: {title} ({len(blobs)} сурет)\nid: {did}\n"
+        "Клиент дизайн сұраса, бот енді осыны да көрсетеді. Өшіру: /deldesign " + did
+    )
+
+
+async def on_owner_photo(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
+    msg: Message = update.effective_message
+    fid = msg.photo[-1].file_id  # ең үлкен өлшемі
+    if not msg.media_group_id:
+        await _finish_design(ctx, msg, [fid], msg.caption)
+        return
+    g = album_buf.setdefault(msg.media_group_id, {"ids": [], "caption": None, "msg": msg})
+    g["ids"].append((msg.message_id, fid))
+    if msg.caption:
+        g["caption"], g["msg"] = msg.caption, msg
+    if len(g["ids"]) == 1:  # альбомның қалған суреттерін күтеміз
+        await asyncio.sleep(3)
+        g = album_buf.pop(msg.media_group_id)
+        await _finish_design(ctx, g["msg"], [f for _, f in sorted(g["ids"])], g["caption"])
+
+
+async def on_designs(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
+    items = designs.load()
+    if not items:
+        await update.effective_message.reply_text("Каталог бос. Фото жіберіп, астына «#дизайн Атауы | сипаттама» деп жазыңыз.")
+        return
+    lines = [f"• {d['title']} ({len(d['images'])} сурет)\n  id: {d['id']}" for d in items]
+    await update.effective_message.reply_text(
+        "🎨 Дизайн каталогы:\n\n" + "\n".join(lines) + "\n\nҚосу: фото + «#дизайн Атауы | сипаттама»\nӨшіру: /deldesign id"
+    )
+
+
+async def on_deldesign(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
+    if not ctx.args:
+        await update.effective_message.reply_text("Қолдану: /deldesign id (id-ді /designs көрсетеді)")
+        return
+    ok = await asyncio.to_thread(designs.remove, ctx.args[0])
+    await update.effective_message.reply_text("🗑 Өшірілді" if ok else "Ондай id жоқ. /designs")
+
+
 async def on_owner(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     msg: Message = update.effective_message
     target = msg.reply_to_message
     key = store.notif_key(target.message_id) if target else None
+    if not key and msg.photo:
+        await on_owner_photo(update, ctx)
+        return
     if not key:
         await msg.reply_text("Клиентке жауап беру үшін 🔥 хабарландыруға reply жасаңыз. /help")
         return
@@ -271,6 +387,8 @@ def main() -> None:
     app.add_handler(CommandHandler("start", on_start))
     app.add_handler(CommandHandler("help", on_help, filters=owner))
     app.add_handler(CommandHandler("list", on_list, filters=owner))
+    app.add_handler(CommandHandler("designs", on_designs, filters=owner))
+    app.add_handler(CommandHandler("deldesign", on_deldesign, filters=owner))
     app.add_handler(CallbackQueryHandler(on_button, pattern="^(auto|human)$"))
     app.add_handler(MessageHandler(owner & private & ~filters.COMMAND, on_owner))
     app.add_handler(MessageHandler(private & ~owner & ~filters.COMMAND, on_customer))

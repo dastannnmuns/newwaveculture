@@ -11,6 +11,7 @@ import ssl
 from dataclasses import dataclass
 from email.message import EmailMessage
 from email.utils import formataddr, make_msgid, parseaddr
+from pathlib import Path
 
 from config import MailAccount
 
@@ -104,7 +105,15 @@ def fetch_new(acc: MailAccount, last_uid: int | None) -> tuple[list[Incoming], i
         return out, top
 
 
-def send_reply(acc: MailAccount, to: str, subject: str, body: str, in_reply_to: str = "", references: str = "") -> None:
+def send_reply(
+    acc: MailAccount,
+    to: str,
+    subject: str,
+    body: str,
+    in_reply_to: str = "",
+    references: str = "",
+    attachments: list[Path] | None = None,
+) -> None:
     m = EmailMessage()
     m["From"] = formataddr(("newwave", acc.address))
     m["To"] = to
@@ -114,6 +123,9 @@ def send_reply(acc: MailAccount, to: str, subject: str, body: str, in_reply_to: 
         m["In-Reply-To"] = in_reply_to
         m["References"] = (references + " " + in_reply_to).strip()
     m.set_content(body)
+    for path in attachments or []:
+        sub = "png" if path.suffix.lower() == ".png" else "jpeg"
+        m.add_attachment(path.read_bytes(), maintype="image", subtype=sub, filename=path.name)
     with smtplib.SMTP_SSL(acc.smtp_host, acc.smtp_port, context=ssl.create_default_context()) as s:
         s.login(acc.address, acc.password)
         s.send_message(m)

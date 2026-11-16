@@ -1,0 +1,16 @@
+[
+  {
+    "id": "newwave-site",
+    "title": "newwave студиясының сайты: компьютер нұсқасы",
+    "about": "Dark premium style, 3D phone and gold coin, animated ocean wave background, gradient headings, package picker, price cards with pros/cons, glass footer. Kazakh/Russian.",
+    "images": ["newwave-hero.jpg", "newwave-picker.jpg", "newwave-prices.jpg", "newwave-contact.jpg", "newwave-footer.jpg"],
+    "link": ""
+  },
+  {
+    "id": "newwave-mobile",
+    "title": "newwave сайты: телефон нұсқасы",
+    "about": "The same newwave site on a phone screen: hero and price cards, mobile layout.",
+    "images": ["newwave-mobile.jpg", "newwave-mobile-prices.jpg"],
+    "link": ""
+  }
+]

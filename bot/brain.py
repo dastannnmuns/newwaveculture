@@ -2,10 +2,11 @@
 
 import json
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import anthropic
 
+import designs as design_catalog
 from config import CLAUDE_EFFORT, CLAUDE_MODEL, KNOWLEDGE_PATH
 
 log = logging.getLogger("brain")
@@ -19,7 +20,7 @@ You answer customers who write via {channel}.
 
 How to answer:
 - Reply in the customer's language (Kazakh, Russian or English) — match what they wrote.
-- You may answer ANY question, including general ones unrelated to websites: be genuinely helpful, friendly and concise.
+- Answer EVERY question the customer asks, whatever the topic — websites, design, marketing, business, tech or anything general. Never brush a question off or say it's off-topic: give a real, helpful answer, friendly and concise.
 - For questions about newwave, use only the business information below. If something isn't covered there, say the owner will clarify — never invent prices, discounts, deadlines or guarantees.
 - Keep it short and natural, like a messenger reply (email replies may be a bit fuller, with a greeting and sign-off "newwave").
 - Plain text only, no Markdown.
@@ -32,6 +33,15 @@ When to hand off to the owner (handoff = true) — this is "real business":
 - any question where an answer would commit the studio to something.
 Small talk, general questions and questions answered by the information below are NOT a handoff.
 When handing off, the reply should still be useful: thank them, answer what you safely can, collect what is missing (business type, wanted package, deadline, phone) only if it's natural, and say the owner will reply personally soon.
+
+Showing designs (designs field):
+- If the customer asks to see designs, examples, portfolio, works, "how it looks", or it would clearly help (e.g. they ask what a package looks like), put the ids of the most relevant designs from the catalog below into "designs" (1–3 ids, best first) and say in the reply that you are sending them.
+- Otherwise leave "designs" empty. Never invent ids that are not in the catalog. If the catalog has nothing suitable, say the owner will send more examples.
+
+Design catalog:
+<designs>
+{designs}
+</designs>
 
 Set ignore = true (and reply = "") only for messages that need no reply at all: newsletters, notifications, ads, spam, automatic mails.
 
@@ -53,10 +63,20 @@ SCHEMA = {
         },
         "ignore": {"type": "boolean", "description": "True if no reply should be sent"},
         "summary": {"type": "string", "description": "Short summary for the owner, in Kazakh"},
+        "designs": {"type": "array", "items": {"type": "string"}, "description": "Design ids to send"},
     },
-    "required": ["reply", "handoff", "category", "ignore", "summary"],
+    "required": ["reply", "handoff", "category", "ignore", "summary", "designs"],
     "additionalProperties": False,
 }
+
+def _schema() -> dict:
+    """Каталогтағы id-лерді enum етіп береміз — Claude тек бар дизайнды таңдай алады."""
+    ids = [d["id"] for d in design_catalog.load()]
+    sch = json.loads(json.dumps(SCHEMA))
+    if ids:
+        sch["properties"]["designs"]["items"] = {"type": "string", "enum": ids}
+    return sch
+
 
 CATEGORY_KK = {
     "question": "сұрақ",
@@ -78,6 +98,7 @@ class Decision:
     category: str
     ignore: bool
     summary: str
+    designs: list[str] = field(default_factory=list)
 
     @property
     def category_kk(self) -> str:
@@ -118,9 +139,9 @@ async def decide(history: list[dict[str, str]], channel: str) -> Decision:
         params = dict(
             model=CLAUDE_MODEL,
             max_tokens=16000,
-            system=SYSTEM.format(channel=channel, knowledge=knowledge),
+            system=SYSTEM.format(channel=channel, knowledge=knowledge, designs=design_catalog.prompt_block()),
             messages=messages,
-            output_config={"effort": CLAUDE_EFFORT, "format": {"type": "json_schema", "schema": SCHEMA}},
+            output_config={"effort": CLAUDE_EFFORT, "format": {"type": "json_schema", "schema": _schema()}},
         )
         if CLAUDE_MODEL in FALLBACK_MODELS:
             # Claude бас тартса, сервер өзі басқа модельмен қайталайды (Haiku-да бұл мүмкіндік жоқ)
@@ -146,6 +167,7 @@ async def decide(history: list[dict[str, str]], channel: str) -> Decision:
         log.warning("Claude stop_reason=%s", resp.stop_reason)
         return FAILSAFE
     text = "".join(b.text for b in resp.content if b.type == "text")
+    valid = {d["id"] for d in design_catalog.load()}
     try:
         data = json.loads(text)
         return Decision(
@@ -154,6 +176,7 @@ async def decide(history: list[dict[str, str]], channel: str) -> Decision:
             category=str(data["category"]),
             ignore=bool(data["ignore"]),
             summary=str(data["summary"]).strip(),
+            designs=[d for d in data.get("designs", []) if d in valid][:3],
         )
     except (json.JSONDecodeError, KeyError, TypeError):
         log.error("Claude жауабын оқу мүмкін болмады: %r", text[:300])
