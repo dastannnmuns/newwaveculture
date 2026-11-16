@@ -37,13 +37,10 @@ class MailAccount:
     smtp_port: int = 465
 
 
-CLAUDE_MODEL = env("BOT_MODEL", "claude-haiku-5-5")
-CLAUDE_EFFORT = env("BOT_EFFORT", "low")
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 OWNER_CHAT_ID = int(env("OWNER_CHAT_ID") or 0)
 MAIL_POLL_SECONDS = int(env("MAIL_POLL_SECONDS", "60") or 60)
 DB_PATH = ROOT / "state.db"
-KNOWLEDGE_PATH = ROOT / "knowledge.md"
 
 MAIL_ACCOUNTS: list[MailAccount] = []
 if env("GMAIL_ADDRESS") and env("GMAIL_APP_PASSWORD"):

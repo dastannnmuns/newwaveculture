@@ -1,19 +1,26 @@
-"""newwave бот: Telegram + Gmail + Mail.ru.
+"""newwave бот: Telegram + Gmail + Mail.ru. ЖИ ЖОҚ, тек дайын жауаптар (answers.json).
 
-Клиент жазады → Claude жауап береді.
-«Іс» болса (тапсырыс, баға, төлем, шағым, адам сұраса) → бот клиентке «өзім жауап беремін» дейді,
-сізге Telegram-ға хабар келеді, сіз сол хабарға reply жасап жауап бересіз — ол клиентке кетеді
-(Telegram-ға немесе email-ге).
+Telegram: клиентке мәзір батырмалары + кілт сөздер бойынша дайын жауаптар + дизайн суреттері.
+«Іс» болса (тапсырыс, жеңілдік, адам сұраса) немесе бот сұрақты түсінбесе → сізге Telegram-ға хабар,
+сіз сол хабарға reply жасап жауап бересіз → клиентке кетеді (Telegram-ға немесе email-ге).
+Пошта: жаңа хатқа автожауап («хатыңыз қабылданды» + сұрағына сай дайын жауап) → хат сізге Telegram-ға.
 
 Іске қосу:  python bot.py
 """
 
 import asyncio
 import logging
+import time
 from collections import defaultdict
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, Message, Update
-from telegram.constants import ChatAction
+from telegram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    InputMediaPhoto,
+    Message,
+    ReplyKeyboardMarkup,
+    Update,
+)
 from telegram.ext import (
     Application,
     CallbackQueryHandler,
@@ -23,9 +30,9 @@ from telegram.ext import (
     filters,
 )
 
+import answers
 import designs
 import store
-from brain import decide
 from config import MAIL_ACCOUNTS, MAIL_POLL_SECONDS, OWNER_CHAT_ID, TELEGRAM_BOT_TOKEN
 from mailbox import fetch_new, send_reply
 
@@ -33,10 +40,7 @@ logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", le
 logging.getLogger("httpx").setLevel(logging.WARNING)
 log = logging.getLogger("bot")
 
-ACK = (
-    "Сәлеметсіз бе! Хабарыңыз қабылданды, жақын арада өзім жауап беремін.\n"
-    "Здравствуйте! Сообщение получено, скоро отвечу лично."
-)
+AUTOREPLY_EVERY = 24 * 3600  # бір адамға email автожауап тәулігіне бір рет
 locks: defaultdict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
 ACCOUNTS = {a.name: a for a in MAIL_ACCOUNTS}
 
@@ -55,6 +59,12 @@ def kb(mode: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([[InlineKeyboardButton("👤 Өзім жауап беремін", callback_data="human")]])
 
 
+def menu() -> ReplyKeyboardMarkup:
+    b = answers.buttons()
+    rows = [b[i : i + 2] for i in range(0, len(b), 2)]
+    return ReplyKeyboardMarkup(rows, resize_keyboard=True)
+
+
 # ───────────── Иесіне хабар ─────────────
 async def tell_owner(app: Application, key: str, text: str, mode: str) -> None:
     if not OWNER_CHAT_ID:
@@ -67,7 +77,7 @@ async def tell_owner(app: Application, key: str, text: str, mode: str) -> None:
         store.link_notif(m.message_id, key)
 
 
-# ───────────── Клиентке жіберу ─────────────
+# ───────────── Дизайн жіберу ─────────────
 async def send_designs_tg(app: Application, chat_id: int, items: list[dict]) -> None:
     for d in items:
         caption = d["title"] + (f"\n{d['link']}" if d.get("link") else "")
@@ -85,100 +95,133 @@ async def send_designs_tg(app: Application, chat_id: int, items: list[dict]) -> 
                 h.close()
 
 
-async def send_to_customer(app: Application, key: str, text: str, design_ids: list[str] | None = None) -> None:
-    items = [d for d in (designs.get(i) for i in design_ids or []) if d]
+async def offer_designs(app: Application, chat_id: int, lang: str) -> None:
+    items = designs.load()
+    if not items:
+        await app.bot.send_message(
+            chat_id, "Мысалдарды иесі өзі жібереді 🙌" if lang == "kk" else "Примеры пришлёт владелец 🙌"
+        )
+        return
+    if len(items) <= 3:
+        await send_designs_tg(app, chat_id, items)
+        return
+    # Көп болса — таңдау батырмалары
+    rows = [[InlineKeyboardButton(d["title"][:60], callback_data=f"d:{i}")] for i, d in enumerate(items[:30])]
+    await app.bot.send_message(
+        chat_id,
+        "Қайсысын көргіңіз келеді? 👇" if lang == "kk" else "Какой пример показать? 👇",
+        reply_markup=InlineKeyboardMarkup(rows),
+    )
+
+
+# ───────────── Клиентке жіберу (иесінің жауабы) ─────────────
+async def send_to_customer(app: Application, key: str, text: str) -> None:
     if key.startswith("tg:"):
-        chat_id = int(key[3:])
         for part in chunks(text):
-            await app.bot.send_message(chat_id, part)
-        if items:
-            await app.bot.send_chat_action(chat_id, ChatAction.UPLOAD_PHOTO)
-            await send_designs_tg(app, chat_id, items)
+            await app.bot.send_message(int(key[3:]), part)
     elif key.startswith("mail:"):
         meta = store.get_conv(key)["meta"]
         acc = ACCOUNTS[meta["account"]]
-        body = text
-        links = [f"{d['title']}: {d['link']}" for d in items if d.get("link")]
-        if links:
-            body += "\n\n" + "\n".join(links)
-        files = [p for d in items for p in designs.paths(d)]
         await asyncio.to_thread(
-            send_reply,
-            acc,
-            meta["to"],
-            meta.get("subject", ""),
-            body,
-            meta.get("message_id", ""),
-            meta.get("references", ""),
-            files,
+            send_reply, acc, meta["to"], meta.get("subject", ""), text, meta.get("message_id", ""), meta.get("references", "")
         )
-    note = ("\n[Жіберілген дизайндар: " + ", ".join(d["title"] for d in items) + "]") if items else ""
-    store.add_message(key, "assistant", text + note)
+    store.add_message(key, "assistant", text)
 
 
-# ───────────── Ортақ логика: клиент хабары ─────────────
-async def handle_customer(app: Application, key: str, title: str, channel: str, text: str, meta: dict | None = None) -> None:
+# ───────────── Telegram: клиенттер ─────────────
+async def reply_topic(app: Application, chat_id: int, key: str, topic: dict, lang: str) -> None:
+    txt = answers.answer(topic, lang)
+    await app.bot.send_message(chat_id, txt, reply_markup=menu())
+    store.add_message(key, "assistant", txt)
+    if topic.get("send_designs"):
+        await offer_designs(app, chat_id, lang)
+
+
+async def handoff(app: Application, chat_id: int, key: str, title: str, text: str, lang: str, why: str) -> None:
+    await app.bot.send_message(chat_id, answers.text("handoff", lang), reply_markup=menu())
+    store.upsert_conv(key, mode="human")
+    await tell_owner(
+        app,
+        key,
+        f"🔥 {why}\n👤 {title}\n\nКлиент жазды:\n{text}\n\n"
+        "↩️ Осы хабарға reply жасап жазсаңыз, клиентке кетеді.\n"
+        "Бот бұл клиенттің мәтініне енді жауап бермейді (батырмалар жұмыс істей береді), «Ботқа қайтару» басқанша.",
+        "human",
+    )
+
+
+async def on_customer(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
+    msg, user, app = update.effective_message, update.effective_user, ctx.application
+    chat_id = update.effective_chat.id
+    key = f"tg:{chat_id}"
+    title = f"{user.full_name}" + (f" (@{user.username})" if user.username else "") + " · Telegram"
+    base_lang = "ru" if (user.language_code or "").startswith("ru") else "kk"
+
     async with locks[key]:
         conv = store.get_conv(key)
-        store.upsert_conv(key, title=title, meta=meta if meta is not None else conv["meta"])
+        store.upsert_conv(key, title=title)
+
+        if not msg.text:  # фото, дауыс, файл → иесіне
+            if OWNER_CHAT_ID:
+                await tell_owner(app, key, f"📎 {title} файл/дауыс жіберді 👇", "human")
+                fwd = await msg.forward(OWNER_CHAT_ID)
+                store.link_notif(fwd.message_id, key)
+            store.upsert_conv(key, mode="human")
+            await msg.reply_text(answers.text("handoff", base_lang), reply_markup=menu())
+            return
+
+        text = msg.text.strip()
+        lang = answers.lang_of(text, base_lang)
         store.add_message(key, "user", text)
 
+        # 1) Мәзір батырмасы — әрқашан жауап береді
+        if text == answers.load()["owner_button"]:
+            await handoff(app, chat_id, key, title, text, base_lang, "Клиент сізбен сөйлескісі келеді")
+            return
+        topic = answers.by_button(text)
+        if topic:
+            await reply_topic(app, chat_id, key, topic, base_lang)
+            return
+
+        # 2) Иесі сөйлесіп жатыр — мәтінді тек иесіне жібереміз
         if conv["mode"] == "human":
             await tell_owner(app, key, f"💬 {title}\n\n{text}\n\n↩️ Жауап беру үшін осы хабарға reply жасаңыз.", "human")
             return
 
-        d = await decide(store.history(key), channel)
-        if d.ignore and not d.handoff:
-            log.info("%s: жауапсыз қалдырылды (%s)", key, d.category)
-            return
-        reply = d.reply or ACK
-        try:
-            await send_to_customer(app, key, reply, d.designs)
-        except Exception:
-            log.exception("%s: клиентке жіберу мүмкін болмады", key)
-            reply = "(клиентке жіберілмеді — қате)"
-
-        if d.handoff:
-            store.upsert_conv(key, mode="human")
-            await tell_owner(
-                app,
-                key,
-                f"🔥 Іс: {d.category_kk}\n👤 {title}\n📝 {d.summary}\n\n"
-                f"Клиент жазды:\n{text}\n\n🤖 Бот жауабы:\n{reply}\n"
-                + (f"🎨 Дизайн жіберілді: {', '.join(d.designs)}\n" if d.designs else "")
-                + "\n"
-                "↩️ Осы хабарға reply жасап жазсаңыз, клиентке кетеді. "
-                "Бот бұл клиентке енді жауап бермейді, «Ботқа қайтару» басқанша.",
-                "human",
-            )
+        # 3) Кілт сөздер
+        m = answers.match(text)
+        for tp in m.topics:
+            await reply_topic(app, chat_id, key, tp, lang)
+        if m.handoff:
+            await handoff(app, chat_id, key, title, text, lang, "Іс: тапсырыс / келісу / адам сұрады")
+        elif not m.topic:
+            if m.greeting:
+                await msg.reply_text(answers.text("greeting", lang), reply_markup=menu())
+            else:
+                await msg.reply_text(answers.text("unknown", lang), reply_markup=menu())
+                await tell_owner(
+                    app,
+                    key,
+                    f"❓ Бот түсінбеген сұрақ\n👤 {title}\n\n{text}\n\n↩️ Жауап беру үшін осы хабарға reply жасаңыз.",
+                    "auto",
+                )
 
 
-# ───────────── Telegram: клиенттер ─────────────
-async def on_customer(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
-    msg, user = update.effective_message, update.effective_user
-    key = f"tg:{update.effective_chat.id}"
-    title = f"{user.full_name}" + (f" (@{user.username})" if user.username else "") + " · Telegram"
-    if not msg.text:
-        # Фото, дауыс, файл → иесіне жібереміз
-        if OWNER_CHAT_ID:
-            await tell_owner(ctx.application, key, f"📎 {title} файл/дауыс жіберді 👇", "human")
-            fwd = await msg.forward(OWNER_CHAT_ID)
-            store.link_notif(fwd.message_id, key)
-        store.upsert_conv(key, title=title, mode="human")
-        await msg.reply_text(ACK)
-        return
-    await ctx.bot.send_chat_action(update.effective_chat.id, ChatAction.TYPING)
-    await handle_customer(ctx.application, key, title, "Telegram", msg.text)
+async def on_design_pick(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
+    q = update.callback_query
+    await q.answer()
+    items = designs.load()
+    i = int(q.data[2:])
+    if 0 <= i < len(items):
+        await send_designs_tg(ctx.application, q.message.chat.id, [items[i]])
 
 
 async def on_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     if is_owner(update):
         await on_help(update, ctx)
         return
-    await update.effective_message.reply_text(
-        "Сәлеметсіз бе! Мен newwave көмекшісімін 👋 Сайт, баға немесе кез келген сұрағыңызды жазыңыз.\n"
-        "Здравствуйте! Я помощник newwave — задайте любой вопрос."
-    )
+    lang = "ru" if (update.effective_user.language_code or "").startswith("ru") else "kk"
+    await update.effective_message.reply_text(answers.text("greeting", lang), reply_markup=menu())
 
 
 # ───────────── Telegram: иесі ─────────────
@@ -193,8 +236,10 @@ async def on_help(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
         "🤖 newwave бот жұмыс істеп тұр.\n\n"
         f"Пошта: {mails}\n\n"
-        "• Бот сұрақтарға өзі жауап береді.\n"
-        "• «Іс» болса (тапсырыс, баға, төлем, шағым) — сізге 🔥 хабар келеді.\n"
+        "• Бот мәзір мен кілт сөздер бойынша дайын жауап береді (answers.json).\n"
+        "• «Іс» болса (тапсырыс, жеңілдік, адам сұраса) — сізге 🔥 хабар келеді.\n"
+        "• Бот түсінбеген сұрақ — ❓ хабар келеді.\n"
+        "• Жаңа email — 📧 хабар келеді (клиентке автожауап кеткен).\n"
         "• Хабарға reply жасап жазсаңыз — клиентке кетеді (Telegram немесе email).\n"
         "• «🤖 Ботқа қайтару» — бот сол клиентпен қайта сөйлеседі.\n\n"
         "🎨 Дизайн қосу: фото (немесе альбом) жіберіп, астына жазыңыз:\n"
@@ -333,6 +378,51 @@ async def on_owner(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 # ───────────── Пошта ─────────────
+async def handle_email(app: Application, acc, it) -> None:
+    key = f"mail:{acc.name}:{it.sender}"
+    title = f"{it.sender_name or it.sender} <{it.sender}> · {acc.name}"
+    meta = {
+        "account": acc.name,
+        "to": it.sender,
+        "subject": it.subject,
+        "message_id": it.message_id,
+        "references": it.references,
+    }
+    text = f"Тақырып: {it.subject}\n\n{it.body}"
+    async with locks[key]:
+        conv = store.get_conv(key)
+        store.upsert_conv(key, title=title, meta=meta)
+        store.add_message(key, "user", text)
+        last = float(conv["meta"].get("autoreplied", 0) or 0)
+        sent = ""
+        if conv["mode"] != "human" and time.time() - last > AUTOREPLY_EVERY:
+            lang = answers.lang_of(it.subject + " " + it.body)
+            m = answers.match(it.subject + " " + it.body)
+            body, files = answers.text("email_autoreply", lang), []
+            for tp in reversed(m.topics):
+                if tp.get("send_designs"):
+                    files = [p for d in designs.load()[:3] for p in designs.paths(d)]
+                else:
+                    body = answers.answer(tp, lang) + "\n\n" + body
+            try:
+                await asyncio.to_thread(
+                    send_reply, acc, it.sender, it.subject, body, it.message_id, it.references, files
+                )
+                meta["autoreplied"] = time.time()
+                sent = "\n\n🤖 Клиентке автожауап кетті."
+            except Exception as e:
+                log.error("%s: автожауап жіберілмеді: %s", key, e)
+        else:
+            meta["autoreplied"] = last
+        store.upsert_conv(key, meta=meta, mode="human")
+    await tell_owner(
+        app,
+        key,
+        f"📧 Жаңа хат · {title}\n\n{text[:3000]}{sent}\n\n↩️ Осы хабарға reply жасасаңыз, жауабыңыз email болып кетеді.",
+        "human",
+    )
+
+
 async def mail_loop(app: Application) -> None:
     if not MAIL_ACCOUNTS:
         log.info("Пошта қосылмаған (GMAIL_/MAILRU_ баптаулары жоқ)")
@@ -349,19 +439,10 @@ async def mail_loop(app: Application) -> None:
                 continue
             store.kv_set(kv, str(top))
             for it in items:
-                key = f"mail:{acc.name}:{it.sender}"
-                title = f"{it.sender_name or it.sender} <{it.sender}> · {acc.name}"
-                meta = {
-                    "account": acc.name,
-                    "to": it.sender,
-                    "subject": it.subject,
-                    "message_id": it.message_id,
-                    "references": it.references,
-                }
                 try:
-                    await handle_customer(app, key, title, "email", f"Тақырып: {it.subject}\n\n{it.body}", meta)
+                    await handle_email(app, acc, it)
                 except Exception:
-                    log.exception("%s хатын өңдеу қатесі", key)
+                    log.exception("%s хатын өңдеу қатесі", it.sender)
         await asyncio.sleep(MAIL_POLL_SECONDS)
 
 
@@ -390,6 +471,7 @@ def main() -> None:
     app.add_handler(CommandHandler("designs", on_designs, filters=owner))
     app.add_handler(CommandHandler("deldesign", on_deldesign, filters=owner))
     app.add_handler(CallbackQueryHandler(on_button, pattern="^(auto|human)$"))
+    app.add_handler(CallbackQueryHandler(on_design_pick, pattern="^d:[0-9]+$"))
     app.add_handler(MessageHandler(owner & private & ~filters.COMMAND, on_owner))
     app.add_handler(MessageHandler(private & ~owner & ~filters.COMMAND, on_customer))
     app.run_polling(allowed_updates=Update.ALL_TYPES)
