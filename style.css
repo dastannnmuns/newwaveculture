@@ -9,8 +9,8 @@
   --ink: #f3f1ec;
   --muted: #9a98a6;
   --line: #2a2936;
-  --accent: #d4ff3a;
-  --wave: linear-gradient(100deg, #d4ff3a 0%, #3ff0ff 50%, #8b6bff 100%);
+  --accent: #2ee6d6;
+  --wave: linear-gradient(100deg, #5ff5dc 0%, #22b8ff 50%, #3b5bff 100%);
   --cyan: #3ff0ff;
   --gold: #f6d27a;
   --good: #4cc488;
@@ -19,7 +19,7 @@
   --t2: #1d1a36;
   --t3: #34287a;
   --t4: #6a4dff;
-  --t5: #d4ff3a;
+  --t5: #2ee6d6;
   --t6: #f6d27a;
   --display: "Unbounded", "Montserrat", "Segoe UI", Arial, sans-serif;
   --body: "Onest", "Segoe UI", Arial, sans-serif;
@@ -703,7 +703,7 @@ form textarea {
   --gold1: #f6d27a;
   --gold2: #c8902a;
   --gold3: #8a5a12;
-  --glow: #d4ff3a;
+  --glow: #2ee6d6;
   --violet: #7b5cff;
   background: var(--sbg);
   color: var(--sink);
@@ -1058,7 +1058,7 @@ form textarea {
 }
 
 .scr .tile:nth-child(2) {
-  background: #e3ff9a;
+  background: #a8fff2;
 }
 
 .scr .pill {
@@ -1084,7 +1084,7 @@ form textarea {
   width: 30px;
   height: 30px;
   border-radius: 8px;
-  background: #e3ff9a;
+  background: #a8fff2;
   display: block;
 }
 
@@ -1525,7 +1525,7 @@ form .row2 {
   --fmuted: #9a98a6;
   --gold1: #f6d27a;
   --gold2: #c8902a;
-  --glow: #d4ff3a;
+  --glow: #2ee6d6;
   --violet: #7b5cff;
   position: relative;
   overflow: hidden;
@@ -2289,7 +2289,7 @@ form .row2 {
 }
 
 .intro .iname span {
-  color: #d4ff3a;
+  color: #2ee6d6;
 }
 
 @keyframes icoin {
@@ -3023,7 +3023,7 @@ form .row2 {
 
 .btn {
   font-weight: 700;
-  box-shadow: 0 0 0 0 rgba(212, 255, 58, 0.5);
+  box-shadow: 0 0 0 0 rgba(46, 230, 214, 0.5);
   transition:
     transform 0.2s,
     box-shadow 0.3s,
@@ -3035,7 +3035,7 @@ form .row2 {
   background: var(--accent);
   color: #07070d;
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px -8px rgba(212, 255, 58, 0.55);
+  box-shadow: 0 10px 30px -8px rgba(46, 230, 214, 0.55);
 }
 
 .label {

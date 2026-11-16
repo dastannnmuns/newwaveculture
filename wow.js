@@ -90,9 +90,9 @@
     // түстер: лайм → көгілдір → күлгін
     const lerp = (a, b, k) => a + (b - a) * k;
     const C = [
-      [212, 255, 58],
-      [63, 240, 255],
-      [139, 107, 255],
+      [95, 245, 220],
+      [34, 184, 255],
+      [59, 91, 255],
     ];
     const col = (k) => {
       const i = k < 0.5 ? 0 : 1,
@@ -325,7 +325,7 @@
     svg.setAttribute("preserveAspectRatio", "none");
     svg.setAttribute("viewBox", "0 0 1000 40");
     svg.innerHTML =
-      '<defs><linearGradient id="wgrad" x1="0" x2="1"><stop offset="0" stop-color="#d4ff3a"/><stop offset=".5" stop-color="#3ff0ff"/><stop offset="1" stop-color="#8b6bff"/></linearGradient></defs>';
+      '<defs><linearGradient id="wgrad" x1="0" x2="1"><stop offset="0" stop-color="#5ff5dc"/><stop offset=".5" stop-color="#22b8ff"/><stop offset="1" stop-color="#3b5bff"/></linearGradient></defs>';
     let d = "M0 20";
     for (let x = 0; x < 1000; x += 50) d += ` Q${x + 25} ${(x / 50) % 2 ? 34 : 6} ${x + 50} 20`;
     const bg = document.createElementNS(ns, "path"),
