@@ -37,7 +37,7 @@ class MailAccount:
     smtp_port: int = 465
 
 
-CLAUDE_MODEL = env("BOT_MODEL", "claude-opus-5-5")
+CLAUDE_MODEL = env("BOT_MODEL", "claude-haiku-5-5")
 CLAUDE_EFFORT = env("BOT_EFFORT", "low")
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 OWNER_CHAT_ID = int(env("OWNER_CHAT_ID") or 0)

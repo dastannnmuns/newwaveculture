@@ -11,6 +11,9 @@ from config import CLAUDE_EFFORT, CLAUDE_MODEL, KNOWLEDGE_PATH
 log = logging.getLogger("brain")
 client = anthropic.AsyncAnthropic()
 
+# Сервердегі fallback-ты қолдайтын модельдер
+FALLBACK_MODELS = {"claude-opus-5-5", "claude-opus-5", "claude-sonnet-5-5", "claude-fable-5-2", "claude-fable-5-1"}
+
 SYSTEM = """You are the assistant of newwave, a web studio in Kazakhstan that builds websites for businesses.
 You answer customers who write via {channel}.
 
@@ -112,16 +115,20 @@ async def decide(history: list[dict[str, str]], channel: str) -> Decision:
         return FAILSAFE
     knowledge = KNOWLEDGE_PATH.read_text(encoding="utf-8") if KNOWLEDGE_PATH.exists() else ""
     try:
-        resp = await client.beta.messages.create(
+        params = dict(
             model=CLAUDE_MODEL,
             max_tokens=16000,
             system=SYSTEM.format(channel=channel, knowledge=knowledge),
             messages=messages,
             output_config={"effort": CLAUDE_EFFORT, "format": {"type": "json_schema", "schema": SCHEMA}},
-            # Claude бас тартса, сервер өзі басқа модельмен қайталайды
-            betas=["server-side-fallback-2026-07-01"],
-            fallbacks="default",
         )
+        if CLAUDE_MODEL in FALLBACK_MODELS:
+            # Claude бас тартса, сервер өзі басқа модельмен қайталайды (Haiku-да бұл мүмкіндік жоқ)
+            resp = await client.beta.messages.create(
+                **params, betas=["server-side-fallback-2026-07-01"], fallbacks="default"
+            )
+        else:
+            resp = await client.messages.create(**params)
     except anthropic.AuthenticationError:
         log.error("ANTHROPIC_API_KEY қате немесе жоқ")
         return FAILSAFE
