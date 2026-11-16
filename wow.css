@@ -1,0 +1,361 @@
+/* newwave — «вау» қабаты: толқынды мұхит, курсор, магнит, жарық, скролл-прогресс */
+
+/* ───── Скролл-прогресс (жоғарғы толқын сызығы) ───── */
+.wprog {
+  position: fixed;
+  inset: env(safe-area-inset-top, 0px) 0 auto;
+  height: 3px;
+  z-index: 11;
+  pointer-events: none;
+  background: var(--wave);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+  box-shadow: 0 0 12px rgba(63, 240, 255, 0.7);
+}
+
+/* ───── 3D толқынды мұхит — бірінші бөлімнің фоны ───── */
+.ocean {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ocean canvas {
+  position: sticky;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  opacity: 0;
+  transition: opacity 1.4s ease 0.3s;
+}
+
+.ocean.on canvas {
+  opacity: 1;
+}
+
+.story .wrap {
+  position: relative;
+  z-index: 1;
+}
+
+/* ───── Жеке курсор (тек тінтуір бар құрылғыда) ───── */
+.has-cur,
+.has-cur * {
+  cursor: none !important;
+}
+
+.has-cur input,
+.has-cur textarea,
+.has-cur select {
+  cursor: text !important;
+}
+
+.cur,
+.cur-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.cur {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.cur-ring {
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 1.5px solid rgba(243, 241, 236, 0.55);
+  mix-blend-mode: difference;
+  transition:
+    width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    margin 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.3s,
+    border-color 0.3s,
+    opacity 0.3s;
+}
+
+.cur-ring.hot {
+  width: 74px;
+  height: 74px;
+  margin: -37px 0 0 -37px;
+  background: #fff;
+  border-color: #fff;
+}
+
+.cur-ring.txt {
+  width: 4px;
+  height: 30px;
+  margin: -15px 0 0 -2px;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.cur-ring.down {
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+}
+
+.cur-hide .cur,
+.cur-hide .cur-ring {
+  opacity: 0;
+}
+
+/* ───── Тінтуірдің артынан жүретін жарық (карточкалар) ───── */
+.spot {
+  --mx: 50%;
+  --my: 50%;
+  background-image: radial-gradient(
+    420px circle at var(--mx) var(--my),
+    rgba(63, 240, 255, var(--sa, 0)) 0%,
+    rgba(139, 107, 255, calc(var(--sa, 0) * 0.6)) 30%,
+    transparent 60%
+  );
+  transition:
+    --sa 0.4s,
+    border-color 0.3s,
+    transform 0.25s;
+}
+
+.spot:hover {
+  --sa: 0.12;
+  border-color: rgba(63, 240, 255, 0.45);
+}
+
+@property --sa {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/* ───── Тақырыптардың ашылуы ───── */
+.rv {
+  clip-path: inset(0 0 105% 0);
+  transform: translateY(0.45em);
+  opacity: 0;
+  transition:
+    clip-path 1s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 1s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.6s;
+}
+
+.rv.in {
+  clip-path: inset(-0.2em -0.2em -0.3em -0.2em);
+  transform: none;
+  opacity: 1;
+}
+
+.label.rv {
+  transition-delay: 0s;
+}
+
+h2.rv {
+  transition-delay: 0.08s;
+}
+
+/* Бөлім тақырыбының үстінен өтетін жарқыл */
+h2.rv.in {
+  background: linear-gradient(
+      100deg,
+      transparent 0%,
+      transparent 40%,
+      rgba(212, 255, 58, 0.9) 48%,
+      rgba(63, 240, 255, 0.9) 52%,
+      transparent 60%,
+      transparent 100%
+    )
+    0 0 / 300% 100% no-repeat,
+    linear-gradient(var(--ink), var(--ink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+}
+
+@keyframes shine {
+  from {
+    background-position:
+      100% 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0% 0,
+      0 0;
+  }
+}
+
+/* Тізбектей шығатын элементтер */
+.st {
+  opacity: 0;
+  transform: translateY(26px) scale(0.98);
+  transition:
+    opacity 0.7s ease,
+    transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  transition-delay: calc(var(--d, 0) * 70ms);
+}
+
+.st.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ───── Кезеңдер: толқын-жол толады ───── */
+.steps {
+  position: relative;
+}
+
+.wpath {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2px;
+  height: 40px;
+  margin-top: -20px;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.wpath path {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.wpath .bgp {
+  stroke: var(--line);
+}
+
+.wpath .fg {
+  stroke: url(#wgrad);
+  filter: drop-shadow(0 0 6px rgba(63, 240, 255, 0.8));
+}
+
+.steps:has(.wpath) .step {
+  border-top-color: transparent;
+}
+
+@media (max-width: 860px) {
+  .wpath {
+    display: none;
+  }
+  .steps:has(.wpath) .step {
+    border-top-color: var(--line);
+  }
+}
+
+/* ───── Жүгіртпе жол: скролл жылдамдығымен қисаяды ───── */
+.ticker {
+  transform: skewY(var(--sk, 0deg));
+  transition: transform 0.25s ease-out;
+}
+
+/* ───── Нәзік түйіршік (кино текстурасы) ───── */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.9s steps(6) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -5%); }
+  60% { transform: translate(-6%, -2%); }
+  80% { transform: translate(5%, 4%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ───── Магнитті батырмалар (transform-ға кедергі жоқ: translate бөлек) ───── */
+.btn,
+.lbtn {
+  translate: var(--tx, 0) var(--ty, 0);
+  transition:
+    translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.2s,
+    box-shadow 0.3s,
+    background 0.2s,
+    color 0.2s;
+}
+
+.btn.mag {
+  transition:
+    translate 0.08s linear,
+    transform 0.2s,
+    box-shadow 0.3s,
+    background 0.2s,
+    color 0.2s;
+}
+
+/* Батырмадағы жарқыл */
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.7) 50%, transparent 70%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.btn:hover::after {
+  transform: translateX(120%);
+  transition: transform 0.7s ease;
+}
+
+/* ───── Бағаның «санауы» ───── */
+.big.tick {
+  animation: bump 0.5s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+@keyframes bump {
+  40% {
+    transform: scale(1.08);
+    text-shadow: 0 0 30px rgba(212, 255, 58, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv,
+  .st {
+    clip-path: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  h2.rv.in {
+    animation: none;
+    background: none;
+    color: inherit;
+  }
+  .grain,
+  .ocean {
+    display: none;
+  }
+  .ticker {
+    transform: none;
+  }
+}

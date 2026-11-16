@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="kk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Newwave Studio</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="wow.css" />
+  </head>
+  <body>
+    <div class="intro" id="intro" aria-hidden="true">
+      <div class="ig"></div>
+      <div class="ir"></div>
+      <div class="ir v"></div>
+      <div class="ir"></div>
+      <div class="ir v"></div>
+      <div class="ir"></div>
+      <div class="ibox">
+        <div class="gcoin icoin">N.<small>WAVE</small></div>
+        <div class="iname">new<span>wave</span></div>
+      </div>
+    </div>
+
+    <header>
+      <nav class="wrap nav">
+        <a class="logo" href="#top" aria-label="newwave"><svg class="wv" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 16c4 0 4-8 9-8s5 8 9 8 5-8 9-8 5 8 9 8"/><path d="M2 21c4 0 4-5 9-5s5 5 9 5 5-5 9-5 5 5 9 5" opacity=".45"/></svg>new<span>wave</span></a>
+        <ul>
+          <li><a href="#prices" data-text="navPrices">Бағалар</a></li>
+          <li><a href="#addons" data-text="navAddons">Қосымша</a></li>
+          <li><a href="#process" data-text="navProcess">Кезеңдер</a></li>
+          <li><a href="#faq" data-text="navFaq">Сұрақтар</a></li>
+        </ul>
+        <div class="navr">
+          <div class="lang" role="group" aria-label="Тіл / Язык">
+            <button type="button" data-lang="kz">ҚАЗ</button>
+            <button type="button" data-lang="ru">РУС</button>
+          </div>
+          <a class="btn sm ghost2" href="#login" data-login id="hdrLogin" data-text="navLogin">Кіру</a
+          ><a class="btn sm" href="#contact" data-text="ctaLead">Өтінім қалдыру</a>
+        </div>
+      </nav>
+    </header>
+
+    <div class="lg" id="lg" hidden role="dialog" aria-modal="true" aria-label="Кіру">
+      <button class="lg-x" id="lgClose" aria-label="Жабу">✕</button>
+      <div class="lg-in">
+        <div class="lampbox">
+          <canvas id="dust"></canvas>
+          <div class="lamp">
+            <div class="cone"></div>
+            <div class="pole"></div>
+            <div class="base"></div>
+            <div class="floor"></div>
+            <div class="shade"></div>
+            <div class="bulb"></div>
+            <div
+              class="cord"
+              id="cord"
+              tabindex="0"
+              role="button"
+              aria-label="Шамды жағу: жібін тарт"
+              aria-pressed="false"
+            >
+              <div class="line"></div>
+              <div class="knob"></div>
+            </div>
+            <div class="hint" data-text="lHint">↓ жібін тарт</div>
+          </div>
+        </div>
+        <div class="lcard" id="lcard">
+          <h2 id="lTitle">Қайта қош келдіңіз</h2>
+          <p class="sub" id="lSub">Аккаунтыңызға кіріңіз</p>
+          <div class="ltabs" role="tablist">
+            <button role="tab" aria-selected="true" data-lt="in" data-text="tabIn">Кіру</button>
+            <button role="tab" aria-selected="false" data-lt="up" data-text="tabUp">Тіркелу</button>
+          </div>
+          <form class="lform" id="fIn" novalidate>
+            <label class="lf"
+              ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21c1-4 4-6 8-6s7 2 8 6" /></svg
+              ><input
+                id="inLogin"
+                placeholder="Email немесе телефон"
+                data-ph="phLogin"
+                autocomplete="username"
+                aria-label="Email немесе телефон"
+            /></label>
+            <label class="lf"
+              ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="11" width="14" height="10" rx="2" />
+                <path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg
+              ><input
+                id="inPass"
+                type="password"
+                placeholder="Құпия сөз"
+                data-ph="phPass"
+                autocomplete="current-password"
+                aria-label="Құпия сөз"
+              /><button
+                type="button"
+                class="eye"
+                data-eye="inPass"
+                aria-label="Құпия сөзді көрсету"
+              >
+                👁
+              </button></label
+            >
+            <div class="lmeta">
+              <label><input type="checkbox" id="inRem" checked /> <span data-text="remember">Есте сақтау</span></label
+              ><a href="#" id="forgot" data-text="forgot">Құпия сөзді ұмыттыңыз ба?</a>
+            </div>
+            <div class="lerr" id="inErr" hidden></div>
+            <button class="lbtn" type="submit" data-text="tabIn">Кіру</button>
+          </form>
+          <form class="lform" id="fUp" novalidate hidden>
+            <div class="lrow2">
+              <label class="lf"
+                ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 21c1-4 4-6 8-6s7 2 8 6" /></svg
+                ><input id="upName" placeholder="Аты" data-ph="phName" autocomplete="given-name" aria-label="Аты"
+              /></label>
+              <label class="lf"
+                ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 21c1-4 4-6 8-6s7 2 8 6" /></svg
+                ><input id="upSur" placeholder="Тегі" data-ph="phSurname" autocomplete="family-name" aria-label="Тегі"
+              /></label>
+            </div>
+            <label class="lf"
+              ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"
+                /></svg
+              ><input
+                id="upPhone"
+                type="tel"
+                placeholder="+7 7__ ___ __ __"
+                autocomplete="tel"
+                aria-label="Телефон"
+            /></label>
+            <label class="lf"
+              ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" /></svg
+              ><input
+                id="upMail"
+                type="email"
+                placeholder="name@gmail.com немесе @mail.ru"
+                data-ph="phMail"
+                autocomplete="email"
+                aria-label="Email"
+            /></label>
+            <label class="lf"
+              ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="11" width="14" height="10" rx="2" />
+                <path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg
+              ><input
+                id="upPass"
+                type="password"
+                placeholder="Құпия сөз (кемінде 8 таңба)"
+                data-ph="phNewPass"
+                autocomplete="new-password"
+                aria-label="Құпия сөз"
+              /><button
+                type="button"
+                class="eye"
+                data-eye="upPass"
+                aria-label="Құпия сөзді көрсету"
+              >
+                👁
+              </button></label
+            >
+            <div class="strength" aria-hidden="true"><i id="strBar"></i></div>
+            <div class="lerr" id="upErr" hidden></div>
+            <button class="lbtn" type="submit" data-text="tabUp">Тіркелу</button>
+          </form>
+          <div id="lSocial">
+            <div class="lor" style="margin-top: 14px" data-text="or">немесе</div>
+            <div class="lsoc">
+              <button type="button" data-soc="Google">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z"
+                  /></svg
+                >Google
+              </button>
+              <button type="button" data-soc="Mail.ru">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="#0077FF" />
+                  <text
+                    x="12"
+                    y="16.5"
+                    text-anchor="middle"
+                    font-family="Arial"
+                    font-weight="700"
+                    font-size="13"
+                    fill="#FF9E00"
+                  >
+                    @
+                  </text></svg
+                >Mail.ru
+              </button>
+            </div>
+          </div>
+          <div class="lok" id="lOk" hidden></div>
+          <p class="lnote" id="lNote" hidden></p>
+        </div>
+      </div>
+    </div>
+
+    <main id="top">
+      <section class="story" id="story" style="padding: 0">
+        <div class="dots"></div>
+        <div class="wrap">
+          <div class="chapters" id="chapters">
+            <article class="chapter on">
+              <div class="cin">
+                <div class="k" data-text="s0k">newwave · сайт жасау</div>
+                <h2 data-text="s0h">Сен <i>бизнес</i> жүргіз. Сайт <i>сатсын.</i></h2>
+                <p data-text="s0p">
+                  Визиткадан онлайн-дүкенге дейін: дизайн, код және іске қосу бір қолда. 50 000
+                  ₸-ден бастап.
+                </p>
+                <a class="btn" href="#picker" data-text="s0btn">Маған қай пакет керек?</a>
+              </div>
+            </article>
+            <article class="chapter">
+              <div class="cin">
+                <div class="k" data-text="s1k">01 · Дизайн мен код</div>
+                <h2 data-text="s1h">Сырты <i>әдемі.</i> Іші <i>таза.</i></h2>
+                <p data-text="s1p">Әр сайт қолмен жазылады: шаблонсыз, жылдам ашылады, телефонда дұрыс көрінеді.</p>
+                <div class="chips2">
+                  <span data-text="s1c1">Фигмада макет</span><span>HTML · CSS · JS</span><span data-text="s1c3">Телефонға бейім</span>
+                </div>
+              </div>
+            </article>
+            <article class="chapter">
+              <div class="cin">
+                <div class="k" data-text="s2k">02 · Сату</div>
+                <h2 data-text="s2h">Өтінім <i>Telegram-ға.</i> Төлем <i>картамен.</i></h2>
+                <p data-text="s2p">
+                  Клиент корзинаға салып, Kaspi, Visa немесе Mastercard картасымен төлейді. Өтінім
+                  бірден телефоныңызға келеді, сайт түнде де сатады.
+                </p>
+                <div class="chips2"><span>Kaspi</span><span>Visa</span><span>Mastercard</span></div>
+              </div>
+            </article>
+            <article class="chapter">
+              <div class="cin">
+                <div class="k" data-text="s3k">03 · Бағалар</div>
+                <h2 data-text="s3h">6 пакет. <i>Бір мақсат.</i></h2>
+                <p data-text="s3p">
+                  50К визиткадан 450К+ брендтік сайтқа дейін. Әр деңгейдің плюсы мен минусы төменде
+                  ашық жазылған.
+                </p>
+                <a class="ghostlink" href="#prices" data-text="s3btn">Бағаларды көру →</a>
+              </div>
+            </article>
+            <article class="chapter">
+              <div class="cin">
+                <div class="k" data-text="s4k">04 · Бастайық</div>
+                <h2 data-text="s4h">Тиынды <i>лақтыр.</i> Сайтың <i>дайын.</i></h2>
+                <p data-text="s4p">
+                  Өтінім қалдырыңыз, бір сағат ішінде жауап беремін және бизнесіңізге лайық пакетті
+                  бірге таңдаймыз.
+                </p>
+                <a class="btn" href="#contact" data-text="ctaLead">Өтінім қалдыру</a>
+              </div>
+            </article>
+          </div>
+          <div class="stagecol">
+            <div class="mtext" id="mtext"></div>
+            <div class="stage3d" id="stage3d" aria-hidden="true">
+              <div class="scene" id="scene">
+                <div class="obj" id="portal"><div class="portal"></div></div>
+                <div class="obj ring" id="ring"></div>
+                <div class="obj phone3d" id="phone">
+                  <div class="thick"></div>
+                  <div class="f back">
+                    <b>const</b> сайт = {<br />&nbsp;&nbsp;дизайн:
+                    <em>"жеке"</em>,<br />&nbsp;&nbsp;тіл: [<em>"kk"</em>,
+                    <em>"ru"</em>],<br />&nbsp;&nbsp;төлем: [<em>"Kaspi"</em>, <em>"Visa"</em>,
+                    <em>"MC"</em>],<br />&nbsp;&nbsp;өтінім: <em>"Telegram"</em
+                    ><br />};<br /><br /><b>function</b> <u>сату</u>() {<br />&nbsp;&nbsp;<b
+                      >return</b
+                    >
+                    клиент + сайт;<br />}<br /><br /><u>іскеҚосу</u>(сайт);
+                    <span style="color: #666">// ✓</span>
+                  </div>
+                  <div class="f front">
+                    <div class="scr" id="scrA">
+                      <div class="nav2">newwave<i></i></div>
+                      <div class="hero2" data-text="phHero">
+                        Жаңа коллекция<small>Қазақстан бойынша жеткізу</small>
+                      </div>
+                      <div class="row3">
+                        <div class="tile"></div>
+                        <div class="tile"></div>
+                        <div class="tile"></div>
+                        <div class="tile"></div>
+                      </div>
+                      <div class="bar" style="width: 70%"></div>
+                      <div class="bar" style="width: 45%"></div>
+                      <div class="pill" data-text="phPill">Каталог →</div>
+                    </div>
+                    <div class="scr" id="scrB" style="opacity: 0">
+                      <div class="tgtop">
+                        <i>N</i>
+                        <div data-text="phBot"><b>newwave бот</b><small>онлайн</small></div>
+                      </div>
+                      <div class="msg" data-text="phMsg1">
+                        <b>🔥 Жаңа өтінім</b>👤 Айгерім Сейітова<br />📦 Средний · 100 000 ₸<br />📝
+                        Барбершопқа сайт
+                      </div>
+                      <div class="msg me" data-text="phMsg2">Сәлеметсіз бе, Айгерім! Бүгін макет жіберемін 👍</div>
+                      <div class="msg" data-text="phMsg3"><b>✅ Төлем түсті</b>50 000 ₸ · алдын ала</div>
+                      <div class="paycards">
+                        <span>Kaspi</span><span>VISA</span><span class="mc"><i></i><i></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="obj coin3d" id="coin"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="wavesep" aria-hidden="true">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path class="w1" d="M0 60c120 0 120-40 240-40s120 40 240 40 120-40 240-40 120 40 240 40 120-40 240-40 120 40 240 40 120-40 240-40 120 40 240 40 120-40 240-40 120 40 240 40v60H0z"/>
+          <path class="w2" d="M0 80c120 0 120-30 240-30s120 30 240 30 120-30 240-30 120 30 240 30 120-30 240-30 120 30 240 30 120-30 240-30 120 30 240 30 120-30 240-30 120 30 240 30v40H0z"/>
+          <path class="w3" d="M0 96c120 0 120-20 240-20s120 20 240 20 120-20 240-20 120 20 240 20 120-20 240-20 120 20 240 20 120-20 240-20 120 20 240 20 120-20 240-20 120 20 240 20v24H0z"/>
+        </svg>
+      </div>
+      <div class="ticker" aria-hidden="true"><div class="ttrack"><span>newwave</span><b>✦</b><span>design</span><b>✦</b><span>code</span><b>✦</b><span>launch</span><b>✦</b><span>Kaspi · Visa · Mastercard</span><b>✦</b><span>Telegram</span><b>✦</b><span>KZ / RU</span><b>✦</b><span>newwave</span><b>✦</b><span>design</span><b>✦</b><span>code</span><b>✦</b><span>launch</span><b>✦</b><span>Kaspi · Visa · Mastercard</span><b>✦</b><span>Telegram</span><b>✦</b><span>KZ / RU</span><b>✦</b><span>newwave</span><b>✦</b><span>design</span><b>✦</b><span>code</span><b>✦</b><span>launch</span><b>✦</b><span>Kaspi · Visa · Mastercard</span><b>✦</b><span>Telegram</span><b>✦</b><span>KZ / RU</span><b>✦</b><span>newwave</span><b>✦</b><span>design</span><b>✦</b><span>code</span><b>✦</b><span>launch</span><b>✦</b><span>Kaspi · Visa · Mastercard</span><b>✦</b><span>Telegram</span><b>✦</b><span>KZ / RU</span><b>✦</b></div></div>
+
+      <section id="picker">
+        <div class="wrap">
+          <div class="picker">
+            <div>
+              <div class="label" data-text="pickLabel">Пакет таңдағыш</div>
+              <h2 style="margin-bottom: 18px" data-text="pickTitle">Сайттан не күтесіз?</h2>
+              <div class="checks" id="checks">
+                <label
+                  ><input type="checkbox" data-t="0" checked /> <span data-text="pick0">Тек байланыс, прайс және WhatsApp /
+                  Telegram батырмасы</span></label
+                >
+                <label
+                  ><input type="checkbox" data-t="1" /> <span data-text="pick1">Бірнеше бет, өтінім формасы, екі тіл</span></label
+                >
+                <label
+                  ><input type="checkbox" data-t="2" /> <span data-text="pick2">Жеке дизайн, калькулятор немесе
+                  портфолио</span></label
+                >
+                <label
+                  ><input type="checkbox" data-t="3" /> <span data-text="pick3">Корзина, онлайн төлем немесе онлайн
+                  жазылу</span></label
+                >
+                <label
+                  ><input type="checkbox" data-t="4" /> <span data-text="pick4">Анимация, жеңілдік дөңгелегі, акция
+                  таймері</span></label
+                >
+                <label
+                  ><input type="checkbox" data-t="5" /> <span data-text="pick5">Ешкімде жоқ креатив, брендтік
+                  интерактив</span></label
+                >
+              </div>
+            </div>
+            <div class="result" aria-live="polite">
+              <div class="pstage" aria-hidden="true">
+                <div class="portalglow"></div>
+                <div class="pcoin" id="pcoin">
+                  <div class="gcoin pf">
+                    <b id="pcoinP">50К</b><small id="pcoinN">Слабый</small>
+                  </div>
+                  <div class="gcoin pb">₸</div>
+                </div>
+              </div>
+              <div style="color: var(--muted); font-size: 0.9rem" data-text="pickRec">Сізге лайық пакет</div>
+              <div class="big" id="recPrice">50 000 ₸</div>
+              <p id="recText">Слабый · 1 бет</p>
+              <a class="btn" href="#tier-0" id="recLink" data-text="pickMore">Толығырақ көру</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="prices">
+        <div
+          class="portalglow"
+          aria-hidden="true"
+          style="width: min(620px, 90vw); right: -160px; top: -120px"
+        ></div>
+        <div class="wrap">
+          <div class="label" data-text="priceLabel">Бағалар</div>
+          <h2 data-text="priceTitle">6 деңгей: плюсы мен минусы</h2>
+          <div class="tiers" id="tiers"></div>
+        </div>
+      </section>
+
+      <section id="addons" class="alt">
+        <div class="wrap">
+          <div class="label" data-text="addLabel">Қосымша қызметтер</div>
+          <h2 data-text="addTitle">Кез келген пакетке қосуға болады</h2>
+          <div class="addons">
+            <div class="addon">
+              <div data-text="add1">Қосымша бет<small>пакет ішіндегі стильде</small></div>
+              <b>+15 000 ₸</b>
+            </div>
+            <div class="addon">
+              <div data-text="add2">Екінші тіл<small>қазақша / орысша / ағылшынша</small></div>
+              <b>+15 000 ₸</b>
+            </div>
+            <div class="addon">
+              <div data-text="add3">Telegram ботқа өтінім<small>форма → сіздің чатқа</small></div>
+              <b>+10 000 ₸</b>
+            </div>
+            <div class="addon">
+              <div data-text="add4">Жеңілдік дөңгелегі немесе таймер<small>сатылымды арттыруға</small></div>
+              <b>+30–50 000 ₸</b>
+            </div>
+            <div class="addon">
+              <div data-text="add5">Домен .kz + хостинг<small>1 жылға, баптаумен</small></div>
+              <b>+15–20 000 ₸</b>
+            </div>
+            <div class="addon">
+              <div data-text="add6">Ай сайынғы қолдау<small>мәтін, фото, баға жаңарту</small></div>
+              <b data-text="add6p">10–15 000 ₸/ай</b>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="process">
+        <div
+          class="portalglow"
+          aria-hidden="true"
+          style="width: min(520px, 80vw); left: -200px; top: -80px"
+        ></div>
+        <div class="wrap">
+          <div class="label" data-text="procLabel">Қалай жұмыс істеймін</div>
+          <h2 data-text="procTitle">Өтінімнен сайтқа дейін</h2>
+          <div class="steps">
+            <div class="step">
+              <h3 data-text="st1h">Танысу</h3>
+              <p data-text="st1p">Бизнесіңіз бен мақсатыңызды сұраймын, пакет таңдаймыз</p>
+            </div>
+            <div class="step">
+              <h3 data-text="st2h">Алдын ала төлем</h3>
+              <p data-text="st2p">50% төлем, қалғаны тапсырғанда</p>
+            </div>
+            <div class="step">
+              <h3 data-text="st3h">Дизайн</h3>
+              <p data-text="st3p">150К-дан бастап Фигмада макет көрсетемін</p>
+            </div>
+            <div class="step">
+              <h3 data-text="st4h">Код</h3>
+              <p data-text="st4p">Сайтты жасап, телефонда тексеремін</p>
+            </div>
+            <div class="step">
+              <h3 data-text="st5h">Іске қосу</h3>
+              <p data-text="st5p">Доменге қосып, қалай өзгертуді үйретемін</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="alt">
+        <div class="wrap">
+          <div class="label" data-text="faqLabel">Сұрақтар</div>
+          <h2 data-text="faqTitle">Жиі сұралатындар</h2>
+          <div class="faq">
+            <details>
+              <summary data-text="q1">Мәтін мен суретті кім дайындайды?</summary>
+              <p data-text="a1">
+                Негізгі мәтін мен фотоны сіз бересіз. Жоқ болса, мәтінді өзім жазып беремін, ал фото
+                үшін тегін фотобанктерді қолданамыз немесе фотограф ұсынамын.
+              </p>
+            </details>
+            <details>
+              <summary data-text="q2">Сайтты кейін өзім өзгерте аламын ба?</summary>
+              <p data-text="a2">
+                200К-дан бастап админка бар, мәтін мен тауарды өзіңіз өзгертесіз. Төменгі пакеттерде
+                маған жазасыз немесе ай сайынғы қолдауды аласыз.
+              </p>
+            </details>
+            <details>
+              <summary data-text="q3">Неше рет түзету енгізуге болады?</summary>
+              <p data-text="a3">
+                Әр пакетте 2 тегін түзету раунды бар. Одан кейінгі үлкен өзгерістер бөлек
+                бағаланады.
+              </p>
+            </details>
+            <details>
+              <summary data-text="q4">Хостинг ақылы ма?</summary>
+              <p data-text="a4">
+                50–150К сайттар тегін хостингте (Netlify, GitHub Pages) тұра алады. Тек .kz домені
+                жылына шамамен 5–10 000 ₸.
+              </p>
+            </details>
+            <details>
+              <summary data-text="q5">Төлемді қалай қабылдайсыз?</summary>
+              <p data-text="a5">
+                Kaspi аударымы немесе Visa / Mastercard картасы. 50% алдын ала, 50% сайт дайын
+                болғанда.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div
+          class="portalglow"
+          aria-hidden="true"
+          style="width: min(700px, 110vw); right: -120px; top: 10%"
+        ></div>
+        <div class="wrap contact">
+          <div>
+            <div class="label" data-text="contLabel">Байланыс</div>
+            <h2 data-text="contTitle">Сайтыңызды талқылайық</h2>
+            <p style="color: var(--muted)" data-text="contText">
+              Өтінім қалдырыңыз немесе тікелей жазыңыз. Әдетте бір сағат ішінде жауап беремін.
+            </p>
+            <div class="ways">
+              <div class="way">
+                <div><span data-text="tgDm">Telegram · жеке хат</span><b id="tgm">@newwave</b></div>
+                <div class="wbtns">
+                  <a class="wbtn" href="https://t.me/newwave" target="_blank" rel="noopener"
+                    data-text="write"
+                    >Жазу</a
+                  ><button data-copy="tgm" data-text="copy">Көшіру</button>
+                </div>
+              </div>
+              <div class="way">
+                <div><span data-text="tgCh">Telegram · арна</span><b id="tgc">@newwave_kz</b></div>
+                <div class="wbtns">
+                  <a class="wbtn" href="https://t.me/newwave_kz" target="_blank" rel="noopener"
+                    data-text="subscribe"
+                    >Жазылу</a
+                  ><button data-copy="tgc" data-text="copy">Көшіру</button>
+                </div>
+              </div>
+            </div>
+            <div class="tgsub">
+              <div class="tgicon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    fill="#fff"
+                    d="M9.8 15.3 9.6 19c.4 0 .6-.2.8-.4l2-1.9 4.1 3c.8.4 1.3.2 1.5-.7l2.7-12.8c.3-1.1-.4-1.6-1.1-1.3L3.7 10.8c-1.1.4-1.1 1-.2 1.3l4.1 1.3 9.5-6c.4-.3.9-.1.5.2z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <b data-text="tgSubTitle">Telegram арнама жазылыңыз</b
+                ><span data-text="tgSubText"
+                  >Жаңа жұмыстар, жеңілдіктер мен сайт туралы кеңестер сонда. Пост ұнаса, ⭐
+                  жұлдызша қойып қолдаңыз.</span
+                >
+                <div class="stars" aria-hidden="true">⭐⭐⭐⭐⭐</div>
+                <a class="btn sm" href="https://t.me/newwave_kz" target="_blank" rel="noopener"
+                  data-text="tgSubBtn"
+                  >Арнаға жазылу</a
+                >
+              </div>
+            </div>
+          </div>
+          <form id="form" novalidate>
+            <div class="regt">
+              <b data-text="regTitle">Тіркелу</b
+              ><span data-text="regText">Өтінім жіберу үшін поштаңызды, атыңызды және нөміріңізді жазыңыз</span>
+            </div>
+            <div class="prov" role="group" aria-label="Пошта түрі">
+              <button type="button" data-prov="gmail.com" aria-pressed="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    fill="#4285F4"
+                    d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z"
+                  /></svg
+                >Gmail
+              </button>
+              <button type="button" data-prov="mail.ru" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" fill="#0077FF" />
+                  <text
+                    x="12"
+                    y="16.5"
+                    text-anchor="middle"
+                    font-family="Arial"
+                    font-weight="700"
+                    font-size="13"
+                    fill="#FF9E00"
+                  >
+                    @
+                  </text></svg
+                >Mail.ru
+              </button>
+            </div>
+            <label for="em"
+              ><span data-text="fMail">Электрондық пошта</span><span class="emrow"
+                ><input
+                  id="em"
+                  required
+                  autocomplete="username"
+                  placeholder="aigerim"
+                  inputmode="email"
+                /><span id="dom">@gmail.com</span></span
+              ></label
+            >
+            <div class="row2">
+              <label for="n"
+                ><span data-text="fName">Аты</span><input id="n" required autocomplete="given-name" placeholder="Айгерім" /></label
+              ><label for="sn"
+                ><span data-text="fSurname">Тегі</span><input id="sn" required autocomplete="family-name" placeholder="Сейітова"
+              /></label>
+            </div>
+            <label for="p"
+              ><span data-text="fPhone">Телефон нөмірі</span><input
+                id="p"
+                type="tel"
+                required
+                placeholder="+7 7__ ___ __ __"
+                autocomplete="tel"
+            /></label>
+            <label for="t"><span data-text="fPack">Пакет</span><select id="t"></select></label>
+            <label for="m"
+              ><span data-text="fAbout">Бизнесіңіз туралы қысқаша</span><textarea
+                id="m"
+                placeholder="Мысалы: Шымкенттегі барбершоп, бағалар мен жазылу керек"
+                data-ph="phAbout"
+              ></textarea>
+            </label>
+            <div class="err" id="err" hidden></div>
+            <button class="btn" type="submit" data-text="fSend">Тіркеліп, өтінім жіберу</button>
+            <div class="ok" id="ok" hidden></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="gfoot" id="gfoot">
+      <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+        <filter id="liquid" x="-5%" y="-20%" width="110%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.008 0.02"
+            numOctaves="2"
+            seed="4"
+            result="n"
+          />
+          <feDisplacementMap
+            id="liqMap"
+            in="SourceGraphic"
+            in2="n"
+            scale="0"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+        <filter id="liquidB">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.01 0.03"
+            numOctaves="2"
+            seed="7"
+            result="n"
+          />
+          <feDisplacementMap
+            id="liqMapB"
+            in="SourceGraphic"
+            in2="n"
+            scale="0"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </svg>
+      <div class="gbg" aria-hidden="true">
+        <div class="slats"></div>
+        <i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i><i class="b5"></i>
+      </div>
+      <div class="gwrap">
+        <div class="glass" data-glass>
+          <div class="gbrand"><svg class="wv" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 16c4 0 4-8 9-8s5 8 9 8 5-8 9-8 5 8 9 8"/><path d="M2 21c4 0 4-5 9-5s5 5 9 5 5-5 9-5 5 5 9 5" opacity=".45"/></svg>new<span>wave</span></div>
+          <p data-text="fText">Бизнесіңізге сайт. Жаңа жұмыстар мен пайдалы кеңестер әр апта Telegram арнада.</p>
+          <div class="gsub">
+            <span>t.me/newwave_kz</span
+            ><a href="https://t.me/newwave_kz" target="_blank" rel="noopener" data-text="subscribe">Жазылу</a>
+          </div>
+          <div class="gstar" data-text="fStar">⭐ Пост ұнаса, жұлдызша қойып қолдаңыз</div>
+        </div>
+        <div class="glass" data-glass>
+          <div class="gcols">
+            <div>
+              <b data-text="fPacks">Пакеттер</b><a href="#tier-0" data-text="fT0">Визитка</a><a href="#tier-1" data-text="fT1">Шағын сайт</a
+              ><a href="#tier-2" data-text="fT2">Корпоративтік</a><a href="#tier-3" data-text="fT3">Онлайн-дүкен</a
+              ><a href="#tier-4">Премиум</a><a href="#tier-5" data-text="fT5">Люкс <span class="tag">жаңа</span></a>
+            </div>
+            <div>
+              <b data-text="fSite">Сайт</b><a href="#prices" data-text="navPrices">Бағалар</a><a href="#picker" data-text="fPick">Пакет таңдау</a
+              ><a href="#addons" data-text="navAddons">Қосымша</a><a href="#process" data-text="navProcess">Кезеңдер</a
+              ><a href="#faq" data-text="navFaq">Сұрақтар</a>
+            </div>
+            <div>
+              <b data-text="contLabel">Байланыс</b
+              ><a href="https://t.me/newwave" target="_blank" rel="noopener">Telegram</a
+              ><a href="https://t.me/newwave_kz" target="_blank" rel="noopener" data-text="fChannel">Арна</a
+              ><a href="#contact" data-text="fLead">Өтінім</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gline">
+        <div class="glass" data-glass>
+          <span data-text="fCopy">© 2026 newwave · Мысал сайттар портфолио үшін жасалған</span
+          ><a href="#top" data-text="fUp">Жоғары ↑</a>
+        </div>
+      </div>
+      <div class="giant" aria-hidden="true" data-t="newwave">newwave</div>
+    </footer>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="script.js"></script>
+    <script src="wow.js"></script>
+  </body>
+</html>

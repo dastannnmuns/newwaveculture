@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>newwave — анимация таңдау</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Onest:wght@400;600&display=swap" />
+<style>
+  :root { --bg:#07070d; --card:#0f0f18; --line:#24233a; --ink:#f3f1ec; --muted:#9a98a6; --lime:#d4ff3a; --cyan:#3ff0ff; --vio:#8b6bff;
+    --wave: linear-gradient(90deg, #d4ff3a 0%, #3ff0ff 50%, #8b6bff 100%); }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg) radial-gradient(rgba(255,255,255,.04) 1px, transparent 1.5px) 0 0/22px 22px; color:var(--ink); font:16px/1.5 "Onest", system-ui, sans-serif; padding:32px 16px 60px; }
+  h1 { font:800 clamp(1.4rem,4vw,2.2rem) "Unbounded", sans-serif; margin:0 0 6px; text-align:center; letter-spacing:-.03em; }
+  .sub { text-align:center; color:var(--muted); margin:0 0 28px; }
+  .grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,500px),1fr)); gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:22px; padding:16px 18px 18px; position:relative; overflow:hidden; cursor:pointer; transition:border-color .2s; }
+  .card:hover { border-color:var(--lime); }
+  .head { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .num { width:30px; height:30px; border-radius:50%; background:var(--lime); color:#07070d; display:grid; place-items:center; font:800 .85rem "Unbounded", sans-serif; flex:none; }
+  .head b { font-weight:600; }
+  .head small { color:var(--muted); margin-left:auto; font-size:.8rem; }
+  .stage { height:150px; display:grid; place-items:center; }
+  .w { font:700 clamp(2.4rem,8vw,4.6rem)/1 "Unbounded", sans-serif; letter-spacing:-.045em; white-space:nowrap; user-select:none; }
+  .w span { display:inline-block; }
+  .grad span, .grad { background:var(--wave); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad span { background-size:700% 100%; background-position:calc(var(--i) * 100% / 6) 0; }
+  .hint { text-align:center; color:var(--muted); font-size:.9rem; margin-top:28px; }
+
+  /* 1. Толқын */
+  .a1 span { animation:a1 2.6s cubic-bezier(.45,0,.55,1) infinite; animation-delay:calc(var(--i) * .13s); transform-origin:50% 100%; }
+  @keyframes a1 { 0%,60%,100% { transform:none } 25% { transform:translateY(-.16em) scaleY(1.06) } 45% { transform:translateY(.03em) scaleY(.97) } }
+
+  /* 2. Түс ағыны */
+  .a2 { background:linear-gradient(90deg,#d4ff3a,#3ff0ff 25%,#8b6bff 50%,#3ff0ff 75%,#d4ff3a); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:a2 6s linear infinite; }
+  @keyframes a2 { to { background-position:-200% 0 } }
+
+  /* 3. Су толтыру */
+  .a3 { color:transparent; -webkit-text-stroke:2px rgba(63,240,255,.55);
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23d4ff3a'/%3E%3Cstop offset='.5' stop-color='%233ff0ff'/%3E%3Cstop offset='1' stop-color='%238b6bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M0 100c25 0 25-14 50-14s25 14 50 14 25-14 50-14 25 14 50 14v100H0z'/%3E%3C/svg%3E") 0 0 / 220px 200% repeat-x;
+    -webkit-background-clip:text; background-clip:text; animation:a3x 2.2s linear infinite, a3y 6s ease-in-out infinite; }
+  @keyframes a3x { to { background-position-x:220px } }
+  @keyframes a3y { 0%,100% { background-position-y:0% } 45%,60% { background-position-y:100% } }
+
+  /* 4. Глитч */
+  .a4 { position:relative; color:var(--ink); }
+  .a4::before, .a4::after { content:attr(data-t); position:absolute; inset:0; }
+  .a4::before { color:var(--cyan); mix-blend-mode:screen; animation:a4a 2.4s steps(1) infinite; }
+  .a4::after { color:var(--lime); mix-blend-mode:screen; animation:a4b 2.4s steps(1) infinite; }
+  @keyframes a4a { 0%,100% { clip-path:inset(0 0 100% 0); transform:none } 8% { clip-path:inset(10% 0 55% 0); transform:translate(-6px,-2px) } 12% { clip-path:inset(60% 0 10% 0); transform:translate(5px,1px) } 16% { clip-path:inset(0 0 100% 0) } 62% { clip-path:inset(30% 0 40% 0); transform:translate(-4px,0) } 66% { clip-path:inset(0 0 100% 0) } }
+  @keyframes a4b { 0%,100% { clip-path:inset(0 0 100% 0); transform:none } 9% { clip-path:inset(45% 0 30% 0); transform:translate(6px,2px) } 13% { clip-path:inset(5% 0 75% 0); transform:translate(-5px,-1px) } 17% { clip-path:inset(0 0 100% 0) } 63% { clip-path:inset(70% 0 5% 0); transform:translate(4px,0) } 67% { clip-path:inset(0 0 100% 0) } }
+
+  /* 5. Жиналу */
+  .a5 span { animation:a5 3.6s cubic-bezier(.2,.9,.25,1.15) infinite; animation-delay:calc(var(--i) * .07s); }
+  @keyframes a5 { 0% { transform:translateY(.8em) rotate(12deg); opacity:0; filter:blur(8px) } 25%,80% { transform:none; opacity:1; filter:blur(0) } 100% { transform:translateY(-.5em); opacity:0; filter:blur(6px) } }
+
+  /* 6. Неон */
+  .a6 { color:#eaffb0; text-shadow:0 0 6px #d4ff3a,0 0 18px #d4ff3a,0 0 42px rgba(63,240,255,.7); animation:a6 4s linear infinite; }
+  .a6 span:nth-child(5) { animation:a6b 2.3s linear infinite; }
+  @keyframes a6 { 0%,18%,22%,25%,53%,57%,100% { opacity:1 } 20%,24%,55% { opacity:.35; text-shadow:none } }
+  @keyframes a6b { 0%,40%,44%,100% { opacity:1 } 42% { opacity:.15 } }
+
+  /* 7. 3D аудару */
+  .a7 { perspective:600px; }
+  .a7 span { animation:a7 3.4s cubic-bezier(.5,0,.3,1) infinite; animation-delay:calc(var(--i) * .1s); transform-origin:50% 50% -.3em; }
+  @keyframes a7 { 0%,35%,100% { transform:rotateX(0) } 20% { transform:rotateX(360deg) } }
+
+  /* 8. Контур + бояу */
+  .a8 { position:relative; color:transparent; -webkit-text-stroke:1.5px rgba(212,255,58,.6); }
+  .a8::after { content:attr(data-t); position:absolute; inset:0; background:var(--wave); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-stroke:0; clip-path:inset(0 100% 0 0); animation:a8 4s cubic-bezier(.7,0,.3,1) infinite; }
+  @keyframes a8 { 0% { clip-path:inset(0 100% 0 0) } 40%,65% { clip-path:inset(0 0 0 0) } 100% { clip-path:inset(0 0 0 100%) } }
+
+  /* 9. Магнит (тінтуірмен) */
+  .a9 span { transition:transform .25s cubic-bezier(.2,.9,.3,1.3); }
+
+  /* 10. Теру машинасы */
+  .a10 { color:var(--lime); }
+  .a10::after { content:""; display:inline-block; width:.08em; height:.85em; margin-left:.06em; background:var(--cyan); vertical-align:-.05em; animation:blink .8s steps(1) infinite; }
+  @keyframes blink { 50% { opacity:0 } }
+
+  /* 11. Код шешу */
+  .a11 { font-variant-numeric:tabular-nums; }
+  .a11 span.r { color:var(--muted); -webkit-text-fill-color:var(--muted); }
+
+  /* 12. Жылт */
+  .a12 { background:linear-gradient(100deg, var(--lime) 0 40%, #fff 48%, #fff 52%, var(--lime) 60% 100%); background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:a12 3s ease-in-out infinite; }
+  @keyframes a12 { 0% { background-position:100% 0 } 60%,100% { background-position:0 0 } }
+
+  /* 13. Желе */
+  .a13 span { animation:a13 3s ease infinite; animation-delay:calc(var(--i) * .09s); transform-origin:50% 100%; }
+  @keyframes a13 { 0%,40%,100% { transform:none } 8% { transform:scale(1.25,.75) } 16% { transform:scale(.8,1.2) translateY(-.12em) } 24% { transform:scale(1.1,.9) } 32% { transform:scale(.96,1.04) } }
+
+  /* 14. Ұзын көлеңке */
+  .a14 { color:var(--lime); animation:a14 4s ease-in-out infinite; }
+  @keyframes a14 {
+    0%,100% { text-shadow:1px 1px 0 #3ff0ff,2px 2px 0 #3ff0ff,3px 3px 0 #8b6bff,4px 4px 0 #8b6bff,5px 5px 0 #6a4dff,6px 6px 0 #6a4dff,7px 7px 0 #4a35c0,8px 8px 0 #4a35c0; transform:translate(-4px,-4px) }
+    50% { text-shadow:-1px 1px 0 #3ff0ff,-2px 2px 0 #3ff0ff,-3px 3px 0 #8b6bff,-4px 4px 0 #8b6bff,-5px 5px 0 #6a4dff,-6px 6px 0 #6a4dff,-7px 7px 0 #4a35c0,-8px 8px 0 #4a35c0; transform:translate(4px,-4px) }
+  }
+
+  /* 15. Фокус */
+  .a15 { animation:a15 4s cubic-bezier(.6,0,.3,1) infinite; }
+  @keyframes a15 { 0%,100% { letter-spacing:.35em; filter:blur(10px); opacity:0 } 35%,75% { letter-spacing:-.045em; filter:blur(0); opacity:1 } }
+
+  /* 16. Шағылыс */
+  .a16 { position:relative; }
+  .a16 .ref { position:absolute; left:0; right:0; top:100%; transform:scaleY(-1); opacity:.35; filter:url(#rip) blur(.5px); -webkit-mask:linear-gradient(to top, #000, transparent 70%); mask:linear-gradient(to top, #000, transparent 70%); }
+  .stage.tall { height:190px; align-items:start; padding-top:18px; }
+
+  /* ═══ Ешкімде жоқ ═══ */
+  h2.sec { font:800 clamp(1.1rem,3vw,1.6rem) "Unbounded", sans-serif; text-align:center; margin:44px 0 6px; letter-spacing:-.03em; }
+  h2.sec span { background:var(--wave); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .card.u { border-color:#3a3360; background:linear-gradient(160deg,#12101f,#0b0b14); }
+  .card.u .num { background:var(--wave); }
+
+  /* 17. Тиын домалайды */
+  .a17 { position:relative; }
+  .a17 span { animation:a17 3.6s ease-out infinite; animation-delay:calc(.35s + var(--i) * .3s); transform-origin:50% 100%; }
+  @keyframes a17 { 0% { transform:none } 4% { transform:translateY(-.32em) rotate(-8deg) } 9% { transform:translateY(.02em) rotate(3deg) } 13%,100% { transform:none } }
+  .coin { position:absolute; width:.62em; height:.62em; bottom:-.08em; left:0; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%,#fff6cf 0,#f6d27a 24%,#c8902a 66%,#8a5a12 100%); box-shadow:inset 0 0 0 .04em rgba(138,90,18,.6), 0 .1em .3em rgba(0,0,0,.6);
+    display:grid; place-items:center; color:#6b430c; letter-spacing:0; animation:coin 3.6s linear infinite; z-index:2; }
+  @keyframes coin { 0% { transform:translateX(-1em) rotate(0); opacity:0 } 5% { opacity:1 } 70% { transform:translateX(var(--wl, 6.5em)) rotate(900deg); opacity:1 } 76%,100% { transform:translateX(calc(var(--wl, 6.5em) + .6em)) rotate(1000deg); opacity:0 } }
+
+  .coin::before { content:"N."; font:800 .2em "Unbounded", sans-serif; }
+  /* 18. Шам жарығы */
+  .a18 { position:relative; color:#191826; }
+  .a18::after { content:attr(data-t); position:absolute; inset:0; background:linear-gradient(90deg,#fff6cf,#d4ff3a 40%,#3ff0ff); -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-mask:radial-gradient(circle 1.1em at var(--x,50%) 40%, #000 30%, transparent 100%); mask:radial-gradient(circle 1.1em at var(--x,50%) 40%, #000 30%, transparent 100%);
+    filter:drop-shadow(0 0 12px rgba(212,255,58,.35)); }
+
+  /* 19. New wave эквалайзер */
+  .a19 span { transform-origin:50% 100%; transition:transform .12s ease-out; }
+  .eqbars { display:flex; gap:4px; justify-content:center; height:22px; align-items:flex-end; margin-top:10px; }
+  .eqbars i { width:6px; border-radius:3px; background:var(--wave); background-size:700% 100%; height:4px; transition:height .12s; }
+
+  /* 20. Синус толқынында */
+  .a20 { position:relative; isolation:isolate; }
+  .a20 svg { position:absolute; left:-4%; width:108%; top:50%; height:1.2em; transform:translateY(-50%); overflow:visible; z-index:-1; }
+  .a20 path { fill:none; stroke:url(#sg); stroke-width:3; opacity:.55; }
+
+  /* 21. Қазақ ою-өрнегі */
+  .a21 { font-weight:800; color:transparent; -webkit-text-stroke:1.5px var(--lime);
+    background:#6a4dff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%23d4ff3a' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M22 34V20C22 9 9 7 9 15c0 6 7 6 7 1M22 20C22 9 35 7 35 15c0 6-7 6-7 1'/%3E%3Cpath d='M0 44l6-6M44 0l-6 6' stroke='%233ff0ff'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 30px 30px;
+    -webkit-background-clip:text; background-clip:text; animation:a21 6s linear infinite; }
+  @keyframes a21 { to { background-position:60px -60px } }
+
+  @media (prefers-reduced-motion: reduce) { .w, .w *, .w::before, .w::after { animation-duration:0s !important; } }
+</style>
+</head>
+<body>
+  <h1>newwave — анимацияны таңда</h1>
+  <p class="sub">Ұнағанының нөмірін жазыңыз, футерге соны қоямын</p>
+  <div class="grid">
+    <div class="card"><div class="head"><span class="num">1</span><b>Толқын</b><small>қазіргі нұсқа</small></div>
+      <div class="stage"><div class="w grad a1" data-split>newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">2</span><b>Түс ағыны</b><small>градиент жылжиды</small></div>
+      <div class="stage"><div class="w a2">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">3</span><b>Су толтыру</b><small>әріп ішіне толқын құйылады</small></div>
+      <div class="stage"><div class="w a3">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">4</span><b>Глитч</b><small>цифрлық бұзылу</small></div>
+      <div class="stage"><div class="w a4" data-t="newwave">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">5</span><b>Жиналу</b><small>әріптер ұшып келеді</small></div>
+      <div class="stage"><div class="w grad a5" data-split>newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">6</span><b>Неон</b><small>жыпылықтайтын жарық</small></div>
+      <div class="stage"><div class="w a6" data-split>newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">7</span><b>3D аудару</b><small>әріптер айналады</small></div>
+      <div class="stage"><div class="w grad a7" data-split>newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">8</span><b>Контур → бояу</b><small>сызықтан түске толады</small></div>
+      <div class="stage"><div class="w a8" data-t="newwave">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">9</span><b>Магнит</b><small>тінтуірді жүргізіп көріңіз</small></div>
+      <div class="stage"><div class="w grad a9" data-split>newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">10</span><b>Теру машинасы</b><small>жазылып, өшіріледі</small></div>
+      <div class="stage"><div class="w a10" id="type"></div></div></div>
+    <div class="card"><div class="head"><span class="num">11</span><b>Код шешу</b><small>кездейсоқ таңбалардан шығады</small></div>
+      <div class="stage"><div class="w grad a11" id="scr">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">12</span><b>Жылт</b><small>үстінен жарық өтеді</small></div>
+      <div class="stage"><div class="w a12">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">13</span><b>Желе</b><small>әріптер серпіледі</small></div>
+      <div class="stage"><div class="w grad a13" data-split>newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">14</span><b>Ұзын көлеңке</b><small>3D қабаттар тербеледі</small></div>
+      <div class="stage"><div class="w a14">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">15</span><b>Фокус</b><small>бұлдырдан анық болады</small></div>
+      <div class="stage"><div class="w grad a15">newwave</div></div></div>
+    <div class="card"><div class="head"><span class="num">16</span><b>Судағы шағылыс</b><small>астында толқынды көлеңкесі</small></div>
+      <div class="stage tall"><div class="w a16"><div class="grad">newwave</div><div class="grad ref" aria-hidden="true">newwave</div></div></div></div>
+  </div>
+
+  <h2 class="sec"><span>Ешкімде жоқ</span> — тек newwave-ке арналған</h2>
+  <p class="sub">Сайттың өз элементтерінен алынған: алтын тиын, шам, қазақ өрнегі, new wave музыкасы</p>
+  <div class="grid">
+    <div class="card u"><div class="head"><span class="num">17</span><b>Тиын домалайды</b><small>сайттағы алтын тиын әріптерді секіртеді</small></div>
+      <div class="stage"><div class="w grad a17" id="coinW"><span style="--i:0">n</span><span style="--i:1">e</span><span style="--i:2">w</span><span style="--i:3">w</span><span style="--i:4">a</span><span style="--i:5">v</span><span style="--i:6">e</span><b class="coin"></b></div></div></div>
+    <div class="card u"><div class="head"><span class="num">18</span><b>Шам жарығы</b><small>қараңғыда шам жазуды жарықтандырады</small></div>
+      <div class="stage"><div class="w a18" id="lamp" data-t="newwave">newwave</div></div></div>
+    <div class="card u"><div class="head"><span class="num">19</span><b>New wave эквалайзер</b><small>80-жылдардың new wave музыкасы сияқты</small></div>
+      <div class="stage"><div><div class="w grad a19" data-split id="eq">newwave</div><div class="eqbars" id="eqb"></div></div></div></div>
+    <div class="card u"><div class="head"><span class="num">20</span><b>Синус толқынында</b><small>әріптер толқын сызығымен жүзеді</small></div>
+      <div class="stage"><div class="w grad a20" id="sine"><svg viewBox="0 0 100 20" preserveAspectRatio="none"><defs><linearGradient id="sg"><stop offset="0" stop-color="#d4ff3a"/><stop offset=".5" stop-color="#3ff0ff"/><stop offset="1" stop-color="#8b6bff"/></linearGradient></defs><path id="sineP"/></svg></div></div></div>
+    <div class="card u"><div class="head"><span class="num">21</span><b>Қазақ ою-өрнегі</b><small>әріп ішінде қошқар мүйіз өрнегі ағады</small></div>
+      <div class="stage"><div class="w a21">newwave</div></div></div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute"><filter id="rip"><feTurbulence id="ripT" type="fractalNoise" baseFrequency="0.01 0.08" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="14"/></filter></svg>
+  <p class="hint">Карточканы бассаңыз, анимация басынан қайта ойнайды</p>
+<script>
+  document.querySelectorAll("[data-split]").forEach((el) => {
+    el.innerHTML = [...el.textContent].map((c, i) => `<span style="--i:${i}">${c}</span>`).join("");
+  });
+  // 9. Магнит
+  document.querySelectorAll(".a9").forEach((w) => {
+    const st = w.closest(".stage");
+    st.addEventListener("pointermove", (e) => {
+      w.querySelectorAll("span").forEach((s) => {
+        const b = s.getBoundingClientRect();
+        const dx = b.left + b.width / 2 - e.clientX, dy = b.top + b.height / 2 - e.clientY;
+        const d = Math.hypot(dx, dy), f = Math.max(0, 1 - d / 160);
+        s.style.transform = `translate(${(dx / (d || 1)) * f * 28}px, ${(dy / (d || 1)) * f * 28}px) rotate(${f * (dx > 0 ? 12 : -12)}deg)`;
+      });
+    });
+    st.addEventListener("pointerleave", () => w.querySelectorAll("span").forEach((s) => (s.style.transform = "")));
+  });
+  // 10. Теру машинасы
+  (() => {
+    const el = document.getElementById("type"), words = ["newwave", "new site", "newwave"];
+    let wi = 0, n = 0, del = false;
+    (function step() {
+      const word = words[wi];
+      n += del ? -1 : 1;
+      el.textContent = word.slice(0, n);
+      let t = del ? 60 : 130;
+      if (!del && n === word.length) { del = true; t = 1600; }
+      else if (del && n === 0) { del = false; wi = (wi + 1) % words.length; t = 400; }
+      setTimeout(step, t);
+    })();
+  })();
+  // 11. Код шешу
+  (() => {
+    const el = document.getElementById("scr"), word = "newwave", pool = "▲◆●#$%&01ӘҒҚҢӨҰҮІ<>/";
+    function run() {
+      let f = 0;
+      const id = setInterval(() => {
+        el.innerHTML = [...word].map((c, i) => (f / 4 > i ? `<span style="--i:${i}">${c}</span>` : `<span class="r">${pool[(Math.random() * pool.length) | 0]}</span>`)).join("");
+        if (++f > word.length * 4 + 2) { clearInterval(id); setTimeout(run, 2200); }
+      }, 55);
+    }
+    run();
+  })();
+  // 16. Шағылыс толқыны
+  (() => {
+    const t = document.getElementById("ripT");
+    let k = 0;
+    (function loop() { k += 0.02; t.setAttribute("baseFrequency", `0.01 ${0.07 + Math.sin(k) * 0.02}`); requestAnimationFrame(loop); })();
+  })();
+
+  // 17. Тиын жолының ұзындығы
+  (() => {
+    const w = document.getElementById("coinW");
+    const fit = () => w.style.setProperty("--wl", w.offsetWidth + "px");
+    fit(); addEventListener("resize", fit); document.fonts && document.fonts.ready.then(fit);
+  })();
+  // 18. Шам: өзі жүреді, тінтуір келсе соған ереді
+  (() => {
+    const el = document.getElementById("lamp"), st = el.closest(".stage");
+    let mx = null, t = 0;
+    st.addEventListener("pointermove", (e) => { const b = el.getBoundingClientRect(); mx = ((e.clientX - b.left) / b.width) * 100; });
+    st.addEventListener("pointerleave", () => (mx = null));
+    (function loop() { t += 0.012; const x = mx ?? 50 + Math.sin(t) * 55; el.style.setProperty("--x", x + "%"); requestAnimationFrame(loop); })();
+  })();
+  // 19. Эквалайзер
+  (() => {
+    const spans = document.querySelectorAll("#eq span"), bars = document.getElementById("eqb");
+    for (let i = 0; i < 14; i++) { const b = document.createElement("i"); b.style.backgroundPosition = (i / 13) * 100 + "% 0"; bars.appendChild(b); }
+    const bi = bars.querySelectorAll("i");
+    let beat = 0;
+    setInterval(() => {
+      beat++;
+      const kick = beat % 4 === 0 ? 0.25 : 0;
+      spans.forEach((s) => (s.style.transform = `scaleY(${0.75 + Math.random() * 0.45 + kick})`));
+      bi.forEach((b) => (b.style.height = 4 + Math.random() * 18 * (kick ? 1 : 0.7) + "px"));
+    }, 140);
+  })();
+  // 20. Синус
+  (() => {
+    const w = document.getElementById("sine"), txt = "newwave", p = document.getElementById("sineP");
+    txt.split("").forEach((c, i) => { const s = document.createElement("span"); s.textContent = c; s.style.setProperty("--i", i); w.appendChild(s); });
+    const spans = w.querySelectorAll("span");
+    let t = 0;
+    (function loop() {
+      t += 0.035;
+      spans.forEach((s, i) => {
+        const ph = t - i * 0.75, y = Math.sin(ph) * 0.2, r = Math.cos(ph) * -12;
+        s.style.transform = `translateY(${y}em) rotate(${r}deg)`;
+      });
+      let d = "";
+      for (let x = 0; x <= 100; x += 2) { const y = 10 + Math.sin(t - (x / 100) * 6.7 + 0.4) * 7; d += (x ? "L" : "M") + x + " " + y.toFixed(2); }
+      p.setAttribute("d", d);
+      requestAnimationFrame(loop);
+    })();
+  })();
+
+  document.querySelectorAll(".card").forEach((card) => {
+    if (card.querySelector("#type, #scr, .a9, #lamp, #eq, #sine")) return;
+    card.addEventListener("click", () => {
+      const w = card.querySelector(".w");
+      const clone = w.cloneNode(true);
+      w.replaceWith(clone);
+    });
+  });
+</script>
+</body>
+</html>
