@@ -29,22 +29,10 @@
     document.body.append(g);
   }
 
-  /* ───── Скролл: прогресс + жүгіртпе жолдың қисаюы ───── */
-  const ticker = $(".ticker");
-  let lastY = scrollY,
-    skew = 0,
-    skTimer;
+  /* ───── Скролл-прогресс ───── */
   const onScroll = () => {
     const max = document.documentElement.scrollHeight - innerHeight;
     prog.style.setProperty("--p", max > 0 ? (scrollY / max).toFixed(4) : 0);
-    if (!still && ticker) {
-      const v = scrollY - lastY;
-      skew = Math.max(-5, Math.min(5, v * 0.12));
-      ticker.style.setProperty("--sk", skew.toFixed(2) + "deg");
-      clearTimeout(skTimer);
-      skTimer = setTimeout(() => ticker.style.setProperty("--sk", "0deg"), 120);
-    }
-    lastY = scrollY;
   };
   addEventListener("scroll", onScroll, { passive: true });
   addEventListener("resize", onScroll);

@@ -257,12 +257,6 @@ h2.rv.in {
   }
 }
 
-/* ───── Жүгіртпе жол: скролл жылдамдығымен қисаяды ───── */
-.ticker {
-  transform: skewY(var(--sk, 0deg));
-  transition: transform 0.25s ease-out;
-}
-
 /* ───── Нәзік түйіршік (кино текстурасы) ───── */
 .grain {
   position: fixed;
@@ -354,8 +348,5 @@ h2.rv.in {
   .grain,
   .ocean {
     display: none;
-  }
-  .ticker {
-    transform: none;
   }
 }

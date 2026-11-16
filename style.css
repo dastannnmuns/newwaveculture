@@ -1651,10 +1651,6 @@ form .row2 {
   --my: 50%;
 }
 
-.liq .glass {
-  backdrop-filter: blur(18px) saturate(160%) url(#liquidB);
-}
-
 .glass::before {
   content: "";
   position: absolute;
@@ -1848,7 +1844,6 @@ form .row2 {
   padding: 0.06em 0.1em calc(14px + env(safe-area-inset-bottom, 0px));
   color: #0b1733;
   -webkit-text-stroke: 1px rgba(94, 180, 255, 0.12);
-  filter: url(#liquid);
   user-select: none;
 }
 

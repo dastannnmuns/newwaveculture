@@ -982,7 +982,6 @@ document.querySelectorAll("[data-copy]").forEach(
   const foot = document.getElementById("gfoot");
   if (!foot) return;
   const still = matchMedia("(prefers-reduced-motion:reduce)").matches;
-  if (!still && window.chrome) foot.classList.add("liq"); // Chrome-да шыныдың өзі де толқиды
   const map = document.getElementById("liqMap"),
     mapB = document.getElementById("liqMapB");
   let amp = 0,
@@ -1047,14 +1046,6 @@ document.querySelectorAll("[data-copy]").forEach(
     giant.style.setProperty("--x", cx.toFixed(2) + "%");
     giant.style.setProperty("--y", (45 + Math.sin(gt * 2.3) * 12).toFixed(2) + "%");
     requestAnimationFrame(lampLoop);
-  })();
-  if (still) return;
-  (function tick() {
-    amp *= 0.93;
-    const v = amp < 0.3 ? 0 : amp.toFixed(1);
-    map.setAttribute("scale", v);
-    mapB.setAttribute("scale", (amp * 0.6).toFixed(1));
-    requestAnimationFrame(tick);
   })();
 })();
 
