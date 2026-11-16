@@ -33,7 +33,7 @@ from telegram.ext import (
 import answers
 import designs
 import store
-from config import MAIL_ACCOUNTS, MAIL_POLL_SECONDS, OWNER_CHAT_ID, TELEGRAM_BOT_TOKEN
+from config import CLAIM_CODE, MAIL_ACCOUNTS, MAIL_POLL_SECONDS, OWNER_CHAT_ID, TELEGRAM_BOT_TOKEN, save_env
 from mailbox import fetch_new, send_reply
 
 logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s", level=logging.INFO)
@@ -45,8 +45,23 @@ locks: defaultdict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
 ACCOUNTS = {a.name: a for a in MAIL_ACCOUNTS}
 
 
+# Иесі: .env-тен немесе алғашқы іске қосуда экрандағы кодты ботқа жазу арқылы анықталады
+_owner = {"id": OWNER_CHAT_ID}
+OWNER_FILTER = filters.Chat(OWNER_CHAT_ID) if OWNER_CHAT_ID else filters.Chat(allow_empty=False)
+
+
+def owner_id() -> int:
+    return _owner["id"]
+
+
+def set_owner(chat_id: int) -> None:
+    _owner["id"] = chat_id
+    OWNER_FILTER.add_chat_ids(chat_id)
+    save_env("OWNER_CHAT_ID", str(chat_id))
+
+
 def is_owner(update: Update) -> bool:
-    return bool(OWNER_CHAT_ID) and update.effective_chat is not None and update.effective_chat.id == OWNER_CHAT_ID
+    return bool(owner_id()) and update.effective_chat is not None and update.effective_chat.id == owner_id()
 
 
 def chunks(text: str, n: int = 4000) -> list[str]:
@@ -67,13 +82,13 @@ def menu() -> ReplyKeyboardMarkup:
 
 # ───────────── Иесіне хабар ─────────────
 async def tell_owner(app: Application, key: str, text: str, mode: str) -> None:
-    if not OWNER_CHAT_ID:
-        log.warning("OWNER_CHAT_ID жоқ — хабарландыру жіберілмеді: %s", text[:200])
+    if not owner_id():
+        log.warning("Иесі әлі тіркелмеген — хабарландыру жіберілмеді: %s", text[:200])
         return
     parts = chunks(text)
     for i, part in enumerate(parts):
         last = i == len(parts) - 1
-        m = await app.bot.send_message(OWNER_CHAT_ID, part, reply_markup=kb(mode) if last else None)
+        m = await app.bot.send_message(owner_id(), part, reply_markup=kb(mode) if last else None)
         store.link_notif(m.message_id, key)
 
 
@@ -157,14 +172,22 @@ async def on_customer(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     title = f"{user.full_name}" + (f" (@{user.username})" if user.username else "") + " · Telegram"
     base_lang = "ru" if (user.language_code or "").startswith("ru") else "kk"
 
+    # Алғашқы іске қосу: экрандағы кодты жазған адам — иесі
+    if not owner_id() and CLAIM_CODE and (msg.text or "").strip() == CLAIM_CODE:
+        set_owner(chat_id)
+        log.info("Иесі тіркелді: %s (%s)", title, chat_id)
+        await msg.reply_text("✅ Сіз боттың иесі болып тіркелдіңіз! Енді клиент хабарлары осында келеді.")
+        await on_help(update, ctx)
+        return
+
     async with locks[key]:
         conv = store.get_conv(key)
         store.upsert_conv(key, title=title)
 
         if not msg.text:  # фото, дауыс, файл → иесіне
-            if OWNER_CHAT_ID:
+            if owner_id():
                 await tell_owner(app, key, f"📎 {title} файл/дауыс жіберді 👇", "human")
-                fwd = await msg.forward(OWNER_CHAT_ID)
+                fwd = await msg.forward(owner_id())
                 store.link_notif(fwd.message_id, key)
             store.upsert_conv(key, mode="human")
             await msg.reply_text(answers.text("handoff", base_lang), reply_markup=menu())
@@ -227,7 +250,7 @@ async def on_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
 # ───────────── Telegram: иесі ─────────────
 async def on_id(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
-        f"Сіздің chat ID: {update.effective_chat.id}\n.env файлындағы OWNER_CHAT_ID-ге қойып, ботты қайта қосыңыз."
+        f"Сіздің chat ID: {update.effective_chat.id}"
     )
 
 
@@ -447,11 +470,18 @@ async def mail_loop(app: Application) -> None:
 
 
 async def post_init(app: Application) -> None:
-    if not OWNER_CHAT_ID:
-        log.warning("OWNER_CHAT_ID бос. Ботқа /id деп жазып, ID-ді .env-ке қойыңыз.")
-    else:
+    me = await app.bot.get_me()
+    print("\n" + "=" * 56)
+    print(f"  ✅ Бот іске қосылды: https://t.me/{me.username}")
+    if not owner_id():
+        print(f"  👉 Telegram-да @{me.username} ботына мына кодты жазыңыз:")
+        print(f"\n        {CLAIM_CODE or '(код жоқ — setup.py іске қосыңыз)'}\n")
+        print("     Сонда бот сізді иесі деп таниды.")
+    print("  Тоқтату: Ctrl+C. Бұл терезені жаппаңыз.")
+    print("=" * 56 + "\n", flush=True)
+    if owner_id():
         try:
-            await app.bot.send_message(OWNER_CHAT_ID, "🟢 newwave бот іске қосылды. /help")
+            await app.bot.send_message(owner_id(), "🟢 newwave бот іске қосылды. /help")
         except Exception as e:
             log.warning("Иесіне хабар жіберілмеді (алдымен ботқа /start басыңыз): %s", e)
     app.create_task(mail_loop(app))
@@ -459,9 +489,9 @@ async def post_init(app: Application) -> None:
 
 def main() -> None:
     if not TELEGRAM_BOT_TOKEN:
-        raise SystemExit("TELEGRAM_BOT_TOKEN жоқ. .env.example → .env көшіріп, толтырыңыз.")
+        raise SystemExit("TELEGRAM_BOT_TOKEN жоқ. Алдымен баптаңыз: python setup.py")
     app = Application.builder().token(TELEGRAM_BOT_TOKEN).concurrent_updates(True).post_init(post_init).build()
-    owner = filters.Chat(OWNER_CHAT_ID) if OWNER_CHAT_ID else filters.Chat([])
+    owner = OWNER_FILTER
     private = filters.ChatType.PRIVATE
 
     app.add_handler(CommandHandler("id", on_id))

@@ -22,6 +22,20 @@ def _load_env(path: Path) -> None:
 _load_env(ROOT / ".env")
 
 
+def save_env(name: str, value: str) -> None:
+    """.env файлындағы мәнді жаңарту (жоқ болса қосу)."""
+    path = ROOT / ".env"
+    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    for i, line in enumerate(lines):
+        if line.split("=", 1)[0].strip() == name:
+            lines[i] = f"{name}={value}"
+            break
+    else:
+        lines.append(f"{name}={value}")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.environ[name] = value
+
+
 def env(name: str, default: str = "") -> str:
     return os.environ.get(name, default).strip()
 
@@ -39,6 +53,7 @@ class MailAccount:
 
 TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
 OWNER_CHAT_ID = int(env("OWNER_CHAT_ID") or 0)
+CLAIM_CODE = env("CLAIM_CODE")  # иесін тану коды (setup.py жасайды)
 MAIL_POLL_SECONDS = int(env("MAIL_POLL_SECONDS", "60") or 60)
 DB_PATH = ROOT / "state.db"
 
