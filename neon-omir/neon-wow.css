@@ -874,24 +874,3 @@ html.night .about-card:hover {
 .header.hc2 .nav {
   display: none;
 }
-
-/* Курсордың неон нүктесі */
-.nw-dot {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 56;
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0 -5px;
-  border-radius: 50%;
-  pointer-events: none;
-  background: #fff;
-  box-shadow: 0 0 6px #fff, 0 0 12px #ff3fb4, 0 0 24px #ff3fb4, 0 0 40px #33f0ff;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-html.night .nw-dot.on {
-  opacity: 1;
-}

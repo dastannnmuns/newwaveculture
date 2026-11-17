@@ -182,14 +182,9 @@
     size();
     addEventListener("resize", size);
     const pts = [];
-    const dot = document.createElement("div");
-    dot.className = "nw-dot";
-    document.body.appendChild(dot);
     addEventListener(
       "pointermove",
       (e) => {
-        dot.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`;
-        dot.classList.add("on");
         const list = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
         const now = performance.now();
         (list.length ? list : [e]).forEach((ev) => pts.push({ x: ev.clientX, y: ev.clientY, t: now }));
@@ -197,8 +192,7 @@
       },
       { passive: true },
     );
-    document.addEventListener("pointerleave", () => dot.classList.remove("on"));
-    const LIFE = 170; // із қысқа: курсормен бірге жүреді
+    const LIFE = 260; // неон із курсормен бірге жүреді
     const draw = (now) => {
       requestAnimationFrame(draw);
       cx.clearRect(0, 0, W, H);
