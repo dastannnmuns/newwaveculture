@@ -189,14 +189,6 @@ html.flick body {
   box-shadow: 0 0 6px #ff3fb4, 0 0 16px #33f0ff;
 }
 
-/* ───── Неон курсор ізі ───── */
-.nw-trail {
-  position: fixed;
-  inset: 0;
-  z-index: 55;
-  pointer-events: none;
-}
-
 /* ───── Hero: кірпіш қабырға + прожектор ───── */
 html.night .hero {
   position: relative;
@@ -847,9 +839,6 @@ html.night .about-card:hover {
   .nwi-copy h2 i,
   html.flick body {
     animation: none;
-  }
-  .nw-trail {
-    display: none;
   }
 }
 

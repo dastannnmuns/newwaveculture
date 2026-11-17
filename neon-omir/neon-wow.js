@@ -163,62 +163,6 @@
     });
   }
 
-  /* ───── Неон курсор ізі (тек түнде, тінтуірмен) ───── */
-  if (fine && !still) {
-    const cv = document.createElement("canvas");
-    cv.className = "nw-trail";
-    document.body.appendChild(cv);
-    const cx = cv.getContext("2d");
-    let W = 0,
-      H = 0;
-    const size = () => {
-      const d = Math.min(devicePixelRatio || 1, 2);
-      W = innerWidth;
-      H = innerHeight;
-      cv.width = W * d;
-      cv.height = H * d;
-      cx.setTransform(d, 0, 0, d, 0, 0);
-    };
-    size();
-    addEventListener("resize", size);
-    const pts = [];
-    addEventListener(
-      "pointermove",
-      (e) => {
-        const list = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
-        const now = performance.now();
-        (list.length ? list : [e]).forEach((ev) => pts.push({ x: ev.clientX, y: ev.clientY, t: now }));
-        while (pts.length > 60) pts.shift();
-      },
-      { passive: true },
-    );
-    const LIFE = 260; // неон із курсормен бірге жүреді
-    const draw = (now) => {
-      requestAnimationFrame(draw);
-      cx.clearRect(0, 0, W, H);
-      if (!root.classList.contains("night")) return;
-      while (pts.length && now - pts[0].t > LIFE) pts.shift();
-      if (pts.length < 2) return;
-      cx.lineCap = "round";
-      cx.lineJoin = "round";
-      for (let i = 1; i < pts.length; i++) {
-        const a = pts[i - 1],
-          b = pts[i];
-        const k = 1 - (now - b.t) / LIFE; // 1 → жаңа, 0 → ескі
-        const hue = 320 - (1 - k) * 140; // қызғылт → көгілдір
-        cx.strokeStyle = `hsla(${hue},100%,62%,${(k * 0.9).toFixed(3)})`;
-        cx.shadowColor = `hsl(${hue},100%,60%)`;
-        cx.shadowBlur = 14;
-        cx.lineWidth = 1.5 + k * 3.5;
-        cx.beginPath();
-        cx.moveTo(a.x, a.y);
-        cx.lineTo(b.x, b.y);
-        cx.stroke();
-      }
-    };
-    requestAnimationFrame(draw);
-  }
-
   /* ═════════════ Instagram телефоны ═════════════ */
   const sec = document.getElementById("nwInsta");
   if (!sec) return;
