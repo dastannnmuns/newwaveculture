@@ -520,7 +520,8 @@
     padding: 0 10px;
   }
   .iga-btns a {
-    font-size: 13px;
+    font-size: 12px;
+    padding: 0 4px;
   }
   .iga-hl {
     gap: 16px;
