@@ -863,3 +863,51 @@ html.night .about-card:hover {
 .header.hc2 .nav {
   display: none;
 }
+
+/* Футердегі «Сайтты жасаған: newwave» */
+.footer {
+  align-items: center;
+}
+
+.nw-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--gray);
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+
+.nw-credit b {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.nw-credit b i {
+  font-style: normal;
+  background: linear-gradient(90deg, #5ff5dc, #22b8ff, #3b5bff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nw-credit svg {
+  width: 22px;
+  height: 14px;
+  fill: none;
+  stroke: #22b8ff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.nw-credit:hover {
+  border-color: #22b8ff;
+  box-shadow: 0 0 18px -4px #22b8ff;
+  transform: translateY(-2px);
+}
