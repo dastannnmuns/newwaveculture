@@ -17,8 +17,9 @@
     igB1: "Жаңа вывеска",
     igB2: "Жаңа сторис",
     igB3: "Директке жаз 💬",
-    nwNight: "Жарықты сөндіру",
-    nwDay: "Жарықты жағу",
+    nwDayShort: "Жарық",
+    nwNightShort: "Қараңғы",
+    nwTip: "👆 Өзіңізге ыңғайлы режимді таңдаңыз",
   });
   Object.assign(texts.ru, {
     igTitle: "Наши работы <i>в Instagram</i>",
@@ -32,8 +33,9 @@
     igB1: "Новая вывеска",
     igB2: "Новая сторис",
     igB3: "Пиши в директ 💬",
-    nwNight: "Выключить свет",
-    nwDay: "Включить свет",
+    nwDayShort: "Светлый",
+    nwNightShort: "Тёмный",
+    nwTip: "👆 Выберите удобный режим",
   });
 
   /* Instagram айналасындағы хабарламалар */
@@ -53,28 +55,52 @@
   }
   setLanguage(lang);
 
-  /* ───── Түн / күн ажыратқышы ───── */
-  const sw = document.getElementById("nwSwitch");
-  const setTitle = () => {
-    if (sw) sw.title = root.classList.contains("night") ? texts[lang].nwDay : texts[lang].nwNight;
+  /* ───── Режим: ☀️ Жарық / 🌙 Қараңғы ───── */
+  const themeBox = document.getElementById("nwTheme");
+  const markTheme = () => {
+    const night = root.classList.contains("night");
+    themeBox &&
+      themeBox.querySelectorAll("button").forEach((b) => {
+        const on = (b.dataset.theme === "night") === night;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-pressed", on);
+      });
   };
-  setTitle();
-  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", setTitle));
-  if (sw)
-    sw.addEventListener("click", () => {
-      const night = !root.classList.contains("night");
-      root.classList.toggle("night", night);
-      try {
-        localStorage.setItem("nwTheme", night ? "night" : "day");
-      } catch (e) {}
-      if (!still) {
-        root.classList.remove("flick");
-        void root.offsetWidth;
-        root.classList.add("flick");
-        setTimeout(() => root.classList.remove("flick"), 700);
-      }
-      setTitle();
-    });
+  markTheme();
+  if (themeBox) {
+    themeBox.querySelectorAll("button").forEach((b) =>
+      b.addEventListener("click", () => {
+        const night = b.dataset.theme === "night";
+        if (night === root.classList.contains("night")) return;
+        root.classList.toggle("night", night);
+        try {
+          localStorage.setItem("nwTheme", night ? "night" : "day");
+        } catch (e) {}
+        if (!still) {
+          root.classList.remove("flick");
+          void root.offsetWidth;
+          root.classList.add("flick");
+          setTimeout(() => root.classList.remove("flick"), 700);
+        }
+        markTheme();
+        hideTip();
+      }),
+    );
+  }
+  // Бірінші рет кіргенде: «Ыңғайлы режимді таңдаңыз» кеңесі
+  const tip = document.getElementById("nwTip");
+  const hideTip = () => {
+    if (tip) tip.hidden = true;
+  };
+  let chosen = null;
+  try {
+    chosen = localStorage.getItem("nwTheme");
+  } catch (e) {}
+  if (tip && !chosen) {
+    setTimeout(() => (tip.hidden = false), 1200);
+    setTimeout(hideTip, 7000);
+    tip.addEventListener("click", hideTip);
+  }
 
   /* ───── Скролл-прогресс ───── */
   const prog = document.createElement("div");
