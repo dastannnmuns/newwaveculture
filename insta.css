@@ -632,3 +632,106 @@
     animation: none;
   }
 }
+
+/* ───── Тек аккаунт: ортасында аватар, бұлдыр лента + «Instagram-да ашу» ───── */
+.ig-handle {
+  display: inline-block;
+  margin: 0 0 24px;
+  font: 800 clamp(1.3rem, 3vw, 1.8rem) / 1.1 var(--display);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  background: var(--ig);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ig-center {
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 18px;
+}
+
+.ig-center .ig-ava {
+  width: 112px;
+  height: 112px;
+}
+
+.ig-center .ig-ava-in {
+  font-size: 2.4rem;
+}
+
+.ig-name {
+  font-size: 1rem;
+}
+
+.ig-scroll {
+  animation: none;
+}
+
+.ig-locked {
+  position: relative;
+}
+
+.ig-blur i {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #2a2a35, #15151d);
+}
+
+.ig-blur i:nth-child(3n + 1) {
+  background: linear-gradient(135deg, #feda75, #d62976);
+}
+
+.ig-blur i:nth-child(4n + 2) {
+  background: linear-gradient(135deg, #4f5bd5, #962fbf);
+}
+
+.ig-blur i:nth-child(5n) {
+  background: linear-gradient(135deg, #5ff5dc, #22b8ff);
+}
+
+.ig-blur {
+  filter: blur(9px) saturate(1.2);
+  opacity: 0.75;
+  transform: scale(1.05);
+}
+
+.ig-open {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  translate: -50% -50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s, background 0.25s;
+}
+
+.ig-open:hover {
+  transform: scale(1.06);
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.ig-open svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.ig-open svg .dot {
+  fill: currentColor;
+  stroke: none;
+}

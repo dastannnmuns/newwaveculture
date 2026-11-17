@@ -17,49 +17,32 @@ const IG_USER = "newwave.kz";
   if (typeof texts !== "undefined") {
     Object.assign(texts.kz, {
       igLabel: "Instagram",
-      igTitle: "Жұмыстарымыз <i>Instagram-да</i>",
-      igText: "Жаңа сайттар, дизайн процесі және бизнеске арналған кеңестер. Жазылып, жаңалықты бірінші көріңіз.",
-      igP1: "Әр жобаның дизайны мен анимациясы",
-      igP2: "Сайт қалай жасалатыны: стористе тікелей",
-      igP3: "Директке жазсаңыз, тез жауап беремін",
+      igTitle: "Менің <i>Instagram</i> аккаунтым",
+      igText: "Жазылыңыз немесе директке жазыңыз 👇",
       igFollow: "Жазылу",
       igDm: "Директке жазу →",
-      igHint: "💡 Посттарды екі рет басып көріңіз",
-      igBio: "Бизнеске сайт · 50&nbsp;000&nbsp;₸-ден<br />Дизайн · код · іске қосу 🚀<br />KZ / RU",
       igMsg: "Хабарлама",
-      igH1: "Бағалар",
-      igH2: "Дизайн",
-      igH3: "Мобильді",
-      igH5: "Процесс",
-      igPostA: "-ден бастап сайт",
-      igPostC: "күнде дайын",
+      igOpen: "Instagram-да ашу",
       igB1: "Жаңа пост",
       igB2: "Жаңа сторис",
-      igB3: "Директ: «Сайт керек!»",
+      igB3: "Жаңа хабарлама",
     });
     Object.assign(texts.ru, {
       igLabel: "Instagram",
-      igTitle: "Наши работы <i>в Instagram</i>",
-      igText: "Новые сайты, процесс дизайна и советы для бизнеса. Подпишитесь, чтобы видеть первыми.",
-      igP1: "Дизайн и анимации каждого проекта",
-      igP2: "Как делается сайт: прямо в сторис",
-      igP3: "Пишите в директ, отвечаю быстро",
+      igTitle: "Мой <i>Instagram</i>",
+      igText: "Подписывайтесь или пишите в директ 👇",
       igFollow: "Подписаться",
       igDm: "Написать в директ →",
-      igHint: "💡 Попробуйте дважды нажать на пост",
-      igBio: "Сайты для бизнеса · от 50&nbsp;000&nbsp;₸<br />Дизайн · код · запуск 🚀<br />KZ / RU",
       igMsg: "Сообщение",
-      igH1: "Цены",
-      igH2: "Дизайн",
-      igH3: "Мобильные",
-      igH5: "Процесс",
-      igPostA: "сайт от",
-      igPostC: "дня до готовности",
+      igOpen: "Открыть в Instagram",
       igB1: "Новый пост",
       igB2: "Новая сторис",
-      igB3: "Директ: «Нужен сайт!»",
+      igB3: "Новое сообщение",
     });
   }
+  // Аватардағы әріп — аккаунт атының бірінші әрпі
+  const ava = document.getElementById("igAva");
+  if (ava) ava.textContent = IG_USER.replace(/[^a-zа-яё0-9]/gi, "").charAt(0).toUpperCase() || "N";
 
   /* Телефон айналасындағы хабарламалар */
   const stage = document.getElementById("igStage");
@@ -124,32 +107,4 @@ const IG_USER = "newwave.kz";
     if (!sec.classList.contains("off") && !document.hidden) fly(1);
   }, 1400);
 
-  /* Екі рет басу (немесе телефонда екі рет түрту) — лайк */
-  function like(post) {
-    post.classList.add("liked");
-    const h = document.createElement("span");
-    h.className = "ig-burst";
-    h.textContent = "❤️";
-    post.appendChild(h);
-    setTimeout(() => h.remove(), 950);
-    const sr = stage.getBoundingClientRect(),
-      pr = post.getBoundingClientRect();
-    fly(6, pr.left + pr.width / 2 - sr.left);
-  }
-  document.querySelectorAll("#igGrid .ig-post").forEach((post) => {
-    let last = 0;
-    post.addEventListener("dblclick", () => like(post));
-    post.addEventListener(
-      "touchend",
-      (e) => {
-        const now = Date.now();
-        if (now - last < 320) {
-          e.preventDefault();
-          like(post);
-        }
-        last = now;
-      },
-      { passive: false },
-    );
-  });
 })();
