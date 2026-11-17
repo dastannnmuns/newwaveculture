@@ -379,6 +379,33 @@ async def on_owner(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     if not key and msg.photo:
         await on_owner_photo(update, ctx)
         return
+    if not key and msg.text:
+        # Иесі ботты тексеріп жатыр: клиент не көретінін көрсетеміз (иесіне хабар жібермейміз)
+        text = msg.text.strip()
+        lang = "ru" if (update.effective_user.language_code or "").startswith("ru") else "kk"
+        topic = answers.by_button(text)
+        topics = [topic] if topic else answers.match(text).topics
+        if not topic:
+            lang = answers.lang_of(text, lang)
+        app, chat_id = ctx.application, update.effective_chat.id
+        if topics:
+            for tp in topics:
+                await reply_topic(app, chat_id, f"tg:{chat_id}", tp, lang)
+            return
+        if text == answers.load()["owner_button"]:
+            await msg.reply_text("👀 Клиент осы батырманы басса, сізге 🔥 хабар келеді.\n\n" + answers.text("handoff", lang), reply_markup=menu())
+            return
+        m = answers.match(text)
+        if m.greeting:
+            await msg.reply_text(answers.text("greeting", lang), reply_markup=menu())
+            return
+        await msg.reply_text(
+            "👀 Бұл сұраққа бот дайын жауап таппады. Клиент жазса, бот оған мынаны айтады да, сізге ❓ хабар жібереді:\n\n"
+            + answers.text("unknown", lang)
+            + "\n\n(Клиентке жауап беру үшін 🔥/❓ хабарландыруға reply жасаңыз.)",
+            reply_markup=menu(),
+        )
+        return
     if not key:
         await msg.reply_text("Клиентке жауап беру үшін 🔥 хабарландыруға reply жасаңыз. /help")
         return
