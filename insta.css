@@ -1,4 +1,4 @@
-/* newwave — «Сайттың иесі»: Instagram қолданбасындағы профильдің дәл көрінісі */
+/* newwave — «Сайттың иесі»: 3D телефонның ішінде Instagram профилі */
 
 #insta {
   --bg: #0c0f14;
@@ -6,33 +6,403 @@
   --txt: #f5f5f5;
   --sub: #a8afb5;
   --ring: #3a4048;
+}
+
+#insta {
+  --ig: linear-gradient(45deg, #feda75, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5);
   position: relative;
   overflow: hidden;
   isolation: isolate;
   padding-block: 96px;
 }
 
+/* Фондағы баяу жылжитын жарық */
 .ig-aurora {
   position: absolute;
   inset: -20% -10%;
   z-index: -1;
   background:
-    radial-gradient(30% 40% at 30% 35%, rgba(214, 41, 118, 0.16), transparent 70%),
-    radial-gradient(30% 40% at 70% 65%, rgba(79, 91, 213, 0.2), transparent 70%);
+    radial-gradient(38% 45% at 70% 40%, rgba(214, 41, 118, 0.22), transparent 70%),
+    radial-gradient(35% 40% at 85% 75%, rgba(79, 91, 213, 0.25), transparent 70%),
+    radial-gradient(30% 35% at 55% 80%, rgba(46, 230, 214, 0.16), transparent 70%);
   filter: blur(20px);
   animation: igAurora 16s ease-in-out infinite alternate;
 }
 
 @keyframes igAurora {
   to {
-    transform: translate3d(-5%, 4%, 0) rotate(6deg) scale(1.08);
+    transform: translate3d(-6%, 4%, 0) rotate(8deg) scale(1.1);
   }
 }
 
-.ig-label {
-  display: flex !important;
-  justify-content: center;
-  margin-bottom: 20px;
+.ig-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.ig-copy h2 i {
+  font-style: normal;
+  background: var(--ig);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: igShift 6s linear infinite;
+}
+
+@keyframes igShift {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.ig-lead {
+  color: var(--muted);
+  font-size: 1.08rem;
+  max-width: 42ch;
+  margin: 0 0 22px;
+}
+
+.ig-points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  gap: 12px;
+}
+
+.ig-points li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ig-points b {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.ig-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+
+.ig-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  background: var(--ig) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 30px -10px rgba(214, 41, 118, 0.7);
+}
+
+.ig-btn:hover {
+  box-shadow: 0 14px 40px -8px rgba(214, 41, 118, 0.9) !important;
+}
+
+.ig-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.ig-btn svg .dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.ig-dm {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.ig-hint {
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+/* ───── Сахна және 3D телефон ───── */
+.ig-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+  min-height: 640px;
+}
+
+.ig-phone {
+  --rx: 0deg;
+  --ry: -14deg;
+  position: relative;
+  width: 300px;
+  height: 610px;
+  border-radius: 46px;
+  padding: 12px;
+  background: linear-gradient(145deg, #2a2a35, #0c0c12 60%, #1d1d27);
+  box-shadow:
+    inset 0 0 0 2px #3a3a48,
+    inset 0 0 0 5px #111,
+    0 50px 90px -30px rgba(0, 0, 0, 0.9),
+    0 0 80px -20px rgba(214, 41, 118, 0.45),
+    0 0 120px -30px rgba(46, 230, 214, 0.35);
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: igFloat 6s ease-in-out infinite;
+}
+
+@keyframes igFloat {
+  50% {
+    translate: 0 -14px;
+  }
+}
+
+.ig-phone.live {
+  transition: transform 0.12s linear;
+}
+
+/* Шыны жарқылы */
+.ig-phone::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 36px;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.09) 45%, transparent 55%);
+  background-size: 250% 100%;
+  background-position: var(--gx, 60%) 0;
+  z-index: 3;
+}
+
+.ig-island {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  translate: -50% 0;
+  width: 92px;
+  height: 26px;
+  border-radius: 20px;
+  background: #000;
+  z-index: 4;
+}
+
+.ig-screen {
+  position: relative;
+  height: 100%;
+  border-radius: 36px;
+  overflow: hidden;
+  background: #000;
+  color: #f5f5f5;
+  font: 13px/1.35 var(--body);
+}
+
+.ig-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  font-size: 3.4rem;
+  line-height: 1;
+  color: #fff;
+  pointer-events: none;
+  translate: -50% -50%;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5));
+  animation: igBurst 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
+}
+
+@keyframes igBurst {
+  0% {
+    transform: scale(0) rotate(-15deg);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(1.25) rotate(6deg);
+    opacity: 1;
+  }
+  45% {
+    transform: scale(0.95);
+  }
+  75% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.15) translateY(-30px);
+    opacity: 0;
+  }
+}
+
+/* Телефоннан ұшып шығатын жүректер */
+.ig-floats {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ig-fly {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  font-size: var(--s, 22px);
+  pointer-events: none;
+  animation: igFly var(--t, 2.6s) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+
+@keyframes igFly {
+  0% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx, 0px), var(--dy, -320px)) scale(1.1) rotate(var(--r, 0deg));
+    opacity: 0;
+  }
+}
+
+/* Телефон айналасындағы «қалқыған» хабарламалар */
+.ig-bubble {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: rgba(21, 20, 29, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.8);
+  animation: igBubble 7s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.ig-bubble b {
+  font-size: 1.1rem;
+}
+
+.ig-bubble.b1 {
+  left: -36px;
+  top: 16%;
+}
+
+.ig-bubble.b2 {
+  right: -24px;
+  top: 38%;
+  animation-delay: -2.5s;
+}
+
+.ig-bubble.b3 {
+  left: -36px;
+  bottom: 10%;
+  animation-delay: -4.5s;
+}
+
+@keyframes igBubble {
+  50% {
+    translate: 0 -12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ig-wrap {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .ig-stage {
+    min-height: 560px;
+  }
+  .ig-phone {
+    --ry: 0deg;
+    width: 270px;
+    height: 550px;
+  }
+  .ig-bubble.b1 {
+    left: 0;
+    top: 6%;
+  }
+  .ig-bubble.b2 {
+    right: 0;
+    top: auto;
+    bottom: 30%;
+  }
+  .ig-bubble.b3 {
+    left: 0;
+    bottom: 4%;
+  }
+}
+
+@media (max-width: 420px) {
+  .ig-bubble {
+    font-size: 0.75rem;
+    padding: 8px 10px;
+  }
+  .ig-bubble.b3 {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ig-aurora,
+  .ig-phone,
+  .ig-scroll,
+  .ig-ava::before,
+  .ig-copy h2 i,
+  .ig-bubble {
+    animation: none;
+  }
+}
+
+
+/* ───── Телефон ішіндегі Instagram профилі ───── */
+.ig-screen {
+  background: var(--bg);
+}
+
+.ig-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 26px 0;
+  height: 44px;
+  font: 600 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #fff;
+}
+
+.ig-status i {
+  font-style: normal;
+  letter-spacing: 1px;
+  font-size: 11px;
+}
+
+.ig-screen .iga {
+  zoom: 0.69;
+  width: 400px;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding-top: 4px;
 }
 
 /* ───── Профиль (телефон экранының өлшемі) ───── */
@@ -476,71 +846,6 @@
   border: 2px solid #fff;
 }
 
-@media (max-width: 420px) {
-  .iga {
-    border-radius: 22px;
-    font-size: 14px;
-  }
-  .iga-head {
-    grid-template-columns: 88px 1fr;
-    gap: 16px;
-    padding: 18px 14px 0;
-  }
-  .iga-ava {
-    width: 86px;
-    height: 86px;
-  }
-  .iga-plus {
-    width: 26px;
-    height: 26px;
-    font-size: 19px;
-  }
-  .iga-note {
-    top: -26px;
-    padding: 5px 10px 6px;
-  }
-  .iga-stats b {
-    font-size: 15px;
-  }
-  .iga-stats span {
-    font-size: 12.5px;
-  }
-  .iga-bio,
-  .iga-chips,
-  .iga-btns {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-  .iga-panel {
-    margin-left: 14px;
-    margin-right: 14px;
-  }
-  .iga-chips a {
-    font-size: 12.5px;
-    padding: 0 10px;
-  }
-  .iga-btns a {
-    font-size: 12px;
-    padding: 0 4px;
-  }
-  .iga-hl {
-    gap: 16px;
-  }
-  .iga-hl i {
-    width: 62px;
-    height: 62px;
-  }
-  .iga-nav a.me {
-    width: 66px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ig-aurora,
-  .iga-note b i {
-    animation: none;
-  }
-}
 
 /* Сыртқы адам көретін профиль: ‹ аты ⋯ */
 .iga-top2 {
@@ -568,4 +873,44 @@
 
 .iga-grid {
   margin-bottom: 4px;
+}
+
+/* Телефон ішіндегі нақтылаулар */
+.ig-phone {
+  height: 560px;
+}
+
+.ig-screen .iga-head {
+  grid-template-columns: 92px 1fr;
+  gap: 16px;
+}
+
+.ig-screen .iga-ava {
+  width: 90px;
+  height: 90px;
+}
+
+.ig-screen .iga-stats {
+  gap: 8px;
+}
+
+.ig-screen .iga-stats span {
+  font-size: 12.5px;
+}
+
+.ig-screen .iga-stats b {
+  font-size: 16px;
+}
+
+.ig-screen .iga-grid a {
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .ig-phone {
+    height: 515px;
+  }
+  .ig-screen .iga {
+    zoom: 0.615;
+  }
 }
