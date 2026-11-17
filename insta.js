@@ -1,6 +1,6 @@
 /* newwave — Instagram бөлімі.
    Instagram атыңызды осы жерде өзгертіңіз 👇 */
-const IG_USER = "newwave.kz";
+const IG_USER = "abzallovichh";
 
 (() => {
   const sec = document.getElementById("insta");
@@ -17,8 +17,8 @@ const IG_USER = "newwave.kz";
   if (typeof texts !== "undefined") {
     Object.assign(texts.kz, {
       igLabel: "Instagram",
-      igTitle: "Менің <i>Instagram</i> аккаунтым",
-      igText: "Жазылыңыз немесе директке жазыңыз 👇",
+      igTitle: "Сайттың <i>иесі</i>",
+      igText: "Instagram-да жазылыңыз немесе директке жазыңыз 👇",
       igFollow: "Жазылу",
       igDm: "Директке жазу →",
       igMsg: "Хабарлама",
@@ -29,8 +29,8 @@ const IG_USER = "newwave.kz";
     });
     Object.assign(texts.ru, {
       igLabel: "Instagram",
-      igTitle: "Мой <i>Instagram</i>",
-      igText: "Подписывайтесь или пишите в директ 👇",
+      igTitle: "Владелец <i>сайта</i>",
+      igText: "Подписывайтесь в Instagram или пишите в директ 👇",
       igFollow: "Подписаться",
       igDm: "Написать в директ →",
       igMsg: "Сообщение",
@@ -40,10 +40,6 @@ const IG_USER = "newwave.kz";
       igB3: "Новое сообщение",
     });
   }
-  // Аватардағы әріп — аккаунт атының бірінші әрпі
-  const ava = document.getElementById("igAva");
-  if (ava) ava.textContent = IG_USER.replace(/[^a-zа-яё0-9]/gi, "").charAt(0).toUpperCase() || "N";
-
   /* Телефон айналасындағы хабарламалар */
   const stage = document.getElementById("igStage");
   const bubbles = [

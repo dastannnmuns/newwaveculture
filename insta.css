@@ -735,3 +735,57 @@
   fill: currentColor;
   stroke: none;
 }
+
+/* ───── Нақты аккаунт: аватар-фото, био, 3 пост ───── */
+.ig-ava-img {
+  object-fit: cover;
+  padding: 0;
+  display: block;
+}
+
+.ig-bio {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: #cfcfcf;
+}
+
+.ig-real {
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+.ig-real-grid a {
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.ig-real-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ig-real-grid a:hover img {
+  transform: scale(1.08);
+}
+
+.ig-real-grid + .ig-locked {
+  margin-top: 2px;
+}
+
+.ig-real-grid + .ig-locked .ig-open {
+  top: 34%;
+}
+
+.ig-center {
+  padding-top: 6px;
+  gap: 8px;
+}
+
+.ig-center .ig-ava {
+  width: 96px;
+  height: 96px;
+}
