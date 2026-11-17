@@ -243,7 +243,34 @@ async def on_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     if is_owner(update):
         await on_help(update, ctx)
         return
-    lang = "ru" if (update.effective_user.language_code or "").startswith("ru") else "kk"
+    user = update.effective_user
+    lang = "ru" if (user.language_code or "").startswith("ru") else "kk"
+    # Сайттағы өтінім формасынан келді: t.me/бот?start=site_N
+    arg = ctx.args[0] if ctx.args else ""
+    if arg.startswith("site_"):
+        data = answers.load()
+        pkgs = data.get("site_packages", [])
+        try:
+            pkg = pkgs[int(arg[5:])]
+        except (ValueError, IndexError):
+            pkg = "?"
+        chat_id = update.effective_chat.id
+        key = f"tg:{chat_id}"
+        title = f"{user.full_name}" + (f" (@{user.username})" if user.username else "") + " · Telegram"
+        store.upsert_conv(key, title=title, mode="human")
+        store.add_message(key, "user", f"[Сайттан өтінім: {pkg}]")
+        block = data.get("site_lead", {})
+        await update.effective_message.reply_text(
+            (block.get(lang) or block.get("kk", "")).replace("{pkg}", pkg), reply_markup=menu()
+        )
+        await tell_owner(
+            ctx.application,
+            key,
+            f"🔥 Сайттан өтінім!\n👤 {title}\n📦 {pkg}\n\n"
+            "Клиент өтінім мәтінін қазір осында қоюы керек.\n↩️ Жауап беру үшін осы хабарға reply жасаңыз.",
+            "human",
+        )
+        return
     await update.effective_message.reply_text(answers.text("greeting", lang), reply_markup=menu())
 
 

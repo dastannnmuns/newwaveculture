@@ -1,5 +1,8 @@
 /* newwave — скрипттер */
 
+/* Telegram бот (өтінімдер осыған келеді) */
+const TG_BOT = "newwave_site_bot";
+
 /* ═══════════════ ТІЛ / ЯЗЫК ═══════════════ */
 const texts = {
   kz: {
@@ -106,7 +109,7 @@ const texts = {
     fPhone: "Телефон нөмірі",
     fPack: "Пакет",
     fAbout: "Бизнесіңіз туралы қысқаша",
-    fSend: "Тіркеліп, өтінім жіберу",
+    fSend: "Өтінімді Telegram-ға жіберу",
     fText: "Бизнесіңізге сайт. Бағалар, мысалдар және өтінім: Telegram ботымызда.",
     fStar: "🤖 Бот тәулік бойы бірден жауап береді",
     fPacks: "Пакеттер",
@@ -141,7 +144,9 @@ const texts = {
     errSurname: "Тегіңізді жазыңыз",
     errPhone: "Телефон нөмірін толық жазыңыз: +7 7XX XXX XX XX",
     okLead:
-      "Рақмет, {name}! Сіз {email} поштасымен тіркелдіңіз, өтінім қабылданды. Жақын арада {phone} нөміріне хабарласамын.",
+      "Рақмет, {name}! Өтінімді аяқтау үшін Telegram ботқа өтіңіз: өтінім мәтіні көшірілді, ботқа қойып жіберіңіз.",
+    okBot: "Telegram ботты ашу →",
+    leadHead: "Сайттан өтінім",
     copied: "Көшірілді",
     copySelected: "Белгіледім, көшіріп ал",
     lTitleIn: "Қайта қош келдіңіз",
@@ -265,7 +270,7 @@ const texts = {
     fPhone: "Номер телефона",
     fPack: "Пакет",
     fAbout: "Коротко о вашем бизнесе",
-    fSend: "Зарегистрироваться и отправить",
+    fSend: "Отправить заявку в Telegram",
     fText: "Сайты для бизнеса. Цены, примеры и заявка: в нашем Telegram-боте.",
     fStar: "🤖 Бот отвечает сразу, круглосуточно",
     fPacks: "Пакеты",
@@ -300,7 +305,9 @@ const texts = {
     errSurname: "Введите фамилию",
     errPhone: "Введите номер полностью: +7 7XX XXX XX XX",
     okLead:
-      "Спасибо, {name}! Вы зарегистрированы с почтой {email}, заявка принята. Скоро свяжусь с вами по номеру {phone}.",
+      "Спасибо, {name}! Чтобы завершить заявку, перейдите в Telegram-бот: текст заявки скопирован, вставьте его в бот.",
+    okBot: "Открыть Telegram-бот →",
+    leadHead: "Заявка с сайта",
     copied: "Скопировано",
     copySelected: "Выделил, скопируйте",
     lTitleIn: "С возвращением",
@@ -799,10 +806,27 @@ $id("form").onsubmit = (e) => {
   try {
     localStorage.setItem("nw-user", JSON.stringify(u));
   } catch (x) {}
+  // Өтінім Telegram ботқа: мәтін көшіріледі, бот ашылады, иесіне бірден хабар барады
+  const ti = +$id("t").value || 0;
+  const about = $id("m").value.trim();
+  const leadText =
+    `📝 ${tr("leadHead")}\n👤 ${name} ${sur}\n📞 ${u.phone}\n✉️ ${u.email}\n📦 ${T[ti].k} — ${priceTxt(T[ti])}` +
+    (about ? `\n💬 ${about}` : "");
+  try {
+    navigator.clipboard && navigator.clipboard.writeText(leadText).catch(() => {});
+  } catch (x) {}
+  const botUrl = `https://t.me/${TG_BOT}?start=site_${ti}`;
+  window.open(botUrl, "_blank", "noopener");
   const ok = $id("ok");
-  ok.textContent = tr("okLead", { name: `${name} ${sur}`, email: u.email, phone: u.phone });
+  ok.textContent = tr("okLead", { name: `${name} ${sur}`, email: u.email, phone: u.phone }) + " ";
+  const a = document.createElement("a");
+  a.href = botUrl;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.className = "btn sm";
+  a.textContent = tr("okBot");
+  ok.appendChild(a);
   ok.hidden = false;
-  $id("m").value = "";
   recommend();
 };
 
