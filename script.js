@@ -773,15 +773,10 @@ function fmtPhone(v) {
 $id("p").addEventListener("input", (e) => {
   e.target.value = fmtPhone(e.target.value);
 });
+// Жеке деректер (аты, телефон) сайтта сақталмайды: форма әрқашан бос ашылады.
+// Бұрын сақталып қалған деректерді де өшіреміз.
 try {
-  const u = JSON.parse(localStorage.getItem("nw-user") || "null");
-  if (u) {
-    $id("n").value = u.name;
-    $id("sn").value = u.surname;
-    $id("p").value = u.phone;
-    setProv(u.email.split("@")[1]);
-    $id("em").value = u.email.split("@")[0];
-  }
+  localStorage.removeItem("nw-user");
 } catch (e) {}
 $id("form").onsubmit = (e) => {
   e.preventDefault();
@@ -805,9 +800,6 @@ $id("form").onsubmit = (e) => {
   }
   er.hidden = true;
   const u = { email: user + "@" + prov, name, surname: sur, phone: $id("p").value };
-  try {
-    localStorage.setItem("nw-user", JSON.stringify(u));
-  } catch (x) {}
   // Өтінім Telegram ботқа: мәтін көшіріледі, бот ашылады, иесіне бірден хабар барады
   const ti = +$id("t").value || 0;
   const about = $id("m").value.trim();
@@ -1151,7 +1143,7 @@ document.querySelectorAll("[data-copy]").forEach(
   function open() {
     // Тіркелген болса — профиль мен «Шығу» батырмасын көрсетеміз
     try {
-      const u = JSON.parse(localStorage.getItem("nw-user") || "null");
+      const u = JSON.parse(sessionStorage.getItem("nw-user") || "null");
       if (u && u.name && $("lOk").hidden) success(u, false);
     } catch (x) {}
     lg.hidden = false;
@@ -1350,7 +1342,7 @@ document.querySelectorAll("[data-copy]").forEach(
   /* Шығу: сақталған деректерді өшіреді (тек осы браузерде) */
   function logout() {
     try {
-      localStorage.removeItem("nw-user");
+      sessionStorage.removeItem("nw-user");
     } catch (x) {}
     ["em", "n", "sn", "p", "m"].forEach((i) => {
       const el = document.getElementById(i);
@@ -1389,7 +1381,7 @@ document.querySelectorAll("[data-copy]").forEach(
     if (err("inErr", L, B)) return;
     let u = null;
     try {
-      u = JSON.parse(localStorage.getItem("nw-user") || "null");
+      u = JSON.parse(sessionStorage.getItem("nw-user") || "null");
     } catch (x) {}
     success(
       u || { name: l.split("@")[0], email: isPhone ? "" : l, phone: isPhone ? phoneFmt(l) : "" },
@@ -1428,7 +1420,7 @@ document.querySelectorAll("[data-copy]").forEach(
     if (err("upErr", L, B)) return;
     const u = { name: n, surname: s, phone: ph, email: m };
     try {
-      localStorage.setItem("nw-user", JSON.stringify(u));
+      sessionStorage.setItem("nw-user", JSON.stringify(u));
     } catch (x) {}
     success(u, true);
   };
@@ -1449,7 +1441,7 @@ document.querySelectorAll("[data-copy]").forEach(
   function updateHeader() {
     let u = null;
     try {
-      u = JSON.parse(localStorage.getItem("nw-user") || "null");
+      u = JSON.parse(sessionStorage.getItem("nw-user") || "null");
     } catch (x) {}
     const b = document.getElementById("hdrLogin");
     if (b && u && u.name) b.textContent = u.name;
