@@ -41,7 +41,7 @@ const texts = {
     phPill: "Каталог →",
     phBot: "<b>newwave бот</b><small>онлайн</small>",
     phMsg1:
-      "<b>🔥 Жаңа өтінім</b>👤 Жаңа клиент<br>📦 Средний · 100 000 ₸<br>📝 Барбершопқа сайт",
+      "<b>🔥 Жаңа өтінім</b>👤 Жаңа клиент<br>📦 Business · 100 000 ₸<br>📝 Барбершопқа сайт",
     phMsg2: "Сәлеметсіз бе! Бүгін макет жіберемін 👍",
     phMsg3: "<b>✅ Төлем түсті</b>50 000 ₸ · алдын ала",
     pickLabel: "Пакет таңдағыш",
@@ -117,7 +117,7 @@ const texts = {
     fT1: "Шағын сайт",
     fT2: "Корпоративтік",
     fT3: "Онлайн-дүкен",
-    fT5: 'Люкс <span class="tag">жаңа</span>',
+    fT5: 'Lux <span class="tag">жаңа</span>',
     fSite: "Сайт",
     fPick: "Пакет таңдау",
     fChannel: "Бот",
@@ -202,7 +202,7 @@ const texts = {
     phPill: "Каталог →",
     phBot: "<b>newwave бот</b><small>в сети</small>",
     phMsg1:
-      "<b>🔥 Новая заявка</b>👤 Новый клиент<br>📦 Средний · 100 000 ₸<br>📝 Сайт для барбершопа",
+      "<b>🔥 Новая заявка</b>👤 Новый клиент<br>📦 Business · 100 000 ₸<br>📝 Сайт для барбершопа",
     phMsg2: "Здравствуйте! Сегодня пришлю макет 👍",
     phMsg3: "<b>✅ Оплата получена</b>50 000 ₸ · предоплата",
     pickLabel: "Подбор пакета",
@@ -278,7 +278,7 @@ const texts = {
     fT1: "Небольшой сайт",
     fT2: "Корпоративный",
     fT3: "Интернет-магазин",
-    fT5: 'Люкс <span class="tag">новое</span>',
+    fT5: 'Lux <span class="tag">новое</span>',
     fSite: "Сайт",
     fPick: "Подбор пакета",
     fChannel: "Бот",
@@ -392,7 +392,7 @@ document.querySelectorAll("[data-lang]").forEach((btn) => {
 const A = "sites/";
 const T = [
   {
-    k: "Слабый",
+    k: "Start",
     p: 50000,
     pg: "1 бет",
     time: "2–3 күн",
@@ -413,7 +413,7 @@ const T = [
     ],
   },
   {
-    k: "Средний",
+    k: "Business",
     p: 100000,
     pg: "2–3 бет",
     time: "4–6 күн",
@@ -434,7 +434,7 @@ const T = [
     ],
   },
   {
-    k: "Четкий",
+    k: "Pro",
     p: 150000,
     pg: "3–4 бет",
     time: "1–2 апта",
@@ -460,7 +460,7 @@ const T = [
     ],
   },
   {
-    k: "Бешный",
+    k: "Store",
     p: 200000,
     pg: "5–6 бет",
     time: "2–3 апта",
@@ -489,7 +489,7 @@ const T = [
     ],
   },
   {
-    k: "Премиум",
+    k: "Premium",
     p: 300000,
     pg: "7–8 бет",
     time: "3–4 апта",
@@ -515,7 +515,7 @@ const T = [
     ex: [["Суши жеткізу", "tamaq-sushi.html"]],
   },
   {
-    k: "Люкс",
+    k: "Lux",
     p: 450000,
     from: 1,
     pg: "8+ бет",
@@ -876,12 +876,12 @@ document.querySelectorAll("[data-copy]").forEach(
   coin.innerHTML = h + `<div class="f front">N.<small>WAVE</small></div><div class="f back">₸</div>`;
   // пакет тиындары
   const T = [
-    ["50К", "Слабый"],
-    ["100К", "Средний"],
-    ["150К", "Четкий"],
-    ["200К", "Бешный"],
-    ["300К", "Премиум"],
-    ["450К+", "Люкс"],
+    ["50К", "Start"],
+    ["100К", "Business"],
+    ["150К", "Pro"],
+    ["200К", "Store"],
+    ["300К", "Premium"],
+    ["450К+", "Lux"],
   ];
   ring.innerHTML = T.map(([p, n]) => `<div class="mini">${p}<small>${n}</small></div>`).join("");
   const minis = [...ring.children];
