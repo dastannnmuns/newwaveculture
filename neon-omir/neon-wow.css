@@ -31,9 +31,20 @@ html.night .preview {
   box-shadow: 0 0 0 1px #ffffff08, 0 20px 50px -30px #000;
 }
 
-/* Логотиптер ақ фонда оқылуы үшін */
-html.night .clients li {
-  background: #fff;
+/* Логотиптер: фонсыз; қараңғыда жұқа ақ жиек + жарық, курсор апарса неон */
+.clients li {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html.night .clients img {
+  filter: drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 12px #ffffff26);
+  transition: filter 0.3s;
+}
+
+html.night .clients li:hover img {
+  filter: drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 16px #ff3fb4aa);
 }
 
 html.night .lang button.active {
@@ -852,4 +863,35 @@ html.night .about-card:hover {
     gap: 14px;
     font-size: 13px;
   }
+}
+
+/* Мәзір автоматты сыйдырылады (neon-wow.js тексереді) */
+.header.hc1 .phone span,
+.header.hc1 .nw-theme button span {
+  display: none;
+}
+
+.header.hc2 .nav {
+  display: none;
+}
+
+/* Курсордың неон нүктесі */
+.nw-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 56;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: #fff;
+  box-shadow: 0 0 6px #fff, 0 0 12px #ff3fb4, 0 0 24px #ff3fb4, 0 0 40px #33f0ff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+html.night .nw-dot.on {
+  opacity: 1;
 }

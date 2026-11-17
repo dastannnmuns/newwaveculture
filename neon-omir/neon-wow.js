@@ -102,6 +102,28 @@
     tip.addEventListener("click", hideTip);
   }
 
+  /* ───── Мәзір сыймаса: алдымен жазуларды, сосын мәзірді жасырамыз ───── */
+  const header = document.querySelector(".header");
+  const fitHeader = () => {
+    if (!header) return;
+    header.classList.remove("hc1", "hc2");
+    const bad = () => {
+      const g = (s) => header.querySelector(s)?.getBoundingClientRect();
+      const br = g(".brand"),
+        nv = g(".nav"),
+        hr = g(".header-right");
+      if (header.scrollWidth > header.clientWidth + 1) return true;
+      if (!nv || nv.width === 0) return false;
+      return nv.left < br.right + 12 || nv.right > hr.left - 12;
+    };
+    if (bad()) header.classList.add("hc1");
+    if (bad()) header.classList.add("hc2");
+  };
+  fitHeader();
+  addEventListener("resize", fitHeader);
+  document.fonts && document.fonts.ready.then(fitHeader);
+  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => setTimeout(fitHeader, 0)));
+
   /* ───── Скролл-прогресс ───── */
   const prog = document.createElement("div");
   prog.className = "nw-prog";
@@ -160,15 +182,23 @@
     size();
     addEventListener("resize", size);
     const pts = [];
+    const dot = document.createElement("div");
+    dot.className = "nw-dot";
+    document.body.appendChild(dot);
     addEventListener(
       "pointermove",
       (e) => {
-        pts.push({ x: e.clientX, y: e.clientY, t: performance.now() });
-        if (pts.length > 40) pts.shift();
+        dot.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`;
+        dot.classList.add("on");
+        const list = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+        const now = performance.now();
+        (list.length ? list : [e]).forEach((ev) => pts.push({ x: ev.clientX, y: ev.clientY, t: now }));
+        while (pts.length > 60) pts.shift();
       },
       { passive: true },
     );
-    const LIFE = 380;
+    document.addEventListener("pointerleave", () => dot.classList.remove("on"));
+    const LIFE = 170; // із қысқа: курсормен бірге жүреді
     const draw = (now) => {
       requestAnimationFrame(draw);
       cx.clearRect(0, 0, W, H);
