@@ -1,0 +1,784 @@
+/* Neon Õmir — «вау» қабаты: түнгі режим, неон эффектілер, Instagram 3D телефон */
+
+/* ───── Түнгі режим (әдепкі) ───── */
+html.night {
+  --bg: #07060c;
+  --white: #12101b;
+  --border: #2a2639;
+  --text: #f4f0fb;
+  --gray: #a8a0bd;
+  color-scheme: dark;
+}
+
+html.night body::before {
+  background:
+    radial-gradient(55% 40% at 8% 0%, #ff3fb42e, transparent 70%),
+    radial-gradient(50% 40% at 96% 38%, #33f0ff24, transparent 70%),
+    radial-gradient(40% 30% at 50% 100%, #8b5cff1f, transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 38px, #ffffff06 38px 40px),
+    repeating-linear-gradient(90deg, transparent 0 78px, #ffffff05 78px 80px);
+}
+
+html.night .card,
+html.night .service,
+html.night .about-card,
+html.night .slide,
+html.night .review,
+html.night .contact,
+html.night .faq-item,
+html.night .form,
+html.night .preview {
+  box-shadow: 0 0 0 1px #ffffff08, 0 20px 50px -30px #000;
+}
+
+/* Логотиптер ақ фонда оқылуы үшін */
+html.night .clients li {
+  background: #fff;
+}
+
+html.night .lang button.active {
+  background: var(--pink);
+  color: #fff;
+}
+
+html.night h2 {
+  text-shadow: 0 0 18px #ff3fb455;
+}
+
+/* ───── Ажыратқыш (түн / күн) ───── */
+.nw-switch {
+  position: relative;
+  width: 58px;
+  height: 30px;
+  flex: none;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  padding: 0;
+}
+
+.nw-switch i {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-style: normal;
+  background: #ffd76a;
+  box-shadow: 0 0 10px #ffd76a;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s, box-shadow 0.3s;
+}
+
+html.night .nw-switch i {
+  transform: translateX(28px);
+  background: #ff3fb4;
+  box-shadow: 0 0 6px #fff, 0 0 14px #ff3fb4, 0 0 28px #ff3fb4;
+}
+
+/* Жарық сөнгенде / жанғанда бір сәт жыпылықтау */
+html.flick body {
+  animation: nwFlick 0.6s steps(1) both;
+}
+
+@keyframes nwFlick {
+  0% { filter: brightness(0.15); }
+  15% { filter: brightness(1.2); }
+  25% { filter: brightness(0.3); }
+  40% { filter: brightness(1); }
+  55% { filter: brightness(0.5); }
+  70%, 100% { filter: none; }
+}
+
+/* ───── Скролл-прогресс: неон түтік ───── */
+.nw-prog {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 3px;
+  z-index: 60;
+  pointer-events: none;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+  background: linear-gradient(90deg, #ff3fb4, #33f0ff);
+  box-shadow: 0 0 6px #ff3fb4, 0 0 16px #33f0ff;
+}
+
+/* ───── Неон курсор ізі ───── */
+.nw-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+}
+
+/* ───── Hero: кірпіш қабырға + прожектор ───── */
+html.night .hero {
+  position: relative;
+  isolation: isolate;
+}
+
+html.night .hero::before {
+  content: "";
+  position: absolute;
+  inset: -40px calc(50% - 50vw);
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(420px circle at var(--hx, 30%) var(--hy, 50%), #ff3fb422, transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 34px, #ffffff07 34px 36px),
+    repeating-linear-gradient(90deg, transparent 0 70px, #ffffff06 70px 72px);
+  mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
+  -webkit-mask-image: linear-gradient(transparent, #000 15%, #000 85%, transparent);
+}
+
+html.night .hero-logo img {
+  filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 10px #ff3fb4) drop-shadow(0 0 30px #ff3fb4aa);
+}
+
+html.night .sign {
+  color: #ffd1ec;
+  text-shadow: 0 0 3px #fff, 0 0 10px #ff3fb4, 0 0 24px #ff3fb4, 0 0 60px #ff3fb4aa;
+}
+
+html.night .sign span {
+  color: #d9fbff;
+  text-shadow: 0 0 3px #fff, 0 0 10px #33f0ff, 0 0 24px #33f0ff, 0 0 60px #33f0ffaa;
+}
+
+/* ───── Тақырыптар неон түтік сияқты жанады ───── */
+.nf {
+  opacity: 0;
+}
+
+.nf.on {
+  animation: nwTube 1.1s steps(1) both;
+}
+
+@keyframes nwTube {
+  0% { opacity: 0; }
+  8% { opacity: 1; }
+  14% { opacity: 0.1; }
+  22% { opacity: 1; }
+  30% { opacity: 0.25; }
+  38%, 100% { opacity: 1; }
+}
+
+/* Карточкалар: курсор апарғанда неон жарық */
+html.night .card:hover,
+html.night .service:hover,
+html.night .about-card:hover {
+  border-color: #ff3fb4aa;
+  box-shadow: 0 0 0 1px #ff3fb455, 0 0 24px -4px #ff3fb488, 0 0 60px -20px #33f0ff88;
+}
+
+/* ═════════════ Instagram бөлімі ═════════════ */
+#nwInsta {
+  --bgi: #0c0f14;
+  --cardi: #2b2f35;
+  --txti: #f5f5f5;
+  --subi: #a8afb5;
+  --ringi: #3a4048;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0;
+}
+
+.nwi-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.nwi-copy h2 i {
+  font-style: normal;
+  background: linear-gradient(90deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  animation: nwShift 6s linear infinite;
+}
+
+@keyframes nwShift {
+  to { background-position: -200% 0; }
+}
+
+.nwi-lead {
+  color: var(--gray);
+  font-size: 17px;
+  margin: 8px 0 22px;
+  max-width: 44ch;
+}
+
+.nwi-points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px;
+  display: grid;
+  gap: 12px;
+}
+
+.nwi-points li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.nwi-points b {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+}
+
+.nwi-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+
+.nwi-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  color: #fff !important;
+  font-weight: 800;
+  text-decoration: none;
+  background: linear-gradient(45deg, #feda75, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5);
+  box-shadow: 0 10px 30px -10px #d62976;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.nwi-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px -8px #d62976;
+}
+
+.nwi-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.nwi-dm {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.nwi-hint {
+  margin-top: 20px;
+  color: var(--gray);
+  font-size: 14px;
+}
+
+/* Сахна және 3D телефон */
+.nwi-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+  min-height: 680px;
+}
+
+.nwi-phone {
+  --rx: 0deg;
+  --ry: -14deg;
+  position: relative;
+  width: 300px;
+  height: 640px;
+  border-radius: 46px;
+  padding: 12px;
+  background: linear-gradient(145deg, #2a2a35, #0c0c12 60%, #1d1d27);
+  box-shadow:
+    inset 0 0 0 2px #3a3a48,
+    inset 0 0 0 5px #111,
+    0 50px 90px -30px #000,
+    0 0 80px -16px #ff3fb488,
+    0 0 120px -30px #33f0ff77;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: nwFloat 6s ease-in-out infinite;
+}
+
+.nwi-phone.live {
+  transition: transform 0.12s linear;
+}
+
+@keyframes nwFloat {
+  50% { translate: 0 -14px; }
+}
+
+.nwi-phone::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 36px;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, #ffffff17 45%, transparent 55%);
+  background-size: 250% 100%;
+  background-position: var(--gx, 60%) 0;
+  z-index: 3;
+}
+
+.nwi-island {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  translate: -50% 0;
+  width: 92px;
+  height: 26px;
+  border-radius: 20px;
+  background: #000;
+  z-index: 4;
+}
+
+.nwi-screen {
+  position: relative;
+  height: 100%;
+  border-radius: 36px;
+  overflow: hidden;
+  background: var(--bgi);
+  color: var(--txti);
+}
+
+#nwInsta.off .nwi-phone,
+#nwInsta.off .nwi-bubble {
+  animation-play-state: paused;
+}
+
+.nwi-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  padding: 16px 26px 0;
+  font: 600 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.nwi-status i {
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* Профиль 400px енінде жасалып, телефонға кішірейтіледі */
+.iga {
+  zoom: 0.69;
+  width: 400px;
+  padding: 4px 0 10px;
+  font: 15px/1.3 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--txti);
+}
+
+.iga a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.iga svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+
+.iga-top {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  padding: 6px 14px 12px;
+}
+
+.iga-top svg {
+  width: 28px;
+  height: 28px;
+}
+
+.iga-top a:last-child {
+  justify-self: end;
+}
+
+.iga-top .iga-dots svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.iga-user {
+  padding-left: 10px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.iga-head {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 16px 0;
+}
+
+.iga-ava {
+  width: 90px;
+  height: 90px;
+  display: block;
+}
+
+.iga-ava img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.iga-right {
+  display: grid;
+  gap: 8px;
+}
+
+.iga-name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.iga-stats {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.iga-stats li {
+  display: grid;
+  line-height: 1.25;
+}
+
+.iga-stats b {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.iga-stats span {
+  font-size: 12.5px;
+}
+
+.iga-bio {
+  padding: 12px 16px 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.iga-link {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  color: #8ab4ff !important;
+  font-weight: 600;
+}
+
+.iga-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+.iga-chips {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px 0;
+}
+
+.iga-chips a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid var(--ringi);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.iga-chips svg {
+  width: 13px;
+  height: 13px;
+}
+
+.iga-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 36px;
+  gap: 6px;
+  padding: 12px 16px 0;
+}
+
+.iga-btns a {
+  display: grid;
+  place-items: center;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--cardi);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.iga-btns a.blue {
+  background: #4a5df6;
+  color: #fff;
+}
+
+.iga-btns svg {
+  width: 18px;
+  height: 18px;
+}
+
+.iga-hl {
+  display: flex;
+  gap: 14px;
+  padding: 16px 14px 0;
+  overflow: hidden;
+}
+
+.iga-hl a {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  max-width: 66px;
+}
+
+.iga-hl span {
+  max-width: 66px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iga-hl i {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  padding: 3px;
+  border: 2px solid var(--ringi);
+}
+
+.iga-hl img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.iga-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 14px;
+}
+
+.iga-tabs span {
+  display: grid;
+  place-items: center;
+  height: 42px;
+  color: var(--subi);
+  border-bottom: 2px solid transparent;
+}
+
+.iga-tabs span.on {
+  color: var(--txti);
+  border-bottom-color: var(--txti);
+  margin: 0 26px;
+}
+
+.iga-tabs span.on svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.iga-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.iga-grid a {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #121212;
+  cursor: pointer;
+}
+
+.iga-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.iga-grid a:hover img {
+  transform: scale(1.06);
+}
+
+.iga-pin {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 14px;
+  filter: grayscale(1) brightness(3);
+}
+
+/* Хабарламалар, ұшатын жүректер, лайк */
+.nwi-floats {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.nwi-fly {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  font-size: var(--s, 22px);
+  animation: nwFly var(--t, 2.6s) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+
+@keyframes nwFly {
+  0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(var(--dx, 0), var(--dy, -320px)) scale(1.1) rotate(var(--r, 0)); opacity: 0; }
+}
+
+.nwi-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  font-size: 3rem;
+  line-height: 1;
+  pointer-events: none;
+  translate: -50% -50%;
+  animation: nwBurst 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
+}
+
+@keyframes nwBurst {
+  0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+  25% { transform: scale(1.25) rotate(6deg); opacity: 1; }
+  45% { transform: scale(0.95); }
+  75% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.15) translateY(-30px); opacity: 0; }
+}
+
+.nwi-bubble {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--white) 75%, transparent);
+  border: 1px solid #ffffff1a;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px -18px #000, 0 0 20px -8px #ff3fb488;
+  animation: nwBubble 7s ease-in-out infinite;
+}
+
+.nwi-bubble.b1 { left: -20px; top: 16%; }
+.nwi-bubble.b2 { right: -20px; top: 40%; animation-delay: -2.5s; }
+.nwi-bubble.b3 { left: -20px; bottom: 12%; animation-delay: -4.5s; }
+
+@keyframes nwBubble {
+  50% { translate: 0 -12px; }
+}
+
+@media (max-width: 900px) {
+  .nwi-wrap {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .nwi-stage {
+    min-height: 590px;
+  }
+  .nwi-phone {
+    --ry: 0deg;
+    width: 270px;
+    height: 575px;
+  }
+  .iga {
+    zoom: 0.615;
+  }
+  .nwi-bubble.b1 { left: 0; top: 4%; }
+  .nwi-bubble.b2 { right: 0; top: auto; bottom: 34%; }
+  .nwi-bubble.b3 { left: 0; bottom: 4%; }
+}
+
+@media (max-width: 420px) {
+  .nwi-bubble {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf,
+  .nf.on {
+    opacity: 1;
+    animation: none;
+  }
+  .nwi-phone,
+  .nwi-bubble,
+  .nwi-copy h2 i,
+  html.flick body {
+    animation: none;
+  }
+  .nw-trail {
+    display: none;
+  }
+}
+
+/* Мәзір бір жолда тұрсын */
+.nav a {
+  white-space: nowrap;
+}
+
+@media (max-width: 1240px) {
+  .nav {
+    gap: 14px;
+    font-size: 13px;
+  }
+}
