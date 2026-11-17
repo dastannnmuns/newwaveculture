@@ -1,7 +1,7 @@
 /* newwave — «Сайттың иесі»: Instagram профилі.
    Аккаунт атын және сандарды осы жерде өзгертіңіз 👇 */
 const IG_USER = "abzallovichh";
-const IG_STATS = { posts: 0, followers: 103, following: 109 };
+const IG_STATS = { posts: 3, followers: 103, following: 109 };
 
 (() => {
   const sec = document.getElementById("insta");

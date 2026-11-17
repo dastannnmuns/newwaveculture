@@ -1,8 +1,8 @@
 /* newwave — «Сайттың иесі»: Instagram қолданбасындағы профильдің дәл көрінісі */
 
 #insta {
-  --bg: #0b1014;
-  --card: #2b3036;
+  --bg: #0c0f14;
+  --card: #2b2f35;
   --txt: #f5f5f5;
   --sub: #a8afb5;
   --ring: #3a4048;
@@ -540,4 +540,32 @@
   .iga-note b i {
     animation: none;
   }
+}
+
+/* Сыртқы адам көретін профиль: ‹ аты ⋯ */
+.iga-top2 {
+  grid-template-columns: 40px 1fr 40px;
+}
+
+.iga-top2 .iga-user {
+  justify-self: start;
+  padding-left: 10px;
+}
+
+.iga-top2 .iga-dots svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.iga-btns a.blue {
+  background: #4a5df6;
+  color: #fff;
+}
+
+.iga-btns {
+  padding-top: 16px;
+}
+
+.iga-grid {
+  margin-bottom: 4px;
 }
