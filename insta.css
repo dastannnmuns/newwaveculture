@@ -1,0 +1,634 @@
+/* newwave — Instagram бөлімі: 3D телефондағы профиль, сторис шеңберлері, лайк жарылысы */
+
+#insta {
+  --ig: linear-gradient(45deg, #feda75, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: 96px;
+}
+
+/* Фондағы баяу жылжитын жарық */
+.ig-aurora {
+  position: absolute;
+  inset: -20% -10%;
+  z-index: -1;
+  background:
+    radial-gradient(38% 45% at 70% 40%, rgba(214, 41, 118, 0.22), transparent 70%),
+    radial-gradient(35% 40% at 85% 75%, rgba(79, 91, 213, 0.25), transparent 70%),
+    radial-gradient(30% 35% at 55% 80%, rgba(46, 230, 214, 0.16), transparent 70%);
+  filter: blur(20px);
+  animation: igAurora 16s ease-in-out infinite alternate;
+}
+
+@keyframes igAurora {
+  to {
+    transform: translate3d(-6%, 4%, 0) rotate(8deg) scale(1.1);
+  }
+}
+
+.ig-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.ig-copy h2 i {
+  font-style: normal;
+  background: var(--ig);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: igShift 6s linear infinite;
+}
+
+@keyframes igShift {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.ig-lead {
+  color: var(--muted);
+  font-size: 1.08rem;
+  max-width: 42ch;
+  margin: 0 0 22px;
+}
+
+.ig-points {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  gap: 12px;
+}
+
+.ig-points li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ig-points b {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.ig-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+
+.ig-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  background: var(--ig) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 30px -10px rgba(214, 41, 118, 0.7);
+}
+
+.ig-btn:hover {
+  box-shadow: 0 14px 40px -8px rgba(214, 41, 118, 0.9) !important;
+}
+
+.ig-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.ig-btn svg .dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.ig-dm {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.ig-hint {
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+/* ───── Сахна және 3D телефон ───── */
+.ig-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+  min-height: 640px;
+}
+
+.ig-phone {
+  --rx: 0deg;
+  --ry: -14deg;
+  position: relative;
+  width: 300px;
+  height: 610px;
+  border-radius: 46px;
+  padding: 12px;
+  background: linear-gradient(145deg, #2a2a35, #0c0c12 60%, #1d1d27);
+  box-shadow:
+    inset 0 0 0 2px #3a3a48,
+    inset 0 0 0 5px #111,
+    0 50px 90px -30px rgba(0, 0, 0, 0.9),
+    0 0 80px -20px rgba(214, 41, 118, 0.45),
+    0 0 120px -30px rgba(46, 230, 214, 0.35);
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: igFloat 6s ease-in-out infinite;
+}
+
+@keyframes igFloat {
+  50% {
+    translate: 0 -14px;
+  }
+}
+
+.ig-phone.live {
+  transition: transform 0.12s linear;
+}
+
+/* Шыны жарқылы */
+.ig-phone::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 36px;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.09) 45%, transparent 55%);
+  background-size: 250% 100%;
+  background-position: var(--gx, 60%) 0;
+  z-index: 3;
+}
+
+.ig-island {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  translate: -50% 0;
+  width: 92px;
+  height: 26px;
+  border-radius: 20px;
+  background: #000;
+  z-index: 4;
+}
+
+.ig-screen {
+  position: relative;
+  height: 100%;
+  border-radius: 36px;
+  overflow: hidden;
+  background: #000;
+  color: #f5f5f5;
+  font: 13px/1.35 var(--body);
+}
+
+.ig-top {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px 16px 10px;
+  background: linear-gradient(#000 70%, transparent);
+  font-size: 0.95rem;
+}
+
+.ig-ico {
+  letter-spacing: 6px;
+  opacity: 0.9;
+}
+
+/* Лента өздігінен баяу жылжиды, курсор апарса тоқтайды */
+.ig-scroll {
+  padding: 92px 0 20px;
+  animation: igScroll 22s ease-in-out infinite alternate;
+}
+
+.ig-stage:hover .ig-scroll,
+#insta.off .ig-scroll,
+#insta.off .ig-phone,
+#insta.off .ig-aurora {
+  animation-play-state: paused;
+}
+
+@keyframes igScroll {
+  0%,
+  12% {
+    transform: translateY(0);
+  }
+  88%,
+  100% {
+    transform: translateY(-190px);
+  }
+}
+
+.ig-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+/* Сторис шеңбері: айналатын градиент */
+.ig-ava {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  flex: none;
+  border-radius: 50%;
+  padding: 3px;
+  display: grid;
+  place-items: center;
+}
+
+.ig-ava::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from var(--a, 0deg), #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75);
+  animation: igSpin 4s linear infinite;
+}
+
+@property --a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes igSpin {
+  to {
+    --a: 360deg;
+  }
+}
+
+.ig-ava-in {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid #000;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font: 800 1.5rem/1 var(--display);
+  color: #6b430c;
+  background: radial-gradient(circle at 32% 28%, #fff6cf 0, #f6d27a 22%, #c8902a 62%, #8a5a12 100%);
+}
+
+.ig-ava-in small {
+  font-size: 0.42rem;
+  letter-spacing: 0.2em;
+  opacity: 0.8;
+}
+
+.ig-who {
+  display: grid;
+  gap: 4px;
+  font-size: 0.76rem;
+  color: #d8d8d8;
+}
+
+.ig-who b {
+  color: #fff;
+  font-size: 0.92rem;
+}
+
+.ig-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 14px 16px;
+}
+
+.ig-btns a {
+  text-align: center;
+  text-decoration: none;
+  padding: 7px 0;
+  border-radius: 9px;
+  background: #262626;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #fff;
+}
+
+.ig-btns .ig-follow {
+  background: #0095f6;
+}
+
+.ig-hl {
+  display: flex;
+  gap: 12px;
+  padding: 4px 16px 14px;
+  overflow: hidden;
+}
+
+.ig-hl div {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  color: #ddd;
+}
+
+.ig-hl i {
+  font-style: normal;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  background: #121212;
+  box-shadow:
+    0 0 0 2px #000,
+    0 0 0 3.5px #3a3a3a;
+}
+
+.ig-tabs {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #262626;
+  padding: 9px 0;
+  color: #777;
+}
+
+.ig-tabs .on {
+  color: #fff;
+}
+
+.ig-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.ig-post {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  cursor: pointer;
+  background: #111;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ig-post img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ig-post:hover img {
+  transform: scale(1.08);
+}
+
+/* Курсор апарғанда — жүрекше */
+.ig-post::after {
+  content: "♥";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.ig-post:hover::after {
+  opacity: 1;
+}
+
+.ig-post.liked::after {
+  color: #ff3040;
+}
+
+/* CSS-пен жасалған мәтін посттар */
+.ig-txt {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 2px;
+  padding: 6px;
+}
+
+.ig-txt b {
+  font: 800 0.92rem/1 var(--display);
+  white-space: nowrap;
+  letter-spacing: -0.03em;
+}
+
+.ig-txt small {
+  font-size: 0.58rem;
+  opacity: 0.85;
+}
+
+.ig-txt.t1 {
+  background: linear-gradient(135deg, #5ff5dc, #22b8ff 55%, #3b5bff);
+  color: #04101a;
+}
+
+.ig-txt.t2 {
+  background:
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.25), transparent 40%),
+    linear-gradient(135deg, #f14635, #d62976);
+  color: #fff;
+}
+
+.ig-txt.t3 {
+  background: radial-gradient(circle at 30% 30%, #fff6cf, #f6d27a 30%, #c8902a 75%);
+  color: #4a2e05;
+}
+
+.ig-txt.t3 b {
+  font-size: 1.6rem;
+}
+
+/* Екі рет басқандағы үлкен жүрек */
+.ig-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  font-size: 3.4rem;
+  line-height: 1;
+  color: #fff;
+  pointer-events: none;
+  translate: -50% -50%;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5));
+  animation: igBurst 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) forwards;
+}
+
+@keyframes igBurst {
+  0% {
+    transform: scale(0) rotate(-15deg);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(1.25) rotate(6deg);
+    opacity: 1;
+  }
+  45% {
+    transform: scale(0.95);
+  }
+  75% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.15) translateY(-30px);
+    opacity: 0;
+  }
+}
+
+/* Телефоннан ұшып шығатын жүректер */
+.ig-floats {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ig-fly {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  font-size: var(--s, 22px);
+  pointer-events: none;
+  animation: igFly var(--t, 2.6s) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+
+@keyframes igFly {
+  0% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx, 0px), var(--dy, -320px)) scale(1.1) rotate(var(--r, 0deg));
+    opacity: 0;
+  }
+}
+
+/* Телефон айналасындағы «қалқыған» хабарламалар */
+.ig-bubble {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: rgba(21, 20, 29, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.8);
+  animation: igBubble 7s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.ig-bubble b {
+  font-size: 1.1rem;
+}
+
+.ig-bubble.b1 {
+  left: -36px;
+  top: 16%;
+}
+
+.ig-bubble.b2 {
+  right: -24px;
+  top: 38%;
+  animation-delay: -2.5s;
+}
+
+.ig-bubble.b3 {
+  left: -36px;
+  bottom: 10%;
+  animation-delay: -4.5s;
+}
+
+@keyframes igBubble {
+  50% {
+    translate: 0 -12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ig-wrap {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .ig-stage {
+    min-height: 560px;
+  }
+  .ig-phone {
+    --ry: 0deg;
+    width: 270px;
+    height: 550px;
+  }
+  .ig-bubble.b1 {
+    left: 0;
+    top: 6%;
+  }
+  .ig-bubble.b2 {
+    right: 0;
+    top: auto;
+    bottom: 30%;
+  }
+  .ig-bubble.b3 {
+    left: 0;
+    bottom: 4%;
+  }
+}
+
+@media (max-width: 420px) {
+  .ig-bubble {
+    font-size: 0.75rem;
+    padding: 8px 10px;
+  }
+  .ig-bubble.b3 {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ig-aurora,
+  .ig-phone,
+  .ig-scroll,
+  .ig-ava::before,
+  .ig-copy h2 i,
+  .ig-bubble {
+    animation: none;
+  }
+}
