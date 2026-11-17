@@ -1,12 +1,11 @@
-/* newwave — «Сайттың иесі»: Instagram профилі (instagram.com-дағыдай) */
+/* newwave — «Сайттың иесі»: Instagram қолданбасындағы профильдің дәл көрінісі */
 
 #insta {
-  --ig-bg: #000;
-  --ig-line: #262626;
-  --ig-text: #f5f5f5;
-  --ig-sub: #a8a8a8;
-  --ig-btn: #363636;
-  --ig-blue: #0095f6;
+  --bg: #0b1014;
+  --card: #2b3036;
+  --txt: #f5f5f5;
+  --sub: #a8afb5;
+  --ring: #3a4048;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -18,8 +17,8 @@
   inset: -20% -10%;
   z-index: -1;
   background:
-    radial-gradient(35% 45% at 25% 30%, rgba(214, 41, 118, 0.18), transparent 70%),
-    radial-gradient(35% 45% at 80% 70%, rgba(79, 91, 213, 0.22), transparent 70%);
+    radial-gradient(30% 40% at 30% 35%, rgba(214, 41, 118, 0.16), transparent 70%),
+    radial-gradient(30% 40% at 70% 65%, rgba(79, 91, 213, 0.2), transparent 70%);
   filter: blur(20px);
   animation: igAurora 16s ease-in-out infinite alternate;
 }
@@ -30,210 +29,343 @@
   }
 }
 
-#insta .label {
-  margin-bottom: 18px;
+.ig-label {
+  display: flex !important;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-/* ───── Профиль карточкасы ───── */
-.igp {
-  max-width: 935px;
+/* ───── Профиль (телефон экранының өлшемі) ───── */
+.iga {
+  max-width: 460px;
   margin: 0 auto;
-  padding: 36px 40px 28px;
-  background: var(--ig-bg);
-  color: var(--ig-text);
-  border: 1px solid var(--ig-line);
-  border-radius: 24px;
-  font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  padding: 10px 0 14px;
+  background: var(--bg);
+  color: var(--txt);
+  border-radius: 28px;
+  border: 1px solid #1f262c;
+  box-shadow:
+    0 50px 100px -40px rgba(0, 0, 0, 0.95),
+    0 0 80px -30px rgba(214, 41, 118, 0.35);
+  font: 15px/1.3 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
 }
 
-.igp a {
+.iga a {
   color: inherit;
   text-decoration: none;
 }
 
-.igp svg {
-  width: 22px;
-  height: 22px;
+.iga svg {
+  width: 24px;
+  height: 24px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.igp svg .f {
-  fill: currentColor;
-  stroke: none;
-}
-
-.igp-head {
-  display: grid;
-  grid-template-columns: 290px 1fr;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-/* Аватар: айналатын сторис шеңбері */
-.igp-ava {
-  position: relative;
-  justify-self: center;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  padding: 6px;
   display: block;
 }
 
-.igp-ava::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(from var(--a, 0deg), #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75);
-  animation: igSpin 5s linear infinite;
+/* Жоғарғы жол: + · аты ⌄ · ☰ */
+.iga-top {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  padding: 6px 14px 14px;
 }
 
-@property --a {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
+.iga-top svg {
+  width: 28px;
+  height: 28px;
 }
 
-@keyframes igSpin {
-  to {
-    --a: 360deg;
-  }
+.iga-top a:last-child {
+  justify-self: end;
 }
 
-.igp-ava img {
+.iga-user {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.iga-user .chev {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.4;
+}
+
+/* Аватар + аты + сандар */
+.iga-head {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 22px;
+  align-items: center;
+  padding: 18px 18px 0;
+}
+
+.iga-ava {
   position: relative;
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+
+.iga-ava > img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--ig-bg);
   display: block;
-  transition: transform 0.3s;
 }
 
-.igp-ava:hover img {
-  transform: scale(0.96);
-}
-
-.igp-info {
-  display: grid;
-  gap: 20px;
-}
-
-.igp-row1 {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px 20px;
-}
-
-.igp-user {
-  font-size: 20px;
-  font-weight: 400;
-}
-
-.igp-btns {
-  display: flex;
-  gap: 8px;
-}
-
-.igp-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 32px;
-  padding: 0 16px;
-  border-radius: 8px;
-  background: var(--ig-btn);
-  font-weight: 600;
-  font-size: 14px;
-  transition: filter 0.2s;
-}
-
-.igp-btn:hover {
-  filter: brightness(1.25);
-}
-
-.igp-btn.blue {
-  background: var(--ig-blue);
-  color: #fff;
-}
-
-.igp-btn.sq {
-  padding: 0 8px;
-}
-
-.igp-btn.sq svg {
-  width: 18px;
-  height: 18px;
-}
-
-.igp-stats {
-  display: flex;
-  gap: 40px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 16px;
-}
-
-.igp-stats b {
-  font-weight: 600;
-}
-
-.igp-bio {
-  display: grid;
-  gap: 2px;
-}
-
-.igp-bio b {
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-.igp-bio span {
-  letter-spacing: 0.04em;
-}
-
-/* Хайлайттар */
-.igp-hl {
-  display: flex;
-  gap: 44px;
-  padding: 0 0 44px 44px;
-}
-
-.igp-hl a {
+/* Заметка: «I miss you / Santiz» */
+.iga-note {
+  position: absolute;
+  left: -2px;
+  top: -30px;
   display: grid;
   justify-items: center;
-  gap: 10px;
+  padding: 6px 12px 7px;
+  border-radius: 16px;
+  background: #3a4048;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  z-index: 2;
+}
+
+.iga-note::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3a4048;
+}
+
+.iga-note b {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-size: 12px;
   font-weight: 600;
 }
 
-.igp-hl i {
-  width: 87px;
-  height: 87px;
+.iga-note b i {
+  width: 2px;
+  height: 8px;
+  background: #fff;
+  border-radius: 1px;
+  animation: igEq 0.9s ease-in-out infinite;
+}
+
+.iga-note b i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.iga-note b i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes igEq {
+  50% {
+    transform: scaleY(0.45);
+  }
+}
+
+.iga-note small {
+  font-size: 11px;
+  color: var(--sub);
+}
+
+.iga-plus {
+  position: absolute;
+  right: -2px;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  padding: 3px;
-  background: var(--ig-bg);
-  box-shadow: 0 0 0 1px #3a3a3a;
-  transition:
-    box-shadow 0.25s,
-    transform 0.25s;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: #000;
+  font: 700 22px/1 Arial, sans-serif;
+  border: 3px solid var(--bg);
 }
 
-.igp-hl a:hover i {
-  box-shadow: 0 0 0 2px #d62976;
-  transform: scale(1.04);
+.iga-right {
+  display: grid;
+  gap: 8px;
 }
 
-.igp-hl img {
+.iga-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.iga-stats {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0 4px 0 0;
+}
+
+.iga-stats li {
+  display: grid;
+  line-height: 1.25;
+}
+
+.iga-stats b {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.iga-stats span {
+  font-size: 14px;
+}
+
+.iga-bio {
+  padding: 18px 18px 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* Чиптер */
+.iga-chips {
+  display: flex;
+  gap: 10px;
+  padding: 14px 18px 0;
+}
+
+.iga-chips a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--ring);
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.iga-chips a.dim {
+  color: var(--sub);
+}
+
+.iga-chips svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* «Ваша панель» */
+.iga-panel {
+  display: grid;
+  gap: 2px;
+  margin: 14px 18px 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.iga-panel b {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.iga-panel span {
+  font-size: 13.5px;
+  color: var(--sub);
+}
+
+/* Батырмалар */
+.iga-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 36px;
+  gap: 6px;
+  padding: 12px 18px 0;
+}
+
+.iga-btns a {
+  display: grid;
+  place-items: center;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: filter 0.2s;
+}
+
+.iga-btns a:hover,
+.iga-panel:hover,
+.iga-chips a:hover {
+  filter: brightness(1.2);
+}
+
+.iga-btns .sq svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Хайлайттар */
+.iga-hl {
+  display: flex;
+  gap: 22px;
+  padding: 20px 16px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.iga-hl::-webkit-scrollbar {
+  display: none;
+}
+
+.iga-hl a {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+}
+
+.iga-hl i {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  padding: 4px;
+  border: 2px solid var(--ring);
+  display: grid;
+  place-items: center;
+  transition: transform 0.25s;
+}
+
+.iga-hl a:hover i {
+  transform: scale(1.05);
+}
+
+.iga-hl i.add {
+  border: 1px solid #3a4048;
+}
+
+.iga-hl i.add svg {
+  width: 34px;
+  height: 34px;
+  stroke-width: 1.6;
+}
+
+.iga-hl img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -242,50 +374,44 @@
 }
 
 /* Табтар */
-.igp-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
-  border-top: 1px solid var(--ig-line);
+.iga-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 18px;
 }
 
-.igp-tabs span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 52px;
-  margin-top: -1px;
-  color: var(--ig-sub);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border-top: 1px solid transparent;
+.iga-tabs span {
+  display: grid;
+  place-items: center;
+  height: 46px;
+  color: var(--sub);
+  border-bottom: 2px solid transparent;
 }
 
-.igp-tabs span.on {
-  color: var(--ig-text);
-  border-top-color: var(--ig-text);
+.iga-tabs span.on {
+  color: var(--txt);
+  border-bottom-color: var(--txt);
+  margin: 0 18px;
 }
 
-.igp-tabs svg {
-  width: 13px;
-  height: 13px;
-  stroke-width: 2.2;
+.iga-tabs svg {
+  width: 24px;
+  height: 24px;
 }
 
-.igp-tabs em {
-  font-style: normal;
+.iga-tabs span.on svg {
+  fill: currentColor;
+  stroke: none;
 }
 
-/* Посттар торы */
-.igp-grid {
+/* Посттар */
+.iga-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
+  gap: 2px;
 }
 
-.igp-grid a {
+.iga-grid a {
   position: relative;
   display: block;
   aspect-ratio: 3 / 4;
@@ -293,7 +419,7 @@
   background: #121212;
 }
 
-.igp-grid img {
+.iga-grid img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -301,151 +427,116 @@
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.igp-grid a::after {
-  content: "♥   💬";
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: 22px;
-  color: #fff;
-  white-space: pre;
-  background: rgba(0, 0, 0, 0.35);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.igp-grid a:hover::after {
-  opacity: 1;
-}
-
-.igp-grid a:hover img {
+.iga-grid a:hover img {
   transform: scale(1.05);
 }
 
-/* «Бірнеше фото» белгісі */
-.igp-multi {
+.iga-multi {
   position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 16px;
-  height: 16px;
+  top: 8px;
+  right: 10px;
+  width: 14px;
+  height: 14px;
   border: 2px solid #fff;
   border-radius: 4px;
   box-shadow: 3px 3px 0 -1px #fff;
-  z-index: 1;
 }
 
-.igp-more {
-  display: block;
-  margin-top: 20px;
-  text-align: center;
-  font-weight: 600;
-  color: var(--ig-blue) !important;
+/* Төменгі мәзір */
+.iga-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 18px 14px 0;
+  padding: 6px 6px 6px 18px;
+  border-radius: 999px;
+  background: rgba(30, 35, 40, 0.92);
+  border: 1px solid #2f363d;
 }
 
-.igp-more:hover {
-  text-decoration: underline !important;
+.iga-nav svg {
+  width: 26px;
+  height: 26px;
 }
 
-/* Телефондағы толық енді батырмалар (JS көшіріп қояды) */
-.igp-mbtns {
-  display: none !important;
+.iga-nav a.me {
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 46px;
+  border-radius: 999px;
+  background: #3a4048;
 }
 
-/* ───── Телефонда: Instagram қолданбасындағыдай ───── */
-@media (max-width: 735px) {
-  .igp {
-    padding: 18px 0 16px;
-    border-radius: 20px;
+.iga-nav a.me img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+@media (max-width: 420px) {
+  .iga {
+    border-radius: 22px;
+    font-size: 14px;
   }
-  .igp-head {
-    grid-template-columns: 90px 1fr;
-    gap: 0 22px;
-    padding: 0 16px;
-    margin-bottom: 14px;
-    align-items: center;
-  }
-  .igp-ava {
-    width: 90px;
-    height: 90px;
-    padding: 3px;
-    grid-row: 1 / span 2;
-  }
-  .igp-ava img {
-    border-width: 3px;
-  }
-  .igp-info {
-    display: contents;
-  }
-  .igp-row1 {
-    grid-column: 2;
-  }
-  .igp-row1 .igp-btns {
-    display: none;
-  }
-  .igp-user {
-    font-size: 18px;
-    font-weight: 600;
-  }
-  .igp-stats {
-    grid-column: 2;
+  .iga-head {
+    grid-template-columns: 88px 1fr;
     gap: 16px;
+    padding: 18px 14px 0;
+  }
+  .iga-ava {
+    width: 86px;
+    height: 86px;
+  }
+  .iga-plus {
+    width: 26px;
+    height: 26px;
+    font-size: 19px;
+  }
+  .iga-note {
+    top: -26px;
+    padding: 5px 10px 6px;
+  }
+  .iga-stats b {
+    font-size: 15px;
+  }
+  .iga-stats span {
+    font-size: 12.5px;
+  }
+  .iga-bio,
+  .iga-chips,
+  .iga-btns {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .iga-panel {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
+  .iga-chips a {
+    font-size: 12.5px;
+    padding: 0 10px;
+  }
+  .iga-btns a {
     font-size: 13px;
-    margin-top: 6px;
   }
-  .igp-stats li {
-    display: grid;
-    line-height: 1.25;
+  .iga-hl {
+    gap: 16px;
   }
-  .igp-stats b {
-    font-size: 16px;
+  .iga-hl i {
+    width: 62px;
+    height: 62px;
   }
-  .igp-bio {
-    grid-column: 1 / -1;
-    margin-top: 14px;
-  }
-  .igp-mbtns {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 6px;
-    padding: 0 16px 18px;
-  }
-  .igp-hl {
-    gap: 18px;
-    padding: 0 16px 18px;
-    overflow-x: auto;
-  }
-  .igp-hl i {
+  .iga-nav a.me {
     width: 66px;
-    height: 66px;
-  }
-  .igp-tabs {
-    gap: 0;
-    justify-content: space-around;
-  }
-  .igp-tabs em {
-    display: none;
-  }
-  .igp-tabs svg {
-    width: 24px;
-    height: 24px;
-    stroke-width: 1.8;
-  }
-  .igp-grid {
-    gap: 2px;
-  }
-  .igp-multi {
-    top: 6px;
-    right: 8px;
-    width: 13px;
-    height: 13px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ig-aurora,
-  .igp-ava::before {
+  .iga-note b i {
     animation: none;
   }
 }
