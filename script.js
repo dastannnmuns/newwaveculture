@@ -156,6 +156,7 @@ const texts = {
     lDoneUp: "Тіркелдіңіз!",
     lDoneIn: "Қош келдіңіз!",
     lGo: "Сайтқа өту →",
+    lOut: "Шығу (деректерімді өшіру)",
     lDemo:
       "Демо нұсқа: деректер тек осы браузерде сақталады. Нақты кіру Firebase қосылғанда іске қосылады.",
     eLogin: "Gmail / Mail.ru поштасын немесе телефон нөмірін жазыңыз",
@@ -317,6 +318,7 @@ const texts = {
     lDoneUp: "Вы зарегистрированы!",
     lDoneIn: "Добро пожаловать!",
     lGo: "Перейти на сайт →",
+    lOut: "Выйти (удалить мои данные)",
     lDemo:
       "Демо-версия: данные хранятся только в этом браузере. Настоящий вход заработает после подключения Firebase.",
     eLogin: "Введите почту Gmail / Mail.ru или номер телефона",
@@ -1147,6 +1149,11 @@ document.querySelectorAll("[data-copy]").forEach(
       }, 500);
   }
   function open() {
+    // Тіркелген болса — профиль мен «Шығу» батырмасын көрсетеміз
+    try {
+      const u = JSON.parse(localStorage.getItem("nw-user") || "null");
+      if (u && u.name && $("lOk").hidden) success(u, false);
+    } catch (x) {}
     lg.hidden = false;
     document.body.style.overflow = "hidden";
     sizeDust();
@@ -1329,11 +1336,40 @@ document.querySelectorAll("[data-copy]").forEach(
     $("lSub").textContent = u.email || u.phone || "";
     $("lOk").innerHTML =
       `<div class="gcoin">${(u.name || "N")[0].toUpperCase()}</div><div><b style="font-size:1.15rem">${u.name || ""} ${u.surname || ""}</b><div style="color:#9a98a6;font-size:.9rem">${u.phone || ""}</div></div><button class="lbtn" style="width:100%" id="lGo">${tr("lGo")}</button>`;
+    $("lOk").insertAdjacentHTML(
+      "beforeend",
+      `<button class="lbtn lout" style="width:100%;margin-top:8px;background:transparent;color:inherit;border:1px solid rgba(255,255,255,.25)" id="lOut">${tr("lOut")}</button>`,
+    );
     $("lOk").hidden = false;
     $("lNote").hidden = false;
     $("lNote").textContent = tr("lDemo");
     $("lGo").onclick = close;
+    $("lOut").onclick = logout;
     updateHeader();
+  }
+  /* Шығу: сақталған деректерді өшіреді (тек осы браузерде) */
+  function logout() {
+    try {
+      localStorage.removeItem("nw-user");
+    } catch (x) {}
+    ["em", "n", "sn", "p", "m"].forEach((i) => {
+      const el = document.getElementById(i);
+      if (el) el.value = "";
+    });
+    $("fIn").hidden = false;
+    $("fUp").hidden = true;
+    $("lSocial").hidden = false;
+    lg.querySelector(".ltabs").hidden = false;
+    lg.querySelectorAll(".ltabs [role=tab]").forEach((t) => t.setAttribute("aria-selected", t.dataset.lt === "in"));
+    $("lTitle").textContent = tr("lTitleIn");
+    $("lSub").textContent = tr("lSubIn");
+    $("lOk").hidden = true;
+    $("lNote").hidden = true;
+    const ok = document.getElementById("ok");
+    if (ok) ok.hidden = true;
+    const b = document.getElementById("hdrLogin");
+    if (b) b.textContent = tr("navLogin");
+    close();
   }
   $("fIn").onsubmit = (e) => {
     e.preventDefault();
