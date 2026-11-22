@@ -137,7 +137,11 @@ const texts = {
     tPlus: "Артықшылықтары",
     tMinus: "Минусы",
     tWho: "Кімге:",
-    tEx: "Мысал:",
+    tEx: "Дизайнды көру:",
+    demoLabel: "Портфолио",
+    demoTitle: "Біз жасаған <i>дизайндар</i>",
+    demoText: "Әр дизайнды басып, тірі сайт сияқты ашып көріңіз: батырмалар, корзина, мәзір бәрі жұмыс істейді.",
+    demoOpen: "Ашу",
     tTerm: "Мерзімі:",
     errMailName: "Поштаның атын дұрыс жазыңыз (тек латын әріп, сан, нүкте)",
     errName: "Атыңызды жазыңыз",
@@ -299,7 +303,11 @@ const texts = {
     tPlus: "Преимущества",
     tMinus: "Минусы",
     tWho: "Кому:",
-    tEx: "Пример:",
+    tEx: "Смотреть дизайн:",
+    demoLabel: "Портфолио",
+    demoTitle: "Дизайны, которые мы <i>сделали</i>",
+    demoText: "Откройте любой дизайн как живой сайт: кнопки, корзина, меню работают.",
+    demoOpen: "Открыть",
     tTerm: "Срок:",
     errMailName: "Введите имя почты правильно (латиница, цифры, точка)",
     errName: "Введите имя",
@@ -540,6 +548,15 @@ const T = [
     ex: [["Киім бренді", "bult-store.html"]],
   },
 ];
+/* Дизайн мысалдары: пакет индексі → designs/ папкасындағы беттер */
+const DEMOS = [
+  { f: "qaimaq", tier: 3, kz: "Qaimaq кондитерлік", ru: "Кондитерская Qaimaq", tagKz: "Дүкен · корзина · төлем", tagRu: "Магазин · корзина · оплата" },
+  { f: "chudo-pechka", tier: 3, kz: "Чудо-печка наубайханасы", ru: "Пекарня «Чудо-печка»", tagKz: "Үй пісірмесі · жеткізу", tagRu: "Домашняя выпечка · доставка" },
+  { f: "tulpar-fit", tier: 4, kz: "Tulpar Fit клубы", ru: "Клуб Tulpar Fit", tagKz: "Онлайн жазылу · жеңілдік дөңгелегі", tagRu: "Онлайн-запись · колесо скидок" },
+  { f: "shanyraq", tier: 5, kz: "Шаңырақ мейрамханасы", ru: "Ресторан «Шанырак»", tagKz: "Мәзір · той · үстел брондау", tagRu: "Меню · банкеты · бронь стола" },
+  { f: "samal", tier: 5, kz: "Samal мейрамханасы", ru: "Ресторан Samal", tagKz: "Медеу · терраса · брондау", tagRu: "Медеу · терраса · бронь" },
+];
+const demoName = (d) => (lang === "ru" ? d.ru : d.kz);
 const T_RU = [
   {
     pg: "1 стр.",
@@ -688,6 +705,12 @@ function renderTiers() {
       .join("")}</ul></div>
     <div class="when">${tr("tWho")} ${tierTx(i, "who")}</div>
   </div>
+  ${(() => {
+    const ds = DEMOS.filter((d) => d.tier === i);
+    return ds.length
+      ? `<div class="ex"><span>${tr("tEx")}</span>${ds.map((d) => `<a href="designs/${d.f}.html" target="_blank" rel="noopener">${demoName(d)} ↗</a>`).join("")}</div>`
+      : "";
+  })()}
  </article>`,
   ).join("");
 }
@@ -722,6 +745,20 @@ document.getElementById("t").innerHTML = T.map(
   (t, i) => `<option value="${i}">${t.k} — ${priceTxt(t)}</option>`,
 ).join("");
 recommend();
+
+// Дизайн мысалдары галереясы
+function renderDemos() {
+  const box = document.getElementById("demosGrid");
+  if (!box) return;
+  box.innerHTML = DEMOS.map(
+    (d) => `<a class="demo" href="designs/${d.f}.html" target="_blank" rel="noopener">
+      <span class="demo-shot"><img src="img/designs/${d.f}.jpg" alt="${demoName(d)}" loading="lazy" /><i>${tr("demoOpen")} ↗</i></span>
+      <span class="demo-info"><b>${demoName(d)}</b><small>${lang === "ru" ? d.tagRu : d.tagKz}</small><em>${T[d.tier].k}</em></span>
+    </a>`,
+  ).join("");
+}
+renderDemos();
+document.addEventListener("langchange", renderDemos);
 
 // Тіл ауысқанда пакет карточкаларын қайта салу
 document.addEventListener("langchange", () => {

@@ -350,3 +350,130 @@ h2.rv.in {
     display: none;
   }
 }
+
+/* ───── Портфолио: біз жасаған дизайндар ───── */
+#demos h2 i {
+  font-style: normal;
+  background: var(--wave);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.demo-lead {
+  color: var(--muted);
+  max-width: 56ch;
+  margin: -12px 0 28px;
+}
+
+.demos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 18px;
+}
+
+.demo {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.demo:hover {
+  transform: translateY(-6px);
+  border-color: rgba(46, 230, 214, 0.6);
+  box-shadow: 0 24px 50px -24px rgba(34, 184, 255, 0.55);
+}
+
+.demo-shot {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #0b0b12;
+}
+
+.demo-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.demo:hover .demo-shot img {
+  transform: scale(1.05);
+}
+
+.demo-shot i {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: #07070d;
+  background: var(--accent);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+
+.demo:hover .demo-shot i {
+  opacity: 1;
+  transform: none;
+}
+
+.demo-info {
+  display: grid;
+  gap: 4px;
+  padding: 16px 18px 18px;
+  position: relative;
+}
+
+.demo-info b {
+  font-family: var(--display);
+  font-size: 1.05rem;
+}
+
+.demo-info small {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.demo-info em {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--accent);
+}
+
+@media (hover: none) {
+  .demo-shot i {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.demo-info b {
+  padding-right: 84px;
+}
