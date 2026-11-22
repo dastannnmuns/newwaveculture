@@ -550,11 +550,16 @@ const T = [
 ];
 /* Дизайн мысалдары: пакет индексі → designs/ папкасындағы беттер */
 const DEMOS = [
+  { f: "aru-nails", tier: 0, kz: "Aru Nails студиясы", ru: "Студия Aru Nails", tagKz: "Визитка · прайс · WhatsApp", tagRu: "Визитка · прайс · WhatsApp" },
+  { f: "taza-ui", tier: 1, kz: "Taza Üi клининг", ru: "Клининг Taza Üi", tagKz: "Қызметтер · бағалар · өтінім", tagRu: "Услуги · цены · заявка" },
   { f: "dala-coffee", tier: 1, kz: "Dala Coffee кофеханасы", ru: "Кофейня Dala Coffee", tagKz: "Мәзір · алдын ала тапсырыс", tagRu: "Меню · предзаказ" },
+  { f: "qurylys", tier: 2, kz: "Berik Qurylys жөндеу", ru: "Ремонт Berik Qurylys", tagKz: "Калькулятор · жұмыстар · кепілдік", tagRu: "Калькулятор · работы · гарантия" },
   { f: "qaimaq", tier: 3, kz: "Qaimaq кондитерлік", ru: "Кондитерская Qaimaq", tagKz: "Дүкен · корзина · төлем", tagRu: "Магазин · корзина · оплата" },
   { f: "nazik-beauty", tier: 3, kz: "Nazik Beauty салоны", ru: "Салон Nazik Beauty", tagKz: "Қызметтер · шеберлер · онлайн жазылу", tagRu: "Услуги · мастера · онлайн-запись" },
+  { f: "kiim-dukeni", tier: 3, kz: "QALA Wear киім дүкені", ru: "Магазин одежды QALA Wear", tagKz: "Каталог · корзина · жеткізу", tagRu: "Каталог · корзина · доставка" },
   { f: "tulpar-fit", tier: 4, kz: "Tulpar Fit клубы", ru: "Клуб Tulpar Fit", tagKz: "Онлайн жазылу · жеңілдік дөңгелегі", tagRu: "Онлайн-запись · колесо скидок" },
   { f: "shanyraq", tier: 5, kz: "Шаңырақ мейрамханасы", ru: "Ресторан «Шанырак»", tagKz: "Мәзір · той · үстел брондау", tagRu: "Меню · банкеты · бронь стола" },
+  { f: "lux-zhk", tier: 5, kz: "Alatau Residence ТҮК", ru: "ЖК Alatau Residence", tagKz: "Пәтер таңдау · жоба · көру", tagRu: "Выбор квартиры · проект · просмотр" },
 ];
 const demoName = (d) => (lang === "ru" ? d.ru : d.kz);
 const T_RU = [

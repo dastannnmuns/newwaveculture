@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Taza Üi клининг</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: таза, сенімді, жарқын — клининг қызметі
+   IDEA: жылтыраған пәтер, көпіршіктер
+   PICTURE: SVG — терезесі жарқыраған үй, көпіршіктер
+   COLOUR/TYPE: көгілдір #0b6bcb, ақ, лимон #ffd23f; Onest + Onest
+   LAYOUT: үстінде мәзір + тіл ауыстырғыш, 4 бет (#home #services #about #order) */
+:root{color-scheme:light;--bg:#f4f9ff;--ink:#0d1b2a;--blue:#0b6bcb;--deep:#08325e;--lemon:#ffd23f;--mut:#5b6b7c}
+*{box-sizing:border-box;min-width:0}
+button,input,select,textarea{font-family:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Onest,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1140px;margin:auto}
+nav{position:sticky;top:0;z-index:5;background:#fff;box-shadow:0 1px 0 #dbe6f2}
+nav .wrap{display:flex;align-items:center;gap:16px;padding:12px max(5vw,16px);flex-wrap:wrap}
+.logo{font:800 20px Onest,sans-serif;color:var(--blue);text-decoration:none;margin-right:auto}
+.links{display:flex;gap:4px;flex-wrap:wrap}
+.links a{padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600}
+.links a.on{background:#e3effc;color:var(--blue)}
+.lang{display:flex;border:2px solid var(--blue);border-radius:10px;overflow:hidden}
+.lang button{border:0;background:#fff;color:var(--blue);font:700 14px Onest,sans-serif;padding:8px 12px;min-height:40px;cursor:pointer}
+.lang button.on{background:var(--blue);color:#fff}
+.page{display:none}.page.on{display:block}
+.hero{background:var(--blue);color:#fff}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center}
+h1{font:800 clamp(32px,5vw,52px)/1.05 Onest,sans-serif;margin:0 0 16px;text-wrap:balance}
+h2{font:800 clamp(26px,3.5vw,38px)/1.1 Onest,sans-serif;margin:0 0 20px}
+.lead{font-size:18px;opacity:.92;margin:0 0 24px;max-width:40ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 22px;border-radius:12px;background:var(--lemon);color:var(--ink);font-weight:700;text-decoration:none;border:0;font-size:16px;cursor:pointer}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:28px}
+.stats b{display:block;font:800 28px Onest,sans-serif}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 6px 20px #0b6bcb12}
+.card h3{margin:0 0 6px;font-size:19px}
+.card p{margin:0 0 12px;color:var(--mut)}
+.card .p{font:800 22px Onest,sans-serif;color:var(--blue);white-space:nowrap}
+.ico{width:48px;height:48px;border-radius:14px;background:#e3effc;display:grid;place-items:center;margin-bottom:12px}
+.steps{counter-reset:s;display:grid;gap:12px;padding:0;list-style:none}
+.steps li{background:#fff;border-radius:14px;padding:16px 18px 16px 64px;position:relative}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:16px;top:14px;width:34px;height:34px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;font-weight:800}
+form{background:#fff;border-radius:20px;padding:24px;display:grid;gap:14px;max-width:560px}
+label{font-weight:600;display:grid;gap:6px}
+input,select,textarea{font:16px Onest,sans-serif;padding:12px 14px;border:2px solid #d5e2f0;border-radius:12px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:3px solid #0b6bcb55;border-color:var(--blue)}
+.ok{display:none;background:#e6f8ec;color:#145c2e;padding:16px;border-radius:14px;font-weight:600}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+footer{background:var(--deep);color:#cfe0f3;padding:28px max(5vw,16px);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:760px){.hero .wrap,.two{grid-template-columns:1fr}.hero svg{max-width:340px;margin:auto}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="logo" href="#home">Taza Üi</a>
+  <div class="links" id="links"></div>
+  <div class="lang"><button data-l="kk" class="on">ҚАЗ</button><button data-l="ru">РУС</button></div>
+</div></nav>
+
+<main>
+<section class="page" id="p-home">
+  <div class="band hero"><div class="wrap">
+    <div>
+      <h1 data-t="h1"></h1>
+      <p class="lead" data-t="lead"></p>
+      <a class="btn" href="#order" data-t="cta"></a>
+      <div class="stats"><div><b>1 200+</b><span data-t="s1"></span></div><div><b>3 сағ</b><span data-t="s2"></span></div><div><b>4.9</b><span data-t="s3"></span></div></div>
+    </div>
+    <svg viewBox="0 0 320 260" aria-hidden="true">
+      <ellipse cx="160" cy="240" rx="120" ry="12" fill="#08325e" opacity=".35"/>
+      <path d="M60 120 L160 50 L260 120 V235 H60Z" fill="#fff"/>
+      <path d="M40 125 L160 38 L280 125" fill="none" stroke="#ffd23f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="90" y="140" width="56" height="50" rx="6" fill="#9fd0ff"/><rect x="174" y="140" width="56" height="50" rx="6" fill="#9fd0ff"/>
+      <path d="M96 182 L136 146" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".8"/><path d="M180 182 L220 146" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".8"/>
+      <rect x="140" y="198" width="40" height="37" rx="4" fill="#0b6bcb" opacity=".25"/>
+      <g fill="#fff" opacity=".85"><circle cx="270" cy="70" r="16"/><circle cx="292" cy="40" r="9"/><circle cx="40" cy="80" r="12"/><circle cx="28" cy="50" r="6"/></g>
+      <path d="M250 165 l6 14 14 6 -14 6 -6 14 -6 -14 -14 -6 14 -6z" fill="#ffd23f"/>
+    </svg>
+  </div></div>
+  <div class="band"><div class="wrap"><h2 data-t="whyT"></h2><div class="grid" id="why"></div></div></div>
+  <div class="band" style="padding-top:0"><div class="wrap"><h2 data-t="popT"></h2><div class="grid" id="pop"></div><p style="margin-top:18px"><a href="#services" data-t="all" style="color:var(--blue);font-weight:700"></a></p></div></div>
+  <div class="band" style="background:var(--lemon)"><div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><h2 data-t="ctaT" style="margin:0;max-width:22ch"></h2><a class="btn" href="#order" data-t="ctaB" style="background:var(--ink);color:#fff"></a></div></div>
+</section>
+
+<section class="page" id="p-services"><div class="band"><div class="wrap">
+  <h2 data-t="srv"></h2><div class="grid" id="srv"></div>
+</div></div></section>
+
+<section class="page" id="p-about"><div class="band"><div class="wrap two">
+  <div><h2 data-t="about"></h2><p data-t="abouttxt"></p></div>
+  <div><h2 data-t="how"></h2><ol class="steps" id="steps"></ol></div>
+</div></div></section>
+
+<section class="page" id="p-order"><div class="band"><div class="wrap two">
+  <div><h2 data-t="order"></h2><p data-t="ordertxt"></p><p><b>+7 702 000 00 00</b><br>Астана · 08:00–21:00</p></div>
+  <form id="f">
+    <label><span data-t="fn"></span><input required id="nm" autocomplete="name"></label>
+    <label><span data-t="fp"></span><input required id="ph" type="tel" inputmode="tel" placeholder="+7"></label>
+    <label><span data-t="fs"></span><select id="sv"></select></label>
+    <label><span data-t="fd"></span><input id="dt" type="date"></label>
+    <label><span data-t="fc"></span><textarea id="cm" rows="3"></textarea></label>
+    <button class="btn" data-t="send"></button>
+    <div class="ok" id="ok"></div>
+  </form>
+</div></div></section>
+</main>
+
+<footer><div class="wrap"><span>© Taza Üi · Астана</span><span>Мысал сайт · newwave «Шағын сайт» пакеті</span></div></footer>
+
+<script>{
+const T={
+kk:{nav:["Басты","Қызметтер","Біз туралы","Өтінім"],h1:"Үйіңіз жарқырап тұрсын — біз жинаймыз",lead:"Пәтер, кеңсе және жөндеуден кейінгі тазалау. Өз құралдарымыз, қауіпсіз химия, нақты баға.",cta:"Өтінім қалдыру",s1:"тапсырыс",s2:"орташа уақыт",s3:"клиент бағасы",whyT:"Неге бізді таңдайды",popT:"Танымал қызметтер",all:"Барлық қызметтер мен бағалар →",ctaT:"Бүгін өтінім қалдырсаңыз — терезе жуу 20% арзан",ctaB:"Өтінім қалдыру",srv:"Қызметтер мен бағалар",about:"Біз туралы",abouttxt:"Taza Üi — 2019 жылдан бері Астанада жұмыс істейтін клининг командасы. Барлық қызметкер тексеруден өткен, келісімшартпен жұмыс істейміз.",how:"Қалай жұмыс істейміз",order:"Өтінім қалдыру",ordertxt:"Форманы толтырыңыз — менеджер 15 минут ішінде хабарласады.",fn:"Атыңыз",fp:"Телефон",fs:"Қызмет",fd:"Күні",fc:"Пікір",send:"Жіберу",ok:"Рақмет! Өтініміңіз қабылданды, жақында хабарласамыз.",
+why:[["Өз құралымыз","Кәсіби шаңсорғыш пен буландырғыш"],["Қауіпсіз химия","Балалар мен үй жануарларына зиянсыз"],["Нақты баға","Келгеннен кейін баға өзгермейді"]],
+srv:[["Жалпы тазалау","1 бөлмелі пәтер","15 000 ₸"],["Терең тазалау","Шкаф ішімен, плита, тоңазытқыш","30 000 ₸"],["Жөндеуден кейін","Шаң, бояу, цемент іздері","45 000 ₸"],["Терезе жуу","1 терезе, екі жағынан","2 500 ₸"],["Диван химчисткасы","3 орындық","12 000 ₸"],["Кеңсе","1 м² үшін","300 ₸"]],
+steps:["Өтінім қалдырасыз","Менеджер бағаны нақтылайды","Команда уақытында келеді","Нәтижені қабылдап, төлейсіз"]},
+ru:{nav:["Главная","Услуги","О нас","Заявка"],h1:"Ваш дом будет сиять — уборку берём на себя",lead:"Уборка квартир, офисов и после ремонта. Своё оборудование, безопасная химия, честная цена.",cta:"Оставить заявку",s1:"заказов",s2:"среднее время",s3:"оценка клиентов",whyT:"Почему выбирают нас",popT:"Популярные услуги",all:"Все услуги и цены →",ctaT:"Оставьте заявку сегодня — мойка окон на 20% дешевле",ctaB:"Оставить заявку",srv:"Услуги и цены",about:"О нас",abouttxt:"Taza Üi — клининговая команда, работающая в Астане с 2019 года. Все сотрудники проверены, работаем по договору.",how:"Как мы работаем",order:"Оставить заявку",ordertxt:"Заполните форму — менеджер свяжется с вами в течение 15 минут.",fn:"Ваше имя",fp:"Телефон",fs:"Услуга",fd:"Дата",fc:"Комментарий",send:"Отправить",ok:"Спасибо! Заявка принята, скоро свяжемся.",
+why:[["Своё оборудование","Профессиональные пылесосы и парогенераторы"],["Безопасная химия","Не вредит детям и питомцам"],["Честная цена","Цена не меняется после приезда"]],
+srv:[["Генеральная уборка","1-комнатная квартира","15 000 ₸"],["Глубокая уборка","С внутренностями шкафов, плита, холодильник","30 000 ₸"],["После ремонта","Пыль, следы краски и цемента","45 000 ₸"],["Мойка окон","1 окно, с двух сторон","2 500 ₸"],["Химчистка дивана","3-местный","12 000 ₸"],["Офис","За 1 м²","300 ₸"]],
+steps:["Вы оставляете заявку","Менеджер уточняет цену","Команда приезжает вовремя","Принимаете результат и оплачиваете"]}};
+const pages=["home","services","about","order"];
+let L='kk';try{L=localStorage.getItem('tz-lang')||'kk'}catch(e){}
+const $=s=>document.querySelector(s);
+const svgI='<svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2l2.6 6.4L21 11l-6.4 2.6L12 20l-2.6-6.4L3 11l6.4-2.6z" fill="#0b6bcb"/></svg>';
+function render(){
+  const t=T[L];document.documentElement.lang=L;
+  document.querySelectorAll('[data-t]').forEach(e=>{const v=t[e.dataset.t];if(typeof v==='string')e.textContent=v});
+  $('#links').innerHTML=pages.map((p,i)=>`<a href="#${p}" data-p="${p}">${t.nav[i]}</a>`).join('');
+  $('#why').innerHTML=t.why.map(([h,p])=>`<div class="card"><div class="ico">${svgI}</div><h3>${h}</h3><p>${p}</p></div>`).join('');
+  $('#pop').innerHTML=t.srv.slice(0,3).map(([h,p,c])=>`<div class="card"><h3>${h}</h3><p>${p}</p><div class="p">${c}</div></div>`).join('');
+  $('#srv').innerHTML=t.srv.map(([h,p,c])=>`<div class="card"><h3>${h}</h3><p>${p}</p><div class="p">${c}</div></div>`).join('');
+  $('#steps').innerHTML=t.steps.map(s=>`<li>${s}</li>`).join('');
+  $('#sv').innerHTML=t.srv.map(s=>`<option>${s[0]}</option>`).join('');
+  document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+  route();
+}
+function route(){
+  const p=pages.includes(location.hash.slice(1))?location.hash.slice(1):'home';
+  pages.forEach(x=>$('#p-'+x).classList.toggle('on',x===p));
+  document.querySelectorAll('#links a').forEach(a=>a.classList.toggle('on',a.dataset.p===p));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{L=b.dataset.l;try{localStorage.setItem('tz-lang',L)}catch(e){}render()});
+addEventListener('hashchange',route);
+$('#f').addEventListener('submit',e=>{e.preventDefault();const ok=$('#ok');ok.textContent=T[L].ok;ok.style.display='block';e.target.reset()});
+render();
+}</script>
+</body>
+</html>
