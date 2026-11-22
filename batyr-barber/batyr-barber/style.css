@@ -1,0 +1,151 @@
+/* Batyr Barber — визитка. Тёмный графит + бетонный серый из их прайса + тёплый акцент */
+:root {
+  --bg: #0e0e0e;
+  --bg2: #161616;
+  --card: #1c1c1c;
+  --ink: #f0eee9;
+  --muted: #9b978f;
+  --line: #2b2b2b;
+  --acc: #e8e2d4;
+  --gold: #c9a46a;
+  --display: "Unbounded", "Arial Black", sans-serif;
+  --body: "Manrope", "Segoe UI", Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; overflow-x: clip; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); overflow-x: clip; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: max(18px, env(safe-area-inset-left)); }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.05; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.7rem, 4.6vw, 2.8rem); text-transform: uppercase; margin-top: 8px; }
+.eyebrow { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+section { padding-block: clamp(56px, 9vw, 96px); }
+section.alt { background: var(--bg2); }
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 28px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 22px; border-radius: 999px; border: 1px solid var(--acc);
+  background: var(--acc); color: #111; font-weight: 700; text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+}
+.btn:hover { background: #fff; transform: translateY(-1px); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: #444; }
+.btn.ghost:hover { border-color: var(--acc); }
+.btn.wa, .mbar a.wa { background: #25d366; border-color: #25d366; color: #0b2a17; }
+.btn.wa:hover { background: #3be07a; }
+.btn.sm { padding: 10px 18px; font-size: 0.9rem; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+
+/* header */
+.top { position: sticky; top: 0; z-index: 20; background: rgba(14, 14, 14, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; height: 64px; }
+.logo { font-family: var(--display); font-weight: 800; text-decoration: none; letter-spacing: 0.04em; font-size: 1.05rem; }
+.logo span { font-weight: 500; color: var(--muted); margin-left: 6px; }
+.menu { display: flex; gap: 26px; }
+.menu a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: 0.95rem; }
+.menu a:hover { color: var(--ink); }
+
+/* hero */
+.hero { padding: 0; position: relative; }
+.hero-in { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; padding-block: clamp(40px, 7vw, 80px); }
+.hero h1 { font-size: clamp(3.2rem, 10vw, 7rem); font-weight: 800; text-transform: uppercase; margin: 14px 0 18px; line-height: 0.92; }
+.hero h1 em { font-style: normal; color: var(--gold); }
+.lead { color: #c9c5bd; font-size: 1.1rem; max-width: 44ch; margin: 0; }
+.facts { list-style: none; padding: 0; margin: 34px 0 0; display: flex; gap: 0; border-top: 1px solid var(--line); }
+.facts li { flex: 1; padding: 16px 14px 0 0; }
+.facts li + li { padding-left: 16px; border-left: 1px solid var(--line); }
+.facts b { display: block; font-family: var(--display); font-size: clamp(1.1rem, 2.6vw, 1.5rem); }
+.facts span { color: var(--muted); font-size: 0.86rem; }
+.hero-pics { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; aspect-ratio: 1 / 1.08; }
+.hero-pics img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; filter: grayscale(0.15) contrast(1.05); }
+.hero-pics img:first-child { grid-row: span 2; }
+
+/* prices */
+.tabs { display: inline-flex; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg2); }
+.tabs button { border: 0; background: none; padding: 10px 18px; border-radius: 999px; font-weight: 700; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--acc); color: #111; }
+.note { color: var(--muted); margin: 0 0 16px; }
+.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold); margin: 26px 0 10px; }
+.ptable { border-top: 1px solid var(--line); }
+.prow { display: grid; grid-template-columns: 1fr 110px 110px; gap: 14px; align-items: baseline; padding: 15px 4px; border-bottom: 1px solid var(--line); }
+.prow b { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.prow:not(.phead):hover { background: #ffffff06; }
+.phead { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; padding-block: 12px; }
+.phead span + span { text-align: right; }
+.ptable.one .prow { grid-template-columns: 1fr auto; }
+.cta-line { margin-top: 34px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 22px 24px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); }
+.cta-line span { font-family: var(--display); font-size: 1.15rem; }
+
+/* team */
+.team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+.ph { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: #111; }
+.ph img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.card:hover .ph img { transform: scale(1.04); }
+.badge { position: absolute; left: 12px; top: 12px; background: var(--gold); color: #111; font-size: 0.72rem; font-weight: 800; padding: 5px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em; }
+.card .in { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.nm { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.nm h3 { font-size: 1.25rem; }
+.exp { font-weight: 700; color: var(--gold); font-size: 0.88rem; white-space: nowrap; }
+.card p { margin: 0; color: #bdb9b1; font-size: 0.92rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.tags span { font-size: 0.76rem; padding: 4px 9px; border-radius: 999px; border: 1px solid #3a3a3a; color: #cfcac1; }
+
+/* contacts */
+.contacts { max-width: 720px; }
+.info { margin: 26px 0 0; }
+.info div { display: grid; grid-template-columns: 130px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.info dt { color: var(--muted); font-size: 0.9rem; }
+.info dd { margin: 0; font-weight: 700; }
+.info a { text-decoration: none; }
+
+footer { border-top: 1px solid var(--line); padding: 24px 0 28px; color: var(--muted); font-size: 0.88rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+/* mobile bottom bar */
+.mbar { display: none; }
+
+@media (max-width: 960px) {
+  .team { grid-template-columns: repeat(2, 1fr); }
+  .hero-in { grid-template-columns: 1fr; }
+  .hero-pics { aspect-ratio: 16 / 11; }
+}
+@media (max-width: 640px) {
+  .menu { display: none; }
+  .prow { grid-template-columns: 1fr 78px 78px; gap: 8px; font-size: 0.93rem; }
+  .info div { grid-template-columns: 1fr; gap: 2px; }
+  .team { gap: 10px; }
+  .card .in { padding: 12px; }
+  .nm { flex-direction: column; gap: 2px; }
+  .nm h3 { font-size: 1.05rem; }
+  .card p { font-size: 0.84rem; }
+  .tags span { font-size: 0.7rem; }
+  .cta-line .btn { width: 100%; }
+  .btns .btn { flex: 1 1 auto; }
+  body { padding-bottom: 76px; }
+  .mbar {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; position: fixed; z-index: 30;
+    left: 0; right: 0; bottom: 0; padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(14, 14, 14, 0.94); backdrop-filter: blur(10px); border-top: 1px solid var(--line);
+  }
+  .mbar a { text-align: center; text-decoration: none; padding: 13px; border-radius: 999px; font-weight: 700; border: 1px solid #444; }
+  .mbar a.wa { background: #25d366; color: #0b2a17; border-color: #25d366; }
+}
+
+/* окно с номером (компьютер) */
+#callBox { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.7); display: grid; place-items: center; padding: 18px; }
+.cb-in { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 30px 26px; text-align: center; max-width: 420px; width: 100%; }
+.cb-num { display: block; font-family: var(--display); font-size: clamp(1.5rem, 5vw, 2rem); text-decoration: none; margin: 12px 0 8px; }
+.cb-in p { color: var(--muted); margin: 0; font-size: .93rem; }
+.cb-x { position: absolute; right: 12px; top: 10px; border: 0; background: none; font-size: 1.2rem; color: var(--muted); }
+
+/* иконка телефона в стиле iPhone */
+.ico-phone { width: 22px; height: 22px; flex: none; border-radius: 5px; vertical-align: middle; }
+.mbar a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }

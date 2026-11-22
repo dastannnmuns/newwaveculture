@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Batyr Barber — барбершоп в Караганде</title>
+    <meta name="description" content="Batyr Barber — мужские стрижки, борода, бритьё. Караганда, пр. Шахтеров 52-Б. Прайс, мастера, запись в WhatsApp." />
+    <meta name="theme-color" content="#0e0e0e" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap nav">
+        <a class="logo" href="#home">BATYR<span>BARBER</span></a>
+        <nav class="menu" aria-label="Меню">
+          <a href="#prices">Прайс</a>
+          <a href="#team">Мастера</a>
+          <a href="#contacts">Контакты</a>
+        </nav>
+        <a class="btn sm" data-wa href="https://wa.me/77086995739?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F" target="_blank" rel="noopener">Записаться</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero" id="home">
+        <div class="wrap hero-in">
+          <div class="hero-txt">
+            <div class="eyebrow">Барбершоп · Караганда</div>
+            <h1>Batyr<br /><em>Barber</em></h1>
+            <p class="lead">Мужские стрижки, борода и бритьё. 8 мастеров с опытом до 7 лет. Запись в WhatsApp — без очереди.</p>
+            <div class="btns">
+              <a class="btn wa" data-wa href="https://wa.me/77086995739?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F" target="_blank" rel="noopener">Записаться в WhatsApp</a>
+              <a class="btn ghost" data-call href="tel:+77086995739"><svg class="ico-phone" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="gph" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ff777"/><stop offset="1" stop-color="#11b92e"/></linearGradient></defs><rect width="32" height="32" rx="7.5" fill="url(#gph)"/><path transform="translate(4 4)" fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>Позвонить</a>
+            </div>
+            <ul class="facts">
+              <li><b>от 5 000 ₸</b><span>стрижка</span></li>
+              <li><b>8</b><span>мастеров</span></li>
+              <li><b>7+ лет</b><span>опыт</span></li>
+            </ul>
+          </div>
+          <div class="hero-pics" aria-hidden="true">
+            <img src="images/ruslan.jpg" alt="" />
+            <img src="images/aibek.jpg" alt="" />
+            <img src="images/aibol.jpg" alt="" />
+          </div>
+        </div>
+      </section>
+
+      <!-- PRICES -->
+      <section id="prices">
+        <div class="wrap">
+          <div class="head">
+            <div>
+              <div class="eyebrow">Прайс-лист</div>
+              <h2>Услуги и цены</h2>
+            </div>
+            <div class="tabs" role="tablist">
+              <button role="tab" aria-selected="true" data-tab="main">Основной</button>
+              <button role="tab" aria-selected="false" data-tab="tima">Прайс Тимы</button>
+            </div>
+          </div>
+
+          <div class="panel" data-panel="main">
+            <p class="note">Цена зависит от категории мастера. Уточните категорию при записи.</p>
+            <div class="ptable">
+              <div class="prow phead"><span>Услуга</span><span>1-я кат.</span><span>2-я кат.</span></div>
+              <div id="mainRows"></div>
+            </div>
+          </div>
+
+          <div class="panel" data-panel="tima" hidden>
+            <p class="note">Авторский прайс топ-барбера Тимы.</p>
+            <h3 class="sub">Стрижка и коррекция</h3>
+            <div class="ptable one" id="timaRows"></div>
+            <h3 class="sub">VIP Complex</h3>
+            <div class="ptable one" id="timaVip"></div>
+          </div>
+
+          <div class="cta-line">
+            <span>Выбрали услугу?</span>
+            <a class="btn wa" data-wa href="https://wa.me/77086995739?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F" target="_blank" rel="noopener">Записаться в WhatsApp</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEAM -->
+      <section id="team" class="alt">
+        <div class="wrap">
+          <div class="head">
+            <div>
+              <div class="eyebrow">Команда</div>
+              <h2>Наши мастера</h2>
+            </div>
+          </div>
+          <div class="team" id="team-grid"></div>
+        </div>
+      </section>
+
+      <!-- CONTACTS -->
+      <section id="contacts">
+        <div class="wrap contacts">
+          <div>
+            <div class="eyebrow">Контакты</div>
+            <h2>Ждём вас</h2>
+            <dl class="info">
+              <div><dt>Адрес</dt><dd>Караганда, пр. Шахтеров, 52-Б</dd></div>
+              <div><dt>Часы работы</dt><dd id="hoursMain">Ежедневно 10:00–21:00</dd></div>
+              <div><dt>WhatsApp</dt><dd><a data-wa href="https://wa.me/77086995739?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F" target="_blank" rel="noopener">+7 708 699 57 39</a></dd></div>
+              <div><dt>Телефон</dt><dd><a data-call href="tel:+77086995739">+7 708 699 57 39</a></dd></div>
+              <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/batyrbarber" target="_blank" rel="noopener">@batyrbarber</a></dd></div>
+            </dl>
+            <div class="btns">
+              <a class="btn" data-call href="tel:+77086995739"><svg class="ico-phone" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="gph" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ff777"/><stop offset="1" stop-color="#11b92e"/></linearGradient></defs><rect width="32" height="32" rx="7.5" fill="url(#gph)"/><path transform="translate(4 4)" fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>Позвонить</a>
+              <a class="btn ghost" href="https://www.instagram.com/batyrbarber" target="_blank" rel="noopener">Instagram</a>
+              <a class="btn wa" data-wa href="https://wa.me/77086995739?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F" target="_blank" rel="noopener">WhatsApp</a>
+              <a class="btn ghost" href="https://2gis.kz/karaganda/firm/70000001034755530" target="_blank" rel="noopener">Открыть в 2ГИС</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>© <span id="yr">2026</span> Batyr Barber · Караганда</span>
+        <span>Сайт: <a href="https://newwave.website" target="_blank" rel="noopener" style="color:inherit;font-weight:700">newwave</a></span>
+      </div>
+    </footer>
+
+    <!-- мобильная нижняя панель -->
+    <div class="mbar">
+      <a class="wa" data-wa href="https://wa.me/77086995739?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F" target="_blank" rel="noopener">Записаться в WhatsApp</a>
+      <a data-call href="tel:+77086995739"><svg class="ico-phone" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="gph" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ff777"/><stop offset="1" stop-color="#11b92e"/></linearGradient></defs><rect width="32" height="32" rx="7.5" fill="url(#gph)"/><path transform="translate(4 4)" fill="#fff" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>Позвонить</a>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
