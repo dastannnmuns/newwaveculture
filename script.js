@@ -143,6 +143,7 @@ const texts = {
     workTitle: "Сайты бар <i>клиенттер</i>",
     workText: "Бұл сайттар нақты бизнеске жасалып, жұмыс істеп тұр.",
     workSite: "Сайтқа өту",
+    workPrice: "Осындай сайт:",
     demoTitle: "Біз жасаған <i>дизайндар</i>",
     demoText: "Әр дизайнды басып, тірі сайт сияқты ашып көріңіз: батырмалар, корзина, мәзір бәрі жұмыс істейді.",
     demoOpen: "Ашу",
@@ -313,6 +314,7 @@ const texts = {
     workTitle: "Клиенты, у которых уже есть <i>сайт</i>",
     workText: "Эти сайты сделаны для настоящего бизнеса и уже работают.",
     workSite: "Открыть сайт",
+    workPrice: "Такой сайт:",
     demoTitle: "Дизайны, которые мы <i>сделали</i>",
     demoText: "Откройте любой дизайн как живой сайт: кнопки, корзина, меню работают.",
     demoOpen: "Открыть",
@@ -573,15 +575,15 @@ const demoName = (d) => (lang === "ru" ? d.ru : d.kz);
 /* Нақты клиенттер: сайт файлдары мұнда жоқ, тек скриншот (код ұрланбауы үшін).
    url — клиенттің сайты интернетке шыққанда соның мекенжайын жазыңыз. */
 const WORKS = [
-  { img: "neon", name: "Neon Õmir", url: "", ig: "https://www.instagram.com/neon.omir/",
+  { img: "neon", tier: 4, name: "Neon Õmir", url: "", ig: "https://www.instagram.com/neon.omir/",
     kz: "Неон вывескалар · Алматы", ru: "Неоновые вывески · Алматы",
     dKz: "Түнгі неон режим, неон-конструктор, каталог, WhatsApp-қа тапсырыс",
     dRu: "Ночной неон-режим, неон-конструктор, каталог, заказ в WhatsApp" },
-  { img: "billionco", name: "Billion Co.", url: "", ig: "https://instagram.com/billion.co.official",
+  { img: "billionco", tier: 3, name: "Billion Co.", url: "", ig: "https://instagram.com/billion.co.official",
     kz: "Киім бренді · онлайн-дүкен", ru: "Бренд одежды · интернет-магазин",
     dKz: "Каталог, корзина, Kaspi төлем, лукбук, екі тіл",
     dRu: "Каталог, корзина, оплата Kaspi, лукбук, два языка" },
-  { img: "batyr", name: "Batyr Barber", url: "", ig: "https://www.instagram.com/batyrbarber",
+  { img: "batyr", tier: 0, name: "Batyr Barber", url: "", ig: "https://www.instagram.com/batyrbarber",
     kz: "Барбершоп · Қарағанды", ru: "Барбершоп · Караганда",
     dKz: "Прайс, шеберлер, WhatsApp арқылы жазылу",
     dRu: "Прайс, мастера, запись через WhatsApp" },
@@ -804,6 +806,7 @@ function renderWorks() {
         <span class="work-tag">${ru ? w.ru : w.kz}</span>
         <h3>${w.name}</h3>
         <p>${ru ? w.dRu : w.dKz}</p>
+        <a class="work-price" href="#tier-${w.tier}"><span>${tr("workPrice")}</span><b>${T[w.tier].k} · ${priceTxt(T[w.tier])}</b></a>
         <div class="work-links">
           ${w.url ? `<a class="btn sm" href="${w.url}" target="_blank" rel="noopener">${tr("workSite")} ↗</a>` : ""}
           <a class="ghostlink" href="${w.ig}" target="_blank" rel="noopener">Instagram ↗</a>
