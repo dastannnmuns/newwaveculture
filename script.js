@@ -1,7 +1,7 @@
 /* newwave — скрипттер */
 
-/* Telegram бот (өтінімдер осыған келеді) */
-const TG_BOT = "newwave_site_bot";
+/* ═══ Telegram: ЖЕКЕ АККАУНТ USERNAME-ІН ОСЫ ЖЕРГЕ ЖАЗЫҢЫЗ (@ белгісіз) ═══ */
+const TG_USER = "newwave_site_bot";
 
 /* ═══════════════ ТІЛ / ЯЗЫК ═══════════════ */
 const texts = {
@@ -92,15 +92,15 @@ const texts = {
     contLabel: "Байланыс",
     contTitle: "Сайтыңызды талқылайық",
     contText: "Өтінім қалдырыңыз немесе тікелей жазыңыз. Әдетте бір сағат ішінде жауап беремін.",
-    tgDm: "Telegram · бот",
+    tgDm: "Telegram · жеке хат",
     write: "Жазу",
     copy: "Көшіру",
     tgCh: "Telegram · арна",
-    subscribe: "Ашу",
-    tgSubTitle: "Telegram ботымызға жазыңыз",
+    subscribe: "Жазу",
+    tgSubTitle: "Маған Telegram-да жазыңыз",
     tgSubText:
-      "Бағалар, дизайн мысалдары және өтінім қалдыру: бәрі ботта. Тәулік бойы бірден жауап береді.",
-    tgSubBtn: "Ботты ашу",
+      "Бағаны, мерзімді және дизайнды тікелей өзіммен талқылайсыз. Әдетте бір сағат ішінде жауап беремін.",
+    tgSubBtn: "Telegram-да жазу",
     regTitle: "Тіркелу",
     regText: "Өтінім жіберу үшін поштаңызды, атыңызды және нөміріңізді жазыңыз",
     fMail: "Электрондық пошта",
@@ -110,8 +110,8 @@ const texts = {
     fPack: "Пакет",
     fAbout: "Бизнесіңіз туралы қысқаша",
     fSend: "Өтінімді Telegram-ға жіберу",
-    fText: "Бизнесіңізге сайт. Бағалар, мысалдар және өтінім: Telegram ботымызда.",
-    fStar: "🤖 Бот тәулік бойы бірден жауап береді",
+    fText: "Бизнесіңізге сайт. Сұрағыңыз болса, Telegram-да тікелей жазыңыз.",
+    fStar: "💬 Әдетте бір сағат ішінде жауап беремін",
     fPacks: "Пакеттер",
     fT0: "Визитка",
     fT1: "Шағын сайт",
@@ -120,7 +120,7 @@ const texts = {
     fT5: 'Lux <span class="tag">жаңа</span>',
     fSite: "Сайт",
     fPick: "Пакет таңдау",
-    fChannel: "Бот",
+    fChannel: "Жазу",
     fLead: "Өтінім",
     fCopy: "© 2026 newwave · Мысал сайттар портфолио үшін жасалған",
     fUp: "Жоғары ↑",
@@ -148,8 +148,8 @@ const texts = {
     errSurname: "Тегіңізді жазыңыз",
     errPhone: "Телефон нөмірін толық жазыңыз: +7 7XX XXX XX XX",
     okLead:
-      "Рақмет, {name}! Өтінімді аяқтау үшін Telegram ботқа өтіңіз: өтінім мәтіні көшірілді, ботқа қойып жіберіңіз.",
-    okBot: "Telegram ботты ашу →",
+      "Рақмет, {name}! Өтінім мәтіні көшірілді. Менің Telegram-ымды ашып, мәтінді қойып жіберіңіз: өзім жауап беремін.",
+    okBot: "Telegram-да жазу →",
     leadHead: "Сайттан өтінім",
     copied: "Көшірілді",
     copySelected: "Белгіледім, көшіріп ал",
@@ -258,15 +258,15 @@ const texts = {
     contLabel: "Контакты",
     contTitle: "Обсудим ваш сайт",
     contText: "Оставьте заявку или напишите напрямую. Обычно отвечаю в течение часа.",
-    tgDm: "Telegram · бот",
+    tgDm: "Telegram · личные сообщения",
     write: "Написать",
     copy: "Копировать",
     tgCh: "Telegram · канал",
-    subscribe: "Открыть",
-    tgSubTitle: "Напишите нашему Telegram-боту",
+    subscribe: "Написать",
+    tgSubTitle: "Напишите мне в Telegram",
     tgSubText:
-      "Цены, примеры дизайна и заявка: всё в боте. Отвечает сразу, круглосуточно.",
-    tgSubBtn: "Открыть бота",
+      "Цену, сроки и дизайн обсуждаете напрямую со мной. Обычно отвечаю в течение часа.",
+    tgSubBtn: "Написать в Telegram",
     regTitle: "Регистрация",
     regText: "Чтобы отправить заявку, укажите почту, имя и номер телефона",
     fMail: "Электронная почта",
@@ -276,8 +276,8 @@ const texts = {
     fPack: "Пакет",
     fAbout: "Коротко о вашем бизнесе",
     fSend: "Отправить заявку в Telegram",
-    fText: "Сайты для бизнеса. Цены, примеры и заявка: в нашем Telegram-боте.",
-    fStar: "🤖 Бот отвечает сразу, круглосуточно",
+    fText: "Сайты для бизнеса. Есть вопрос — пишите напрямую в Telegram.",
+    fStar: "💬 Обычно отвечаю в течение часа",
     fPacks: "Пакеты",
     fT0: "Визитка",
     fT1: "Небольшой сайт",
@@ -286,7 +286,7 @@ const texts = {
     fT5: 'Lux <span class="tag">новое</span>',
     fSite: "Сайт",
     fPick: "Подбор пакета",
-    fChannel: "Бот",
+    fChannel: "Написать",
     fLead: "Заявка",
     fCopy: "© 2026 newwave · Примеры сайтов сделаны для портфолио",
     fUp: "Наверх ↑",
@@ -314,8 +314,8 @@ const texts = {
     errSurname: "Введите фамилию",
     errPhone: "Введите номер полностью: +7 7XX XXX XX XX",
     okLead:
-      "Спасибо, {name}! Чтобы завершить заявку, перейдите в Telegram-бот: текст заявки скопирован, вставьте его в бот.",
-    okBot: "Открыть Telegram-бот →",
+      "Спасибо, {name}! Текст заявки скопирован. Откройте мой Telegram, вставьте его и отправьте — отвечу лично.",
+    okBot: "Написать в Telegram →",
     leadHead: "Заявка с сайта",
     copied: "Скопировано",
     copySelected: "Выделил, скопируйте",
@@ -847,7 +847,7 @@ $id("form").onsubmit = (e) => {
   try {
     navigator.clipboard && navigator.clipboard.writeText(leadText).catch(() => {});
   } catch (x) {}
-  const botUrl = `https://t.me/${TG_BOT}?start=site_${ti}`;
+  const botUrl = `https://t.me/${TG_USER}`;
   window.open(botUrl, "_blank", "noopener");
   const ok = $id("ok");
   ok.textContent = tr("okLead", { name: `${name} ${sur}`, email: u.email, phone: u.phone }) + " ";
@@ -1491,6 +1491,11 @@ document.querySelectorAll("[data-copy]").forEach(
     if (location.hash === "#login") open();
   });
 })();
+
+// Барлық Telegram сілтемелері TG_USER-ге
+document.querySelectorAll('a[href^="https://t.me/"]').forEach((a) => (a.href = "https://t.me/" + TG_USER));
+document.querySelectorAll("#tgm").forEach((e) => (e.textContent = "@" + TG_USER));
+document.querySelectorAll(".gsub > span").forEach((e) => (e.textContent = "t.me/" + TG_USER));
 
 // Бетті сақталған тілмен ашу
 applyLang();
