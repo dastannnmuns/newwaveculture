@@ -1,7 +1,7 @@
 /* newwave — скрипттер */
 
 /* ═══ Telegram: ЖЕКЕ АККАУНТ USERNAME-ІН ОСЫ ЖЕРГЕ ЖАЗЫҢЫЗ (@ белгісіз) ═══ */
-const TG_USER = "newwave_site_bot";
+const TG_USER = "munsyzbayy19";
 
 /* ═══════════════ ТІЛ / ЯЗЫК ═══════════════ */
 const texts = {
