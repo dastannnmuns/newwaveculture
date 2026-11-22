@@ -139,6 +139,10 @@ const texts = {
     tWho: "Кімге:",
     tEx: "Дизайнды көру:",
     demoLabel: "Портфолио",
+    workLabel: "Нақты жобалар",
+    workTitle: "Сайты бар <i>клиенттер</i>",
+    workText: "Бұл сайттар нақты бизнеске жасалып, жұмыс істеп тұр.",
+    workSite: "Сайтқа өту",
     demoTitle: "Біз жасаған <i>дизайндар</i>",
     demoText: "Әр дизайнды басып, тірі сайт сияқты ашып көріңіз: батырмалар, корзина, мәзір бәрі жұмыс істейді.",
     demoOpen: "Ашу",
@@ -305,6 +309,10 @@ const texts = {
     tWho: "Кому:",
     tEx: "Смотреть дизайн:",
     demoLabel: "Портфолио",
+    workLabel: "Реальные проекты",
+    workTitle: "Клиенты, у которых уже есть <i>сайт</i>",
+    workText: "Эти сайты сделаны для настоящего бизнеса и уже работают.",
+    workSite: "Открыть сайт",
     demoTitle: "Дизайны, которые мы <i>сделали</i>",
     demoText: "Откройте любой дизайн как живой сайт: кнопки, корзина, меню работают.",
     demoOpen: "Открыть",
@@ -562,6 +570,22 @@ const DEMOS = [
   { f: "lux-zhk", tier: 5, kz: "Alatau Residence ТҮК", ru: "ЖК Alatau Residence", tagKz: "Пәтер таңдау · жоба · көру", tagRu: "Выбор квартиры · проект · просмотр" },
 ];
 const demoName = (d) => (lang === "ru" ? d.ru : d.kz);
+/* Нақты клиенттер: сайт файлдары мұнда жоқ, тек скриншот (код ұрланбауы үшін).
+   url — клиенттің сайты интернетке шыққанда соның мекенжайын жазыңыз. */
+const WORKS = [
+  { img: "neon", name: "Neon Õmir", url: "", ig: "https://www.instagram.com/neon.omir/",
+    kz: "Неон вывескалар · Алматы", ru: "Неоновые вывески · Алматы",
+    dKz: "Түнгі неон режим, неон-конструктор, каталог, WhatsApp-қа тапсырыс",
+    dRu: "Ночной неон-режим, неон-конструктор, каталог, заказ в WhatsApp" },
+  { img: "billionco", name: "Billion Co.", url: "", ig: "https://instagram.com/billion.co.official",
+    kz: "Киім бренді · онлайн-дүкен", ru: "Бренд одежды · интернет-магазин",
+    dKz: "Каталог, корзина, Kaspi төлем, лукбук, екі тіл",
+    dRu: "Каталог, корзина, оплата Kaspi, лукбук, два языка" },
+  { img: "batyr", name: "Batyr Barber", url: "", ig: "https://www.instagram.com/batyrbarber",
+    kz: "Барбершоп · Қарағанды", ru: "Барбершоп · Караганда",
+    dKz: "Прайс, шеберлер, WhatsApp арқылы жазылу",
+    dRu: "Прайс, мастера, запись через WhatsApp" },
+];
 const T_RU = [
   {
     pg: "1 стр.",
@@ -764,6 +788,32 @@ function renderDemos() {
 }
 renderDemos();
 document.addEventListener("langchange", renderDemos);
+
+// Нақты клиенттер
+function renderWorks() {
+  const box = document.getElementById("worksGrid");
+  if (!box) return;
+  const ru = lang === "ru";
+  box.innerHTML = WORKS.map(
+    (w) => `<article class="work">
+      <div class="work-shots">
+        <img class="work-d" src="img/works/${w.img}.jpg" alt="${w.name}" loading="lazy" draggable="false" />
+        <img class="work-m" src="img/works/${w.img}-m.jpg" alt="" loading="lazy" draggable="false" />
+      </div>
+      <div class="work-info">
+        <span class="work-tag">${ru ? w.ru : w.kz}</span>
+        <h3>${w.name}</h3>
+        <p>${ru ? w.dRu : w.dKz}</p>
+        <div class="work-links">
+          ${w.url ? `<a class="btn sm" href="${w.url}" target="_blank" rel="noopener">${tr("workSite")} ↗</a>` : ""}
+          <a class="ghostlink" href="${w.ig}" target="_blank" rel="noopener">Instagram ↗</a>
+        </div>
+      </div>
+    </article>`,
+  ).join("");
+}
+renderWorks();
+document.addEventListener("langchange", renderWorks);
 
 // Тіл ауысқанда пакет карточкаларын қайта салу
 document.addEventListener("langchange", () => {

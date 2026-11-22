@@ -477,3 +477,121 @@ h2.rv.in {
 .demo-info b {
   padding-right: 84px;
 }
+
+/* ───── Нақты клиенттер ───── */
+#works h2 i {
+  font-style: normal;
+  background: var(--wave);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.works {
+  display: grid;
+  gap: 22px;
+}
+
+.work {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  align-items: center;
+  gap: 32px;
+  padding: 22px;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.work:nth-child(even) {
+  grid-template-columns: 1fr 1.35fr;
+}
+
+.work:nth-child(even) .work-shots {
+  order: 2;
+}
+
+.work:hover {
+  border-color: rgba(46, 230, 214, 0.5);
+  box-shadow: 0 30px 60px -34px rgba(34, 184, 255, 0.6);
+}
+
+.work-shots {
+  position: relative;
+  padding: 0 46px 30px 0;
+}
+
+.work-shots img {
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.work-d {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px -20px #000;
+}
+
+.work-m {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24%;
+  aspect-ratio: 300 / 650;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 18px;
+  border: 5px solid #111;
+  box-shadow: 0 20px 40px -14px #000;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.work:hover .work-m {
+  transform: translateY(-8px) rotate(-2deg);
+}
+
+.work-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.work-info h3 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin: 8px 0 10px;
+}
+
+.work-info p {
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+
+.work-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+
+@media (max-width: 860px) {
+  .work,
+  .work:nth-child(even) {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 16px;
+  }
+  .work:nth-child(even) .work-shots {
+    order: 0;
+  }
+  .work-shots {
+    padding: 0 30px 22px 0;
+  }
+}
